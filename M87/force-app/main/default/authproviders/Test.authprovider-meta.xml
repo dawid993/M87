@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuthProvider xmlns="http://soap.sforce.com/2006/04/metadata">
+    <authorizeUrl>https://login.salesforce.com/services/oauth2/authorize</authorizeUrl>
+    <consumerKey>3MVG95NPsF2gwOiMEP2PYPWJLV168BgzLCrxse2mOQIuzOdNnH3EysbjoBm6sdji1mbhiS5hfKBFq0nemQkvI</consumerKey>
+    <consumerSecret>G3Fb30sW+tQXz4NFBOcfGblr2gzZ7/OmzIt6TS3q+1CUwMhU3bVgxEvRIE5Iy/MmpebwwCuiCdaoOKFJEVSWaXBBGPdiC2rX</consumerSecret>
+    <friendlyName>Test</friendlyName>
+    <includeOrgIdInIdentifier>true</includeOrgIdInIdentifier>
+    <providerType>Salesforce</providerType>
+    <sendAccessTokenInHeader>false</sendAccessTokenInHeader>
+    <sendClientCredentialsInHeader>false</sendClientCredentialsInHeader>
+    <sendSecretInApis>true</sendSecretInApis>
+    <tokenUrl>https://login.salesforce.com/services/oauth2/token</tokenUrl>
+</AuthProvider>

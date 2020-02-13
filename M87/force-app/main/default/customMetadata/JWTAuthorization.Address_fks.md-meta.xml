@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Address</label>
+    <protected>true</protected>
+    <values>
+        <field>Audience__c</field>
+        <value xsi:type="xsd:string">https://login.salesforce.com/</value>
+    </values>
+    <values>
+        <field>CertName__c</field>
+        <value xsi:type="xsd:string">scratch_cert</value>
+    </values>
+    <values>
+        <field>Endpoint__c</field>
+        <value xsi:type="xsd:string">https://login.salesforce.com/services/oauth2/token</value>
+    </values>
+    <values>
+        <field>Issuer__c</field>
+        <value xsi:type="xsd:string">3MVG95NPsF2gwOiMEP2PYPWJLV168BgzLCrxse2mOQIuzOdNnH3EysbjoBm6sdji1mbhiS5hfKBFq0nemQkvI</value>
+    </values>
+    <values>
+        <field>Subject__c</field>
+        <value xsi:type="xsd:string">dawidfks@hotmail.com</value>
+    </values>
+</CustomMetadata>
