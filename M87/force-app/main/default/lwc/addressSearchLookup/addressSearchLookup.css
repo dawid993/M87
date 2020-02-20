@@ -41,3 +41,16 @@
     padding: 10px 5px ;
     z-index: 1;
 }
+
+.address-element{
+    box-sizing: border-box;
+    padding: 10px;
+    height: 60px;
+    display: flexbox;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.address-element:hover{
+    background-color: #E9E5E4;
+}

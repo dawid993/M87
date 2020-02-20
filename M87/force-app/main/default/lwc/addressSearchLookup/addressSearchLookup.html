@@ -1,15 +1,34 @@
 <template>
 	<lightning-card data-id="card" variant="Narrow" title={label.searchAddressLabel} icon-name="standard:account">
-		<div class="search-container">
+		<template if:true={showSpinner}>
+			<lightning-spinner size='small' alternative-text='Action in progrss'>			
+			</lightning-spinner>
+		</template>		
+		<div class="search-container" onclick={handleContainerClick}>
 			<p class="slds-p-horizontal_small">Please find address.</p>
 			<div class="search-box">
-				<lightning-input type="search" label="Enter post code" onblur={searchAddresses}>
-				</lightning-input>
-				<div class="search-results active"></div>
+				<div onkeypress={searchAddresses}>
+					<lightning-input type="search" label="Enter address details">
+					</lightning-input>
+				</div>
+				<template if:true={showSearchResults}>
+					<div class="search-results active">
+						<ul>
+							<template for:each={searchResults} for:item="address">
+								<li key={address.ID} data-address-id={address.Id} onclick={assignAddress}>
+									<div class='address-element'> 
+										<div>{address.Street__c} {address.House_number__c}</div>
+										<div>{address.City__c} {address.PostCode__c}</div>
+									</div>
+								</li>
+							</template>
+						</ul>
+					</div>
+				</template>				
 				<div class="current-address">
-					<p>Al.Jerozlolimskie 45/112</p>
-					<p>Warszawa</p>
-					<p>01-129</p>
+					<p>{selectedAddress.Street__c} {selectedAddress.House_number__c}</p>
+					<p>{selectedAddress.City__c}</p>
+					<p>{selectedAddress.PostCode__c}</p>
 				</div>
 			</div>
 			<div class="buttons">
