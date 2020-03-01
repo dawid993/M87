@@ -3,26 +3,44 @@
 /* eslint-disable no-console */
 /* eslint-disable no-new */
 /* eslint-disable-next-line no-unused-vars */
-import { LightningElement, track } from "lwc";
+import { LightningElement, track, api } from "lwc";
 import searchAddressLabel from "@salesforce/label/c.SearchAddress";
 import searchByPostCodeContinuation from "@salesforce/apexContinuation/AddressSearchController.searchByPostCode";
 import setSearchByPostCodeOrStreetContinuation from "@salesforce/apexContinuation/AddressSearchController.setSearchByPostCodeOrStreet";
 import setSearchByPostCodeAndCityAndStreetContinuation from "@salesforce/apexContinuation/AddressSearchController.setSearchByPostCodeAndCityAndStreet";
 import setFullSearchParametersContinuation from "@salesforce/apexContinuation/AddressSearchController.setFullSearchParameters";
+import ImmutabilityService from "c/immutabilityService";
 
-const ENTER_KEY = 13
+import { loadScript } from 'lightning/platformResourceLoader';
+import ImmutableResource from '@salesforce/resourceUrl/immutable_js'
+
+const ENTER_KEY = 13;
 const addressSeparator = ','
 
 export default class AddressSearchLookup extends LightningElement {
+
+    connectedCallback() {
+        Promise.all([
+            loadScript(this, ImmutableResource)
+        ]).
+        then(() => {
+
+        })
+        .catch(err => console.log(err))
+
+    }
+
     label = {
         searchAddressLabel: searchAddressLabel
-    };
+    }
+
+    addressSaveMethod
 
     @track
-    showSearchResults = false;
+    showSearchResults = false
 
     @track
-    searchResults = [];
+    searchResults = []
 
     @track
     selectedAddress = {}
@@ -30,78 +48,100 @@ export default class AddressSearchLookup extends LightningElement {
     @track
     showSpinner = false
 
-    searchAddresses(event) {
-        const searchPhrase = event.target.value;
-        const isEnterPressed = event.which === ENTER_KEY
-        if (searchPhrase && isEnterPressed) {
-            this.clearPreviousResultsAndHideResultPanel()
-            const addressParts = searchPhrase.split(addressSeparator);
-            const searchMethod = this.getSearchFunction(addressParts);
-            this.runSearch(searchMethod)
+    @api
+    get saveMethod() {
+        return this.addressSaveMethod;
+    }
+
+    get splitPhrases() {
+        return (separator) => (phrase) => Immutable.List(phrase.split(separator))  
+    }
+
+    get searchAddressComposition() {
+        return [
+            this.splitPhrases(addressSeparator),            
+            this.getSearchFunction.bind(this),
+            this.runSearchWithMethod.bind(this)
+        ]
+    }
+
+    get publishResultComposition() {
+        return [
+            (results) => Immutable.List(results),
+            this.mapResultsToList.bind(null),
+            this.publishResults.bind(this)
+        ]
+    }
+
+    get assignAddressComposition(){
+        return [
+           (addressId) => this.searchResults.find(element => element.id === addressId),
+           ImmutabilityService.deepFreeze,
+           (address) => this.selectedAddress = address
+        ]
+    }
+
+
+    get reducer() {        
+        return (parameter, currentFunction) => {            
+            let returnValue = currentFunction(parameter)
+            return returnValue
         }
     }
 
-    runSearch(searchMethod) {
-        searchMethod()
-            .then(results => {
-                const resultsProxy = Object.freeze(results)
-                const currentSearchResults = []
+    set saveMethod(value) {
+        this.addressSaveMethod = ImmutabilityService.deepFreeze(value);
+    }
 
-                resultsProxy.forEach(result => {
-                    currentSearchResults.push(result);
-                });
-
-                this.searchResults = Object.freeze(currentSearchResults)
-                return resultsProxy
-            })
-            .then(results => {
-                results = []
-                if (this.searchResults.length > 0) {
-                    this.showSearchResults = true
-                }
-            })
-            .catch(err => console.log(err))
-            .then(result => this.showSpinner = false)
-        this.showSpinner = true
+    searchAddresses(event) {        
+        const searchPhrase = event.target.value;
+        const isEnterPressed = event.which === ENTER_KEY;
+        if (searchPhrase && isEnterPressed) {            
+            this.clearPreviousResultsAndHideResultPanel()            
+            this.searchAddressComposition.reduce(this.reducer, searchPhrase)
+        }
     }
 
     getSearchFunction(addressParts) {
-        let addressPartsSize = addressParts.length;
-        return addressPartsSize === 1 ? this.searchByPostCode.bind(this, addressParts[0])
-            : addressPartsSize === 2 ? this.setSearchByPostCodeOrStreet.bind(this, addressParts[0], addressParts[1])
-                : addressPartsSize === 3 ? this.setSearchByPostCodeAndCityAndStreet.bind(this, addressParts[0],
-                    addressParts[1], addressParts[2])
-                    : addressPartsSize === 4 ? this.setFullSearchParameters.bind(this, addressParts[0], addressParts[1],
-                        addressParts[2], addressParts[3])
-                        : this.createDefaultSearchFunction();
+        console.log(addressParts)
+        let addressPartsSize = addressParts.size;
+        let searchFunctions = [
+            this.searchByPostCode,
+            this.setSearchByPostCodeOrStreet,
+            this.setSearchByPostCodeAndCityAndStreet,
+            this.setFullSearchParameters
+        ]
+        let searchFunction = searchFunctions.find((func, index) => index === addressPartsSize - 1)
+        searchFunction = searchFunction.bind(null, addressParts)
+        return ImmutabilityService.deepFreeze(searchFunction);
     }
 
-    searchByPostCode(postCode) {
-        return searchByPostCodeContinuation({ postCode: postCode });
+    searchByPostCode(addressStructure) {       
+        return searchByPostCodeContinuation({ postCode: addressStructure.get(0)});
     }
 
-    setSearchByPostCodeOrStreet(postCode, street) {
+    setSearchByPostCodeOrStreet(addressStructure) {
         return setSearchByPostCodeOrStreetContinuation({
-            postCode: postCode,
-            street: street
-        })
+            postCode: addressStructure.get(0),
+            street: addressStructure.get(1)
+        });
     }
 
-    setSearchByPostCodeAndCityAndStreet(postCode, city, street) {
+    setSearchByPostCodeAndCityAndStreet(addressStructure) {
         return setSearchByPostCodeAndCityAndStreetContinuation({
-            postCode: postCode,
-            city: city,
-            street: street
-        })
+            postCode: addressStructure.get(0),
+            city: addressStructure.get(1),
+            street: addressStructure.get(2)
+        });
     }
 
-    setFullSearchParameters(postCode, city, street, houseNumber) {
+    setFullSearchParameters(addressStructure) {
         return setFullSearchParametersContinuation({
-            postCode: postCode,
-            city: city,
-            street: street,
-            houseNumber: houseNumber
-        })
+            postCode: addressStructure.get(0),
+            city: addressStructure.get(1),
+            street: addressStructure.get(2),
+            houseNumber: addressStructure.get(3)
+        });
     }
 
     createDefaultSearchFunction() {
@@ -112,19 +152,58 @@ export default class AddressSearchLookup extends LightningElement {
         };
     }
 
+    runSearchWithMethod(searchMethod) {        
+        searchMethod()
+            .then(results => {                
+                return this.publishResultComposition.reduce(this.reducer, results)
+            })           
+            .catch(err => console.log(err))
+            .then(() => this.showSpinner = false)
+
+        this.showSpinner = true;
+    }
+
+    mapResultsToList(results) {
+        const currentSearchResults = [];
+        results.forEach(result => {
+            currentSearchResults.push(result);
+        });        
+        return Immutable.List(currentSearchResults);
+    }
+
+    publishResults(results) {        
+        this.searchResults = results
+        if (this.searchResults.size > 0) {
+            this.showSearchResults = true;
+        }
+    }    
+
     clearPreviousResultsAndHideResultPanel() {
         this.showSearchResults = false;
         this.searchResults = [];
     }
 
     handleContainerClick(event) {
-        this.clearPreviousResultsAndHideResultPanel()
+        this.clearPreviousResultsAndHideResultPanel();
     }
 
     assignAddress(event) {
-        let addressId = event.currentTarget.dataset.addressId
-        if (addressId) {
-            this.selectedAddress = this.searchResults.find(element => element.Id === addressId)
+        let addressId = event.currentTarget.dataset.addressId;
+        if (addressId && this.searchResults && this.searchResults.size > 0) {
+            this.assignAddressComposition.reduce(this.reducer,addressId)
+        }
+    }
+
+    saveAddress() {
+        if (this.saveMethod && this.selectedAddress) {
+            this.showSpinner = true;
+
+            new Promise(resolve => {
+                this.saveMethod(this.selectedAddress);
+                resolve();
+            })
+            .then(() => (this.showSpinner = false))
+            .catch(err => console.log(err));
         }
     }
 }

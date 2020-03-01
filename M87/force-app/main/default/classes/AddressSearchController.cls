@@ -43,9 +43,7 @@ public with sharing class AddressSearchController {
     public static Object processResponse(List<String> labels,Object state) {      
         final HttpResponse response = Continuation.getResponse(labels[0]);     
         if(response.getStatusCode() == HttpUtils.HTTP_OK_CODE_STATUS){
-            Map<String,Object> addressResults = (Map<String,Object>) JSON.deserializeUntyped(response.getBody());
-            Boolean isSucceeded = (Boolean) addressResults.get(doneParameterName);
-            return isSucceeded ?  addressResults.get(recordsParameterName) : new List<Object>();
+            return new AddressSearchServiceImp().parseResponseAndReturnAddresses(response.getBody());            
         }else{
             return new List<Object>();
         }    

@@ -1,6 +1,64 @@
+
+
 .search-container{
+    position: relative;
+    background-color: rgb(255,255,255);
     min-width: 350px;
+    box-shadow: 0px 1px 1px 1.5px  rgb(190, 190, 190),0px -1px 1px 1.5px rgb(190, 190, 200);
+    border-radius: 4px; 
 }
+
+.search-header{    
+    display: flex;
+    justify-content: space-between;
+    background-color:rgb(236,235,234);
+    padding: 10px 10px 10px 10px;    
+}
+.search-help:hover > .help-content {
+    display: block;
+}
+
+.help-content {
+    position: absolute;
+    min-width: 350px;
+    height: 200px;
+    background-color: rgb(50,205,50)    ;
+    display: none;
+    right: 20px;
+    top:60px;
+    z-index: 10;
+}
+
+.help-content:after, .help-content:before {
+    border: 13px solid transparent;
+    position: absolute;
+    content: '';
+    left: 98%;
+    bottom:100%;
+}
+
+.help-content:after {
+	border-bottom-color: rgb(50,205,50);
+	border-width: 14px;
+	margin-left: -24px;
+}
+
+.help-content:before {
+	border-bottom-color: rgb(50,205,50);
+	border-width: 15px;
+	margin-left: -25px;
+}
+
+.search-header > div:nth-child(1) >lightning-icon {
+    display: inline-block;
+}
+
+.search-header >  div:nth-child(1) > h3 {
+    display: inline-block;
+    font-size: 1.2em;
+    margin-left: 5px;
+}
+
 
 .search-box{
     position: relative;
@@ -53,4 +111,12 @@
 
 .address-element:hover{
     background-color: #E9E5E4;
+}
+
+lightning-card[data-id="address-card"]{
+    background-color: green;
+}
+
+article .slds-card__header{
+    background-color: green;
 }

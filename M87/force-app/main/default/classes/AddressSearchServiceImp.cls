@@ -74,9 +74,35 @@ public with sharing class AddressSearchServiceImp implements AddressSearchServic
         String query = 'select id,name,City__c,House_number__c,PostCode__c,Province__c,Street__c FROM Address__c';
             
     
-        String condition = searchStrategy.generateConditionStatement(this);        
+        String condition = searchStrategy.generateConditionStatement(this);  
         return endpoint+EncodingUtil.urlEncode(query+' '+condition, 'UTF-8');
-    }    
+    }   
+    
+    public List<AddressStructure> parseResponseAndReturnAddresses(String jsonResponse){
+        return String.isBlank(jsonResponse)
+            ? new List<AddressStructure>()
+            : parseResponse(jsonResponse);  
+    }
+
+    private List<AddressStructure> parseResponse(String jsonResponse){
+        List<AddressStructure> addressStructure = new List<AddressStructure>();
+        try{
+            for(AddressResponseParser.Records record : AddressResponseParser.parse(jsonResponse).records){
+                addressStructure.add(new AddressStructure(
+                record.Id,
+                record.Street,
+                record.City,
+                record.Province,
+                record.PostCode,
+                record.House_number));
+            }
+        }catch(Exception ex){
+            System.debug(ex.getMessage()+' '+ex.getStackTraceString());
+            addressStructure = new List<AddressStructure>();
+        }
+
+        return addressStructure;
+    }
 
     public class AddreasSearchByPostCode implements AddressSearchStrategy{
         public String generateConditionStatement(AddressSearchParametersStorage parametersStorage){
@@ -104,5 +130,5 @@ public with sharing class AddressSearchServiceImp implements AddressSearchServic
                     + ' AND City__c = \''+ parametersStorage.getCity() + '\' AND Street__c = \''+ parametersStorage.getStreet()+'\'' 
                     + ' AND House_Number__c = \''+parametersStorage.getHouseNumber() +'\'';
         }
-    }
+    }    
 }

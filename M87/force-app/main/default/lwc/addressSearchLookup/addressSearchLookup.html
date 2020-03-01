@@ -1,39 +1,47 @@
-<template>
-	<lightning-card data-id="card" variant="Narrow" title={label.searchAddressLabel} icon-name="standard:account">
+<template>	
+	<div class="search-container" onclick={handleContainerClick}>
 		<template if:true={showSpinner}>
-			<lightning-spinner size='small' alternative-text='Action in progrss'>			
+			<lightning-spinner size="small" alternative-text="Action in progress">
 			</lightning-spinner>
-		</template>		
-		<div class="search-container" onclick={handleContainerClick}>
-			<p class="slds-p-horizontal_small">Please find address.</p>
-			<div class="search-box">
-				<div onkeypress={searchAddresses}>
-					<lightning-input type="search" label="Enter address details">
-					</lightning-input>
-				</div>
-				<template if:true={showSearchResults}>
-					<div class="search-results active">
-						<ul>
-							<template for:each={searchResults} for:item="address">
-								<li key={address.ID} data-address-id={address.Id} onclick={assignAddress}>
-									<div class='address-element'> 
-										<div>{address.Street__c} {address.House_number__c}</div>
-										<div>{address.City__c} {address.PostCode__c}</div>
-									</div>
-								</li>
-							</template>
-						</ul>
-					</div>
-				</template>				
-				<div class="current-address">
-					<p>{selectedAddress.Street__c} {selectedAddress.House_number__c}</p>
-					<p>{selectedAddress.City__c}</p>
-					<p>{selectedAddress.PostCode__c}</p>
-				</div>
+		</template>
+		<div class="search-header">
+			<div>
+				<lightning-icon icon-name="standard:address" alternative-text="Approved" title="Approved"></lightning-icon>
+				<h3>Please find address.</h3>
 			</div>
-			<div class="buttons">
-				<lightning-button variant="brand" name="save button" label="Save"></lightning-button>
+			<div class='search-help'>
+				<lightning-icon icon-name='action:question_post_action' size='xx-small'></lightning-icon>
+				<div class="help-content"></div>
 			</div>
 		</div>
-	</lightning-card>
+		
+		<div class="search-box">
+			<div onkeypress={searchAddresses}>
+				<lightning-input type="search" label="Enter address details">
+				</lightning-input>
+			</div>
+			<template if:true={showSearchResults}>
+				<div class="search-results active">
+					<ul>
+						<template for:each={searchResults} for:item="address">
+							<li key={address.id} data-address-id={address.id} onclick={assignAddress}>
+								<div class="address-element">
+									<div>{address.street} {address.houseNumber}</div>
+									<div>{address.city} {address.postCode}</div>
+								</div>
+							</li>
+						</template>
+					</ul>
+				</div>
+			</template>
+			<div class="current-address">
+				<p>{selectedAddress.street} {selectedAddress.houseNumber}</p>
+				<p>{selectedAddress.city}</p>
+				<p>{selectedAddress.postCode}</p>
+			</div>
+		</div>
+		<div class="buttons">
+			<lightning-button variant="brand" name="save button" label="Save" onclick={saveAddress}></lightning-button>
+		</div>
+	</div>
 </template>

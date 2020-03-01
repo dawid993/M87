@@ -7,11 +7,5 @@ public with sharing class AddressServiceImp implements AddressService {
         account.BillingCity = address.city;
 
         update account;
-    }
-
-    public Continuation searchAddresses(String postCode,String city,String street){
-        AddressSearchService searchService = new AddressSearchServiceImp();
-        searchService.setSearchingParams(postCode, city, street);
-        return searchService.createContinuationJob();
-    }
+    }    
 }
