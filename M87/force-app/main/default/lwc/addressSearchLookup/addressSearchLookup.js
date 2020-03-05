@@ -29,7 +29,6 @@ export default class AddressSearchLookup extends LightningElement {
         .catch(err => console.log(err))
 
     }
-
     label = {
         searchAddressLabel: searchAddressLabel
     }
@@ -63,6 +62,7 @@ export default class AddressSearchLookup extends LightningElement {
             this.getSearchFunction.bind(this),
             this.runSearchWithMethod.bind(this)
         ]
+        
     }
 
     get publishResultComposition() {
