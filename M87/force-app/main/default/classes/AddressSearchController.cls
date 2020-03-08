@@ -11,14 +11,14 @@ public with sharing class AddressSearchController {
     }
 
     @AuraEnabled(continuation = true cacheable = false)
-    public static Continuation setSearchByPostCodeOrStreet(final String postCode,final String street){
+    public static Continuation searchByPostCodeOrStreet(final String postCode,final String street){
         AddressSearchService searchService = new AddressSearchServiceImp();
         searchService.setSearchByPostCodeOrStreet(postCode,street);
         return createAndReturnContinuation(searchService);
     }
 
     @AuraEnabled(continuation = true cacheable = false)
-    public static Continuation setSearchByPostCodeAndCityAndStreet(
+    public static Continuation searchByPostCodeAndCityAndStreet(
         final String postCode,
         final String city,
         final String street){
@@ -28,7 +28,7 @@ public with sharing class AddressSearchController {
     }
 
     @AuraEnabled(continuation = true cacheable = false)
-    public static Continuation setFullSearchParameters(
+    public static Continuation fullSearchParameters(
         final String postCode,
         final String city,
         final String street,

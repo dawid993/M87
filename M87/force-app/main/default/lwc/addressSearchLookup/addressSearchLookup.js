@@ -6,9 +6,9 @@
 import { LightningElement, track, api } from "lwc";
 import searchAddressLabel from "@salesforce/label/c.SearchAddress";
 import searchByPostCodeContinuation from "@salesforce/apexContinuation/AddressSearchController.searchByPostCode";
-import setSearchByPostCodeOrStreetContinuation from "@salesforce/apexContinuation/AddressSearchController.setSearchByPostCodeOrStreet";
-import setSearchByPostCodeAndCityAndStreetContinuation from "@salesforce/apexContinuation/AddressSearchController.setSearchByPostCodeAndCityAndStreet";
-import setFullSearchParametersContinuation from "@salesforce/apexContinuation/AddressSearchController.setFullSearchParameters";
+import searchByPostCodeOrStreetContinuation from "@salesforce/apexContinuation/AddressSearchController.searchByPostCodeOrStreet";
+import searchByPostCodeAndCityAndStreetContinuation from "@salesforce/apexContinuation/AddressSearchController.searchByPostCodeAndCityAndStreet";
+import fullSearchParametersContinuation from "@salesforce/apexContinuation/AddressSearchController.fullSearchParameters";
 import ImmutabilityService from "c/immutabilityService";
 
 import { loadScript } from 'lightning/platformResourceLoader';
@@ -33,7 +33,7 @@ export default class AddressSearchLookup extends LightningElement {
         searchAddressLabel: searchAddressLabel
     }
 
-    addressSaveMethod
+    addressSaveMethod    
 
     @track
     showSearchResults = false
@@ -53,7 +53,7 @@ export default class AddressSearchLookup extends LightningElement {
     }
 
     get splitPhrases() {
-        return (separator) => (phrase) => Immutable.List(phrase.split(separator))  
+        return (separator) => (phrase) => ImmutabilityService.deepFreeze(phrase.split(separator))  
     }
 
     get searchAddressComposition() {
@@ -67,7 +67,7 @@ export default class AddressSearchLookup extends LightningElement {
 
     get publishResultComposition() {
         return [
-            (results) => Immutable.List(results),
+            (results) => ImmutabilityService.deepFreeze(results),
             this.mapResultsToList.bind(null),
             this.publishResults.bind(this)
         ]
@@ -90,21 +90,20 @@ export default class AddressSearchLookup extends LightningElement {
     }
 
     set saveMethod(value) {
-        this.addressSaveMethod = ImmutabilityService.deepFreeze(value);
+        this.addressSaveMethod = value;
     }
 
-    searchAddresses(event) {        
+    searchAddresses(event) {             
         const searchPhrase = event.target.value;
-        const isEnterPressed = event.which === ENTER_KEY;
+        const isEnterPressed = event.which === ENTER_KEY;        
         if (searchPhrase && isEnterPressed) {            
             this.clearPreviousResultsAndHideResultPanel()            
             this.searchAddressComposition.reduce(this.reducer, searchPhrase)
         }
     }
 
-    getSearchFunction(addressParts) {
-        console.log(addressParts)
-        let addressPartsSize = addressParts.size;
+    getSearchFunction(addressParts) {        
+        let addressPartsSize = addressParts.length;
         let searchFunctions = [
             this.searchByPostCode,
             this.setSearchByPostCodeOrStreet,
@@ -117,30 +116,30 @@ export default class AddressSearchLookup extends LightningElement {
     }
 
     searchByPostCode(addressStructure) {       
-        return searchByPostCodeContinuation({ postCode: addressStructure.get(0)});
+        return searchByPostCodeContinuation({ postCode: addressStructure[0]});
     }
 
     setSearchByPostCodeOrStreet(addressStructure) {
-        return setSearchByPostCodeOrStreetContinuation({
-            postCode: addressStructure.get(0),
-            street: addressStructure.get(1)
+        return searchByPostCodeOrStreetContinuation({
+            postCode: addressStructure[0],
+            street: addressStructure[1]
         });
     }
 
     setSearchByPostCodeAndCityAndStreet(addressStructure) {
-        return setSearchByPostCodeAndCityAndStreetContinuation({
-            postCode: addressStructure.get(0),
-            city: addressStructure.get(1),
-            street: addressStructure.get(2)
+        return searchByPostCodeAndCityAndStreetContinuation({
+            postCode: addressStructure[0],
+            city: addressStructure[1],
+            street: addressStructure[2]
         });
     }
 
     setFullSearchParameters(addressStructure) {
-        return setFullSearchParametersContinuation({
-            postCode: addressStructure.get(0),
-            city: addressStructure.get(1),
-            street: addressStructure.get(2),
-            houseNumber: addressStructure.get(3)
+        return fullSearchParametersContinuation({
+            postCode: addressStructure[0],
+            city: addressStructure[1],
+            street: addressStructure[2],
+            houseNumber: addressStructure[3]
         });
     }
 
@@ -154,7 +153,7 @@ export default class AddressSearchLookup extends LightningElement {
 
     runSearchWithMethod(searchMethod) {        
         searchMethod()
-            .then(results => {                
+            .then(results => { 
                 return this.publishResultComposition.reduce(this.reducer, results)
             })           
             .catch(err => console.log(err))
@@ -168,12 +167,12 @@ export default class AddressSearchLookup extends LightningElement {
         results.forEach(result => {
             currentSearchResults.push(result);
         });        
-        return Immutable.List(currentSearchResults);
+        return ImmutabilityService.deepFreeze(currentSearchResults);
     }
 
     publishResults(results) {        
         this.searchResults = results
-        if (this.searchResults.size > 0) {
+        if (this.searchResults.length > 0) {
             this.showSearchResults = true;
         }
     }    
@@ -188,13 +187,15 @@ export default class AddressSearchLookup extends LightningElement {
     }
 
     assignAddress(event) {
+        console.log('assignAddress',event.currentTarget.dataset.addressId)
         let addressId = event.currentTarget.dataset.addressId;
-        if (addressId && this.searchResults && this.searchResults.size > 0) {
+        if (addressId && this.searchResults && this.searchResults.length > 0) {
             this.assignAddressComposition.reduce(this.reducer,addressId)
         }
     }
 
-    saveAddress() {
+    saveAddress() {       
+        console.log(this.saveMethod,this.selectedAddress) 
         if (this.saveMethod && this.selectedAddress) {
             this.showSpinner = true;
 
