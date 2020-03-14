@@ -9,7 +9,7 @@ import SHIPPING_CITY from '@salesforce/schema/Account.ShippingCity'
 import SHIPPING_STATE from '@salesforce/schema/Account.ShippingState'
 import BUILDING_NUMBER from '@salesforce/schema/Account.Building_Number__c'
 import ADDRESS_SOURCE_ID from '@salesforce/schema/Account.AddressSourceId__c'
-import ID_FIELD from '@salesforce/schema/Account.Id';
+import ID_FIELD from '@salesforce/schema/Account.Id'
 
 export default class AccountAddressSelect extends LightningElement {
 

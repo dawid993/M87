@@ -186,16 +186,14 @@ export default class AddressSearchLookup extends LightningElement {
         this.clearPreviousResultsAndHideResultPanel();
     }
 
-    assignAddress(event) {
-        console.log('assignAddress',event.currentTarget.dataset.addressId)
+    assignAddress(event) {        
         let addressId = event.currentTarget.dataset.addressId;
         if (addressId && this.searchResults && this.searchResults.length > 0) {
             this.assignAddressComposition.reduce(this.reducer,addressId)
         }
     }
 
-    saveAddress() {       
-        console.log(this.saveMethod,this.selectedAddress) 
+    saveAddress() {
         if (this.saveMethod && this.selectedAddress) {
             this.showSpinner = true;
 

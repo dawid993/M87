@@ -101,6 +101,7 @@ describe('c-address-search-lookup tests', () => {
         const helpHeader = addressLookupElement.shadowRoot.querySelector('.search-header')
         expect(helpHeader).toBeTruthy()
     })
+
     it('search by post code', () => {
         searchByPostCodeContinuation.mockResolvedValue(SUCCESS_SEARCH_RESULTS)
 
@@ -213,7 +214,6 @@ describe('c-address-search-lookup tests', () => {
             expect(searchResults.length).toEqual(SUCCESS_SEARCH_RESULTS.length)
             expect(searchByPostCodeOrStreetContinuation.mock.calls[0][0]).toEqual({ postCode: TEST_POST_CODE, street: TEST_STREET })
             searchResults[0].click()
-            console.log(addressLookupElement.shadowRoot.querySelector('.current-address').textContent) 
             return new Promise((resolve) => resolve())
         }).then(() => {
             let saveButton = addressLookupElement.shadowRoot.querySelector('lightning-button')
