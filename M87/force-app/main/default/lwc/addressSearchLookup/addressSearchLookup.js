@@ -13,6 +13,7 @@ import ImmutabilityService from "c/immutabilityService";
 
 import { loadScript } from 'lightning/platformResourceLoader';
 import ImmutableResource from '@salesforce/resourceUrl/immutable_js'
+import reducers from 'c/functionReduction'
 
 const ENTER_KEY = 13;
 const addressSeparator = ','
@@ -82,11 +83,8 @@ export default class AddressSearchLookup extends LightningElement {
     }
 
 
-    get reducer() {        
-        return (parameter, currentFunction) => {            
-            let returnValue = currentFunction(parameter)
-            return returnValue
-        }
+    get reducer() {           
+        return reducers.reducer
     }
 
     set saveMethod(value) {

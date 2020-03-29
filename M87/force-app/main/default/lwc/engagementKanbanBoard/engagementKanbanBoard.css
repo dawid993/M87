@@ -1,0 +1,67 @@
+.kanban-board{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: 600px;
+}
+
+.kanban-board h3{
+    position: sticky;    
+    text-align: center;
+    padding-top: 18px;
+    font-size: 18px;
+    background-color: #32af5c;
+    min-height: 60px;
+}
+
+.kanban-board div.kanban-column{
+    background-color: #d8d8d8;
+    border-left: 2px solid #acacac;  
+    width: 25%;
+}
+
+.kanban-board > div:nth-child(1){
+    margin-left: 10px;
+}
+
+.kanban-board > div:nth-child(4){
+    margin-right: 10px;
+}
+
+.kanban-board .task-element{
+    min-height: 150px;
+    width: 90%;
+    margin: 10px auto;
+    background-color: white;
+    border-left: 3px solid green;
+}
+
+.kanban-board .task-element img{
+    background-color: orange;
+    transform: scale(0.6);
+    display: inline-block;
+    margin-right: 5px;
+
+}
+
+.kanban-board .task-element h2{
+    display: inline-block;
+    font-size: 16px;
+}
+
+.kanban-column-drop {
+    height: 100%;
+}
+
+div > c-engagement-task{
+    height: 100%;
+    width: 100%;
+}
+
+[data-task-id] > [data-owner] {    
+    margin-right: 5px;
+    width: 50%;
+}
+
+

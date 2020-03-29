@@ -1,0 +1,33 @@
+<template>    
+    <template if:true={showSpinner}>       
+            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>        
+    </template>    
+    <lightning-card title='Your cases'>
+        <div class='kanban-board'>
+            <div class="kanban-column">
+                <h3>To do</h3>
+                <div data-status='To Do' class="kanban-column-drop" ondrop={handleDrop} ondragover={handleDragOver}
+                    lwc:dom="manual">
+                </div>
+            </div>
+            <div class="kanban-column">
+                <h3>In Progress</h3>
+                <div data-status='In Progress' class="kanban-column-drop" ondrop={handleDrop} lwc:dom="manual"
+                    ondragover={handleDragOver}>
+                </div>
+            </div>
+            <div class="kanban-column">
+                <h3>Done - success</h3>
+                <div data-status='Done - success' class="kanban-column-drop" ondrop={handleDrop} lwc:dom="manual"
+                    ondragover={handleDragOver}>
+                </div>
+            </div>
+            <div class="kanban-column">
+                <h3>Done - failure</h3>
+                <div data-status='Done - failure' class="kanban-column-drop" ondrop={handleDrop} lwc:dom="manual"
+                    ondragover={handleDragOver}>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>
