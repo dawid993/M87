@@ -2,14 +2,15 @@ public with sharing class EngagementKanbanController {
     
     @AuraEnabled(cacheable=true)
     public static List<Case> retrieveEngagementCases(){
-        CaseSelectorImp caseSelector = new CaseSelectorImp();
-        return caseSelector.retieveEngagementCases(UserInfo.getUserId());
+        EngagementService service = (EngagementService) Application.Service.newInstance(EngagementService.class);
+        return service.retrieveEngagementCases( Id.valueOf(UserInfo.getUserId()));
     }
 
     @AuraEnabled
     public static ApexActionResult changeCaseStatus(String caseId,String status){
         try{
-            new CaseServiceImp().changeCaseStatus(caseId, status);            
+            EngagementService service = (EngagementService) Application.Service.newInstance(EngagementService.class);
+            service.updateEngagementCaseStatus(caseId, status);            
         }catch(Exception ex){
             System.debug(ex.getMessage());
             return ApexActionResult.fail(ex.getMessage());

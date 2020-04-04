@@ -139,7 +139,7 @@ export default class EngagementKanbanBoard extends LightningElement {
             this.createCaseImage,
             this.createCaseHeader.bind(null, caseTask),
             this.createCaseDescription.bind(null, caseTask),
-            this.createOwnerField.bind(null, caseTask)
+            this.createFooterSection.bind(this, caseTask)            
         ];
 
         return elementsFunctions.reduce(divReducer, this.createDraggableDiv(caseTask));
@@ -172,24 +172,31 @@ export default class EngagementKanbanBoard extends LightningElement {
 
     createCaseDescription(caseTask) {
         const description = document.createElement('div');
+        description.setAttribute('class','description');
         description.textContent = caseTask.Description;
         return description;
     }
 
-    createOwnerField(caseTask) {
-        const owner = document.createElement('div')
-        const labelDiv = document.createElement('div');
-        labelDiv.setAttribute('style', 'float:left');
-        labelDiv.textContent = 'Owner:';
+    createFooterSection(caseTask){        
+        const footer = document.createElement('div')
+        footer.classList.add('footer-container');
+        footer.appendChild(this.createFooterElement('Owner',caseTask.Owner.Name));
+        footer.appendChild(this.createFooterElement('Priority',caseTask.Priority));
 
-        const ownerNameDiv = document.createElement('div');
-        ownerNameDiv.setAttribute('data-owner', true);
-        ownerNameDiv.setAttribute('style', 'float:right');
-        ownerNameDiv.textContent = caseTask.Owner.Name;
-
-        owner.appendChild(labelDiv);
-        owner.appendChild(ownerNameDiv);
-
-        return owner;
+        return footer;
     }
+
+    createFooterElement(label,content){
+        const footerElement = document.createElement('div')
+        footerElement.classList.add('footer-element')
+        const labelDiv = document.createElement('div');        
+        labelDiv.textContent = label;
+        const valueDiv = document.createElement('div');        
+        valueDiv.textContent = content;
+
+        footerElement.appendChild(labelDiv);
+        footerElement.appendChild(valueDiv);
+
+        return footerElement;
+    }    
 }

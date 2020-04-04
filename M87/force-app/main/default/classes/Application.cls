@@ -10,7 +10,8 @@ public with sharing class Application {
 	public static final fflib_Application.ServiceFactory Service = 
 		new fflib_Application.ServiceFactory( 
 			new Map<Type, Type> {
-                CaseService.class => CaseServiceImp.class
+				CaseService.class => CaseServiceImp.class,
+				EngagementService.class => EngagementServiceImp.class
             }
         );
 

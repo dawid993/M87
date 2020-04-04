@@ -11,7 +11,8 @@ public with sharing class CaseSelectorImp extends fflib_SObjectSelector implemen
             Case.Description,           
             Case.CreatedDate, 
             Case.OwnerId,   
-            Case.Subject         
+            Case.Subject,
+            Case.Priority        
         };
     }
 
