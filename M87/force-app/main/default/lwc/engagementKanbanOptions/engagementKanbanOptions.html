@@ -18,28 +18,28 @@
                 </div>
             </div>
             <div class="selected-options">
-                <div class="selected-option">
+                <div class="selected-option owners">
                     <div>Owners:</div>
                 </div>
-                <div class="selected-option">
+                <div class="selected-option statuses">
                     <div>Statuses:</div>
                     <template for:each={selectedStatuses} for:item="status">
-                        <lightning-pill key={status} label={status} onremove={handleStatusDelete}></lightning-pill>
+                        <lightning-pill data-id={status} key={status} label={status} onremove={handleStatusDelete}></lightning-pill>
                     </template>
                 </div>
-                <div class="selected-option">
+                <div class="selected-option priorities">
                     <div>Priorities:</div>
                     <template for:each={selectedPriorities} for:item="priority">
-                        <lightning-pill key={priority} label={priority} onremove={handlePriorityDelete}>
+                        <lightning-pill data-id={priority} key={priority} label={priority} onremove={handlePriorityDelete}>
                         </lightning-pill>
                     </template>
                 </div>
             </div>
         </div>
+        <lightning-button onclick={applySearchOptions} value="Search"></lightning-button>
     </lightning-card>
     <template if:true={showOwnerSearchDialog}>
-        <div class='owner-search-box'>
-            123123
+        <div class='owner-search-box'>            
         </div>
     </template>
 </template>

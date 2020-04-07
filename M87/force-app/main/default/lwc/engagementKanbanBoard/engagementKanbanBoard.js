@@ -1,4 +1,4 @@
-import { LightningElement, track, wire } from 'lwc';
+import { LightningElement, track, wire, api} from 'lwc';
 import retrieveEngagementCases from '@salesforce/apex/EngagementKanbanController.retrieveEngagementCases';
 import changeCaseStatus from '@salesforce/apex/EngagementKanbanController.changeCaseStatus';
 import ImmutabilityService from "c/immutabilityService";
@@ -73,6 +73,11 @@ export default class EngagementKanbanBoard extends LightningElement {
 
     get toggleSpinner() {
         return () => this.showSpinner = !this.showSpinner;
+    }
+
+    @api
+    applySearchOptions(searchOptions){
+        console.log('EngagementKanbanBoard',searchOptions);
     }
 
     connectedCallback() {

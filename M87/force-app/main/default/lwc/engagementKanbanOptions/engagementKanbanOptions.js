@@ -2,35 +2,46 @@ import { LightningElement, track } from 'lwc';
 import ImmutabilityService from "c/immutabilityService";
 import reducers from 'c/functionReduction';
 
-export default class EngagementKanbanOptions extends LightningElement {
-    searchOptions = {};
-    
-    @track
-    selectedOwners = [];
+const toDoStatus = 'To Do';
+const inProgressStatus = 'In Progress';
+const doneSuccessStauts = 'Done - success';
+const doneFailureStatus = 'Done - failure';
+
+const lowPriority = 'Low';
+const mediumPriority = 'Medium';
+const highPriority = 'High';
+
+const allOwners = 'All';
+const findOwner = 'Find owner';
+
+export default class EngagementKanbanOptions extends LightningElement {  
 
     @track
-    selectedStatuses = [];
+    selectedOwners = [allOwners];
 
     @track
-    selectedPriorities = [];
+    selectedStatuses = [toDoStatus, inProgressStatus, doneSuccessStauts, doneFailureStatus];
+
+    @track
+    selectedPriorities = [lowPriority, mediumPriority, highPriority];
 
     @track
     showOwnerSearchDialog = false;
 
     get statusOptions() {
         return ImmutabilityService.deepFreeze([
-            { label: 'To Do', value: 'To Do' },
-            { label: 'In Progress', value: 'In Progress' },
-            { label: 'Done - success', value: 'Done - success' },
-            { label: 'Done - failure', value: 'Done - failure' },
+            { label: toDoStatus, value: toDoStatus },
+            { label: inProgressStatus, value: inProgressStatus },
+            { label: doneSuccessStauts, value: doneSuccessStauts },
+            { label: doneFailureStatus, value: doneFailureStatus },
         ]);
     }
 
     get priorityOptions() {
         return ImmutabilityService.deepFreeze([
-            { label: 'Low', value: 'Low' },
-            { label: 'Medium', value: 'Medium' },
-            { label: 'High', value: 'High' },
+            { label: lowPriority, value: lowPriority },
+            { label: mediumPriority, value: mediumPriority },
+            { label: highPriority, value: highPriority },
         ]);
     }
 
@@ -41,15 +52,38 @@ export default class EngagementKanbanOptions extends LightningElement {
         ]);
     }
 
+    applySearchOptions() {
+        const searchOptions = this.createOptionsObject(this.selectedOwners, this.selectedStatuses, this.selectedPriorities);   
+        console.log(searchOptions);     
+        this.fireSearchOptionEvent(searchOptions);
+    }
+
+    createOptionsObject(owners, statuses, priorities) {
+        return {
+            selectedOwners: owners,
+            selectedStatuses: statuses,
+            selectedPriorities: priorities,
+        };
+    }
+
+    fireSearchOptionEvent(searchOptions){          
+        if(searchOptions){
+            this.dispatchEvent(new CustomEvent('search',{
+                bubbles : true,
+                detail : {
+                    'searchOptions' : searchOptions,
+                }
+            }));              
+        }
+    }
+
     handleOwnerSelection(event) {
-        debugger;
         if (event && event.detail.value) {
-            if (event.detail.value === 'All' 
-            && !this.selectedOwners.find(option => option === event.detail.value)) {
+            if (event.detail.value === allOwners
+                && !this.selectedOwners.find(option => option === event.detail.value)) {
                 this.selectedOwners.push(event.detail.value);
-            }else{
+            } else {
                 this.showOwnerSearchDialog = true;
-                console.log(this.showOwnerSearchDialog)
             }
         }
     }
@@ -97,6 +131,4 @@ export default class EngagementKanbanOptions extends LightningElement {
     removeOptionFromList(option, targetList) {
         return targetList.filter(currentOption => currentOption !== option);
     }
-
-
 }
