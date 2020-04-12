@@ -2,11 +2,11 @@
     <lightning-card title="">
         <div class="kanban-options">
             <lightning-input name="enter-search" placeholder="Search" type="search" label="Search"
-                variant="label-hidden"></lightning-input>
+                variant="label-hidden" onchange={handleSearchPhraseChange}></lightning-input>
             <div class="search-options">
                 <div>
-                    <lightning-combobox name="owner" label="Owner" placeholder="Owner" options={ownerOptions}
-                        onchange={handleOwnerSelection}></lightning-combobox>
+                    <lightning-combobox data-id="owner" name="owner" label="Owner" placeholder="Owner"
+                        options={ownerOptions} onchange={handleOwnerSelection}></lightning-combobox>
                 </div>
                 <div>
                     <lightning-combobox name="status" label="Status" placeholder="Status" options={statusOptions}
@@ -20,26 +20,35 @@
             <div class="selected-options">
                 <div class="selected-option owners">
                     <div>Owners:</div>
+                    <template for:each={selectedOwners} for:item="owner">
+                        <lightning-pill data-id={owner} key={owner} label={owner} onremove={handleStatusDelete}>
+                        </lightning-pill>
+                    </template>
                 </div>
                 <div class="selected-option statuses">
                     <div>Statuses:</div>
                     <template for:each={selectedStatuses} for:item="status">
-                        <lightning-pill data-id={status} key={status} label={status} onremove={handleStatusDelete}></lightning-pill>
+                        <lightning-pill data-id={status} key={status} label={status} onremove={handleStatusDelete}>
+                        </lightning-pill>
                     </template>
                 </div>
                 <div class="selected-option priorities">
                     <div>Priorities:</div>
                     <template for:each={selectedPriorities} for:item="priority">
-                        <lightning-pill data-id={priority} key={priority} label={priority} onremove={handlePriorityDelete}>
+                        <lightning-pill data-id={priority} key={priority} label={priority}
+                            onremove={handlePriorityDelete}>
                         </lightning-pill>
                     </template>
                 </div>
             </div>
         </div>
-        <lightning-button onclick={applySearchOptions} value="Search"></lightning-button>
+        <div class='button-container'>
+            <lightning-button onclick={applySearchOptions} value="Search" variant="brand" label="Search">
+            </lightning-button>
+        </div>
     </lightning-card>
     <template if:true={showOwnerSearchDialog}>
-        <div class='owner-search-box'>            
+        <div class='owner-search-box'>
         </div>
     </template>
 </template>

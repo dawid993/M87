@@ -16,6 +16,18 @@ export default class EngagementKanbanBoard extends LightningElement {
     @track
     showSpinner = false
 
+    get purgeAllColumns(){
+        const removeAllChild = (element) => {
+            while(element.firstChild){
+                element.removeChild(element.lastChild);
+            }
+        }
+
+        return () => {            
+            this.template.querySelectorAll('.kanban-column [data-status]').forEach(removeAllChild);
+        }
+    }
+
     get mapTaskToDivElements() {
         return casesContainers => casesTasks => {
 
@@ -67,7 +79,6 @@ export default class EngagementKanbanBoard extends LightningElement {
             } else {
                 console.log('Cannot call service. Invalid parameters');
             }
-
         }
     }
 
@@ -77,23 +88,26 @@ export default class EngagementKanbanBoard extends LightningElement {
 
     @api
     applySearchOptions(searchOptions){
-        console.log('EngagementKanbanBoard',searchOptions);
-    }
-
-    connectedCallback() {
         this.toggleSpinner();
+        console.log(1,searchOptions);
+        retrieveEngagementCases({'searchOptions' : JSON.stringify(searchOptions)})
+        .then(response => {
+            console.log(response);
+            this.processEngagementCasesResponse(response.detailedResult)
+        });
     }
-
-    @wire(retrieveEngagementCases)
-    retrieveCases({ error, data }) {
-        if (data) {
+    
+    
+    processEngagementCasesResponse(response) {
+        if (response) {
+            this.purgeAllColumns();
             const casesContainers = this.createCaseContainers();
-            const renderTaskComposition = [
+            const renderTaskComposition = [               
                 this.mapTaskToDivElements(casesContainers),
                 this.renderColumns.bind(this, casesContainers)
             ]
 
-            renderTaskComposition.reduce(reducers.reducer, data);
+            renderTaskComposition.reduce(reducers.reducer, response);
             this.toggleSpinner();
         }
     }

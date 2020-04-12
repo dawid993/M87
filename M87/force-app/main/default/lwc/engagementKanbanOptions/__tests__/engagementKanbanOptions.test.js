@@ -7,6 +7,9 @@ const predefinedStatuses = ['To Do', 'In Progress', 'Done - success', 'Done - fa
 const predefinedPrioritiesNumber = 3;
 const predefinedPriorities = ['Low', 'Medium', 'High'];
 
+const predefinedOwnersNumber = 1;
+const predefinedOwners = ['All'];
+
 const createElementAndReturn = () => {
     const kanbanOptionsElement = createElement('c-engagement-kanban-options', {
         is: kanbanOptions
@@ -102,7 +105,7 @@ describe('c-egagement-kanban-options test', () => {
         });
     });
 
-    it.only('Is event fired on connected callback',() => {
+    it('Is event fired on connected callback',() => {
         const kanbanOptionsElement = createElement('c-engagement-kanban-options', {
             is: kanbanOptions
         });      
@@ -116,5 +119,34 @@ describe('c-egagement-kanban-options test', () => {
             expect(handler).toHaveBeenCalled();           
         })
     });
-   
+
+    it('should have predefined all option owner selected',()=>{
+        const kanbanOptionsElement = createElementAndReturn();
+        const predefinedOwnerOptions = retrieveOptionsElements('owners', kanbanOptionsElement);
+        expect(predefinedOwnerOptions.length).toBe(predefinedOwnersNumber);
+        const predefinedOwners = Array.from(predefinedOwnerOptions).map(ownerElement => ownerElement.dataset.id);
+            expect(predefinedOwners.sort()).toEqual(['All']);
+
+    });
+
+    it('should show find owner popup',()=>{
+        const kanbanOptionsElement = createElementAndReturn();
+        const ownerCombobox = kanbanOptionsElement.shadowRoot.querySelector("lightning-combobox[data-id='owner']");
+        
+        if(!ownerCombobox){
+            fail('Cannot find owner combobox.');
+        }
+
+        ownerCombobox.dispatchEvent( new CustomEvent('change',{
+            bubbles : true,
+            detail : {
+                value : 'Find owner'
+            }
+        }));
+
+        return flushPromises().then(() => {
+            const ownerPopup = kanbanOptionsElement.shadowRoot.querySelector('.owner-search-box');
+            expect(ownerPopup).toBeTruthy();
+        });
+    });   
 });

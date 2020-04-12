@@ -64,4 +64,8 @@
         <name>standard__SalesforceCMS</name>
         <type>CustomApplication</type>
     </appMenuItems>
+    <appMenuItems>
+        <name>Engagement_Tool</name>
+        <type>CustomApplication</type>
+    </appMenuItems>
 </AppMenu>

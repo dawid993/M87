@@ -14,7 +14,8 @@ const highPriority = 'High';
 const allOwners = 'All';
 const findOwner = 'Find owner';
 
-export default class EngagementKanbanOptions extends LightningElement {  
+export default class EngagementKanbanOptions extends LightningElement {
+    searchPhrase
 
     @track
     selectedOwners = [allOwners];
@@ -47,42 +48,50 @@ export default class EngagementKanbanOptions extends LightningElement {
 
     get ownerOptions() {
         return ImmutabilityService.deepFreeze([
-            { label: 'All Possible', value: 'All' },
-            { label: 'Find owner', value: 'Find owner' },
+            { label: allOwners, value: allOwners },
+            { label: findOwner, value: findOwner },
         ]);
     }
 
     applySearchOptions() {
-        const searchOptions = this.createOptionsObject(this.selectedOwners, this.selectedStatuses, this.selectedPriorities);   
-        console.log(searchOptions);     
+        const searchOptions = this.createOptionsObject(this.searchPhrase, this.selectedOwners, 
+            this.selectedStatuses, this.selectedPriorities);
         this.fireSearchOptionEvent(searchOptions);
     }
 
-    createOptionsObject(owners, statuses, priorities) {
+    createOptionsObject(phrase, owners, statuses, priorities) {
         return {
+            searchPhrase: phrase,
             selectedOwners: owners,
             selectedStatuses: statuses,
             selectedPriorities: priorities,
         };
     }
 
-    fireSearchOptionEvent(searchOptions){          
-        if(searchOptions){
-            this.dispatchEvent(new CustomEvent('search',{
-                bubbles : true,
-                detail : {
-                    'searchOptions' : searchOptions,
+    fireSearchOptionEvent(searchOptions) {
+        if (searchOptions) {
+            this.dispatchEvent(new CustomEvent('search', {
+                bubbles: true,
+                detail: {
+                    'searchOptions': searchOptions,
                 }
-            }));              
+            }));
+        }
+    }
+
+    handleSearchPhraseChange(event) {        
+        if (event.detail.value) {
+            this.searchPhrase = event.detail.value;
         }
     }
 
     handleOwnerSelection(event) {
         if (event && event.detail.value) {
-            if (event.detail.value === allOwners
-                && !this.selectedOwners.find(option => option === event.detail.value)) {
-                this.selectedOwners.push(event.detail.value);
-            } else {
+            const selectedOwner = event.detail.value;
+            if (selectedOwner === allOwners
+                && !this.selectedOwners.find(option => option === selectedOwner)) {
+                this.selectedOwners.push(selectedOwner);
+            } else if (selectedOwner === findOwner) {
                 this.showOwnerSearchDialog = true;
             }
         }

@@ -16,7 +16,7 @@ public with sharing class CaseSelectorImp extends fflib_SObjectSelector implemen
         };
     }
 
-    public List<Case> retieveEngagementCases(ID ownerId){
+    public List<Case> retrieveEngagementCases(ID ownerId){
         String conditionString = 'RecordTypeId = {0} AND OwnerId = {1}';
         conditionString = String.format(conditionString,new List<Object>{
                 '\''+retrieveEngagementRecordType()+'\'',
@@ -29,6 +29,32 @@ public with sharing class CaseSelectorImp extends fflib_SObjectSelector implemen
         System.debug(conditionString);
         return Database.query(
             queryFactoy
+            .setCondition(conditionString)
+            .toSOQL()
+        );
+    }
+
+    public List<Case> retrieveEngagementCases(SearchEngagementCaseOptions searchOptions){  
+        System.debug(searchOptions);
+        final List<String> statuses = searchOptions.selectedStatuses;
+        final List<String> priorities = searchOptions.selectedPriorities;
+        final List<String> owners = searchOptions.selectedOwners;
+
+        String conditionString = 'RecordTypeId = {0} AND Status IN : statuses AND Priority IN :priorities';
+        if(searchOptions.selectedOwners.size() > 1 || searchOptions.selectedOwners[0] != 'All'){
+            conditionString+=' AND OwnerId IN : owners';
+        }
+
+        conditionString = String.format(conditionString,new List<Object>{
+                '\''+retrieveEngagementRecordType()+'\''
+            }
+        );
+
+        fflib_QueryFactory queryFactory = newQueryFactory();
+        new UserSelectorImp().configureQueryFactoryFields(queryFactory,'Owner');
+        
+        return Database.query(
+            queryFactory
             .setCondition(conditionString)
             .toSOQL()
         );

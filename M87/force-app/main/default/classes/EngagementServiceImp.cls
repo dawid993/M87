@@ -15,7 +15,25 @@ public with sharing class EngagementServiceImp implements EngagementService {
 
         try{
             CaseService caseService = newCaseServiceInstance();
-            engagementCases = caseService.retieveEngagementCases(ownerId);
+            engagementCases = caseService.retrieveEngagementCases(ownerId);
+        }catch(Exception ex){
+            System.debug(ex.getMessage());
+            throw new Exceptions.UnableToReadDataException('Cannot retrieve data',ex);
+        }
+
+        return engagementCases;
+    }
+
+    public List<Case> retrieveEngagementCases(SearchEngagementCaseOptions searchOptions){
+        if(searchOptions == null){
+            throw new Exceptions.InvalidServiceActionParametersException('Invalid parameter.');
+        }
+
+        List<Case> engagementCases = new List<Case>();
+
+        try{
+            CaseService caseService = newCaseServiceInstance();
+            engagementCases = caseService.retrieveEngagementCases(searchOptions);
         }catch(Exception ex){
             System.debug(ex.getMessage());
             throw new Exceptions.UnableToReadDataException('Cannot retrieve data',ex);

@@ -2,6 +2,8 @@ public class ApexActionResult {
     
     @AuraEnabled 
     public Boolean success;
+
+    @AuraEnabled   
     public Object detailedResult;
 
     private ApexActionResult(Boolean success, Object detailedResult){

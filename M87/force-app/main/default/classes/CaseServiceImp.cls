@@ -6,8 +6,13 @@ public with sharing class CaseServiceImp implements CaseService {
         uow.commitWork();
     }
 
-    public List<Case> retieveEngagementCases(ID ownerId){
+    public List<Case> retrieveEngagementCases(ID ownerId){
         CaseSelector caseSelector = (CaseSelector) Application.Selector.newInstance(Case.sObjectType);        
-        return caseSelector.retieveEngagementCases(ownerId);
-    }    
+        return caseSelector.retrieveEngagementCases(ownerId);
+    }
+    
+    public List<Case> retrieveEngagementCases(SearchEngagementCaseOptions searchOptions){
+        CaseSelector caseSelector = (CaseSelector) Application.Selector.newInstance(Case.sObjectType);        
+        return caseSelector.retrieveEngagementCases(searchOptions);
+    }
 }

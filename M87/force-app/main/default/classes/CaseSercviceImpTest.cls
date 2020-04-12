@@ -10,9 +10,15 @@ public class CaseSercviceImpTest {
         ID caseId = fflib_IDGenerator.generate(Case.sObjectType);
 
         caseSrvMock.changeCaseStatus(caseId, status);
-
+        
         ((fflib_ISObjectUnitOfWork) mocks.verify(uowMock, 1)).commitWork();
-        ((fflib_ISObjectUnitOfWork) mocks.verify(uowMock, 1)).registerDirty(new Case(Id=caseId,Status = status));
+        ((fflib_ISObjectUnitOfWork) mocks.verify(uowMock, 1)).registerDirty(
+            fflib_Match.sObjectWith(
+                new Map<Schema.SObjectField, Object> {
+                    Case.ID.getDescribe().getSOBjectField() => caseId,
+                    Case.Status.getDescribe().getSOBjectField() => status
+                }
+        ));
 
     }
 
@@ -29,11 +35,11 @@ public class CaseSercviceImpTest {
         CaseServiceImp caseSrvMock = new CaseServiceImp(); 
 
         mocks.startStubbing(); 
-        mocks.when(selector.retieveEngagementCases(ownerId)).thenReturn(engagementCases);
+        mocks.when(selector.retrieveEngagementCases(ownerId)).thenReturn(engagementCases);
         mocks.stopStubbing();
 
-        List<Case> retrievedCases = caseSrvMock.retieveEngagementCases(ownerId);
+        List<Case> retrievedCases = caseSrvMock.retrieveEngagementCases(ownerId);
         System.assertEquals(1,retrievedCases.size());
-        ((CaseSelector) mocks.verify(selector,1)).retieveEngagementCases(ownerId);
+        ((CaseSelector) mocks.verify(selector,1)).retrieveEngagementCases(ownerId);
     }
 }
