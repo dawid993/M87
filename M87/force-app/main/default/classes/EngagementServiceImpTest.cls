@@ -152,5 +152,81 @@ public class EngagementServiceImpTest {
         ((CaseService) mocks.verify(mockedCaseService)).retrieveEngagementCases(searchOptions);               
     }
 
+    @isTest
+    public static void shouldUpdateCaseStatus(){
+        fflib_ApexMocks mocks = new fflib_ApexMocks();
+        CaseService mockedCaseService = (CaseService) MocksUtils.mockServiceAndReturn(CaseService.class, mocks);
+
+        ID caseID = fflib_IDGenerator.generate(Case.getSObjectType());
+        String status = 'To Do';
+
+        EngagementServiceImp engagementService = new EngagementServiceImp();
+        engagementService.updateEngagementCaseStatus(caseId, status);
+
+        ((CaseService) mocks.verify(mockedCaseService)).changeCaseStatus(fflib_Match.eqId(caseID),fflib_Match.eqString(status));
+
+    }
+
+    @isTest
+    public static void shouldThrowExceptionBecauseIncorrectParameters(){      
+        EngagementServiceImp engagementService = new EngagementServiceImp();
+
+        Boolean exceptionThrown = false;
+        Exception thrownException;
+        try{
+            engagementService.updateEngagementCaseStatus(null, null);
+        }catch(Exceptions.InvalidServiceActionParametersException ex){
+            thrownException = ex;
+        }
+
+        System.assertNotEquals(null, thrownException);
+        
+    }
+
+    @isTest
+    public static void shouldThrowExceptionBecauseInvalidStatus(){      
+        EngagementServiceImp engagementService = new EngagementServiceImp();
+        
+        ID caseID = fflib_IDGenerator.generate(Case.getSObjectType());
+        String status = 'Invalid status';
+
+        Boolean exceptionThrown = false;
+        Exception thrownException;
+        
+        try{
+            engagementService.updateEngagementCaseStatus(caseID, status);
+        }catch(Exceptions.InvalidServiceActionParametersException ex){
+            thrownException = ex;
+        }
+
+        System.assertNotEquals(null, thrownException);        
+    }
+
+    @isTest
+    public static void shouldThrowExceptionBecauseCaseServiceThrownExceptionWhenUpdateCase(){      
+        fflib_ApexMocks mocks = new fflib_ApexMocks();
+        CaseService mockedCaseService = (CaseService) MocksUtils.mockServiceAndReturn(CaseService.class, mocks);
+
+        ID caseID = fflib_IDGenerator.generate(Case.getSObjectType());
+        String status = 'To Do';
+
+        mocks.startStubbing();
+        ((CaseService) mocks.doThrowWhen(new Exceptions.UnableToSaveDataException('Test exception'),mockedCaseService))
+            .changeCaseStatus(caseID,status);     
+        mocks.stopStubbing();
+
+        EngagementServiceImp engagementService = new EngagementServiceImp();        
+
+        Boolean exceptionThrown = false;
+        Exception thrownException;
+        
+        try{
+            engagementService.updateEngagementCaseStatus(caseID, status);
+        }catch(Exceptions.UnableToSaveDataException ex){
+            thrownException = ex;
+        }
+
+        System.assertNotEquals(null, thrownException);        
+    }
 
 }
