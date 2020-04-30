@@ -1,9 +1,7 @@
 import { createElement } from 'lwc';
 import engagementKanban from 'c/engagementKanban';
 
-const flushPromises = () => {
-    return new Promise(resolve => setImmediate(resolve));
-}
+import {flushPromises} from 'c/testUtility';
 
 describe('c-engagement-kanban tests', () => {
     afterEach(() => {
@@ -49,6 +47,7 @@ describe('c-engagement-kanban tests', () => {
         }));
 
         return flushPromises().then(() => {
+            console.log('flushPromises');
             expect(engagementBoard.applySearchOptions).toHaveBeenCalled();
             console.log(engagementBoard.applySearchOptions.mock.calls[0])
         })

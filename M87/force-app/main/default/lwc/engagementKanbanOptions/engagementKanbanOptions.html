@@ -49,6 +49,9 @@
     </lightning-card>
     <template if:true={showOwnerSearchDialog}>
         <div class='owner-search-box'>
+            <div class="owner-search-container">
+                <c-engagement-kanban-owner-options ondialogclose={closeOwnerSearchDialog}></c-engagement-kanban-owner-options>
+            </div>            
         </div>
     </template>
 </template>

@@ -18,6 +18,14 @@
   width: 100%;
   height: 100%;
   z-index: 98;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.owner-search-box > .owner-search-container{  
+  width: 25%;
+  height: 20%;
 }
 
 .button-container {
@@ -25,3 +33,4 @@
   justify-content: flex-end;
   margin: 10px;
 }
+

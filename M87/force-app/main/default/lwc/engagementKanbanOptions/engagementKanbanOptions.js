@@ -94,6 +94,7 @@ export default class EngagementKanbanOptions extends LightningElement {
             } else if (selectedOwner === findOwner) {
                 this.showOwnerSearchDialog = true;
             }
+            this.clearComboboxValue(event.currentTarget);
         }
     }
 
@@ -139,5 +140,9 @@ export default class EngagementKanbanOptions extends LightningElement {
 
     removeOptionFromList(option, targetList) {
         return targetList.filter(currentOption => currentOption !== option);
+    }
+
+    closeOwnerSearchDialog(event){
+        this.showOwnerSearchDialog = false;
     }
 }
