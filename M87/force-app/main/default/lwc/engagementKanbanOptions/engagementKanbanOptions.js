@@ -1,6 +1,6 @@
 import { LightningElement, track } from 'lwc';
 import ImmutabilityService from "c/immutabilityService";
-import reducers from 'c/functionReduction';
+import apexSearchOwners from '@salesforce/apex/EngagementKanbanController.searchOwners';
 
 const toDoStatus = 'To Do';
 const inProgressStatus = 'In Progress';
@@ -11,7 +11,9 @@ const lowPriority = 'Low';
 const mediumPriority = 'Medium';
 const highPriority = 'High';
 
-const allOwners = 'All';
+const allOwnersLabel = 'All';
+const allOwnersId = 'ALL_OWNERS_SEARCH';
+const allOwners = { id: allOwnersId , label: allOwnersLabel };
 const findOwner = 'Find owner';
 
 export default class EngagementKanbanOptions extends LightningElement {
@@ -28,6 +30,8 @@ export default class EngagementKanbanOptions extends LightningElement {
 
     @track
     showOwnerSearchDialog = false;
+
+    searchFunction = apexSearchOwners;
 
     get statusOptions() {
         return ImmutabilityService.deepFreeze([
@@ -48,14 +52,18 @@ export default class EngagementKanbanOptions extends LightningElement {
 
     get ownerOptions() {
         return ImmutabilityService.deepFreeze([
-            { label: allOwners, value: allOwners },
+            { label: allOwnersLabel, value: allOwnersLabel },
             { label: findOwner, value: findOwner },
         ]);
     }
 
     applySearchOptions() {
-        const searchOptions = this.createOptionsObject(this.searchPhrase, this.selectedOwners, 
-            this.selectedStatuses, this.selectedPriorities);
+        const searchOptions = this.createOptionsObject(
+            this.searchPhrase,
+            this.selectedOwners.map(owner => owner.id),
+            this.selectedStatuses,
+            this.selectedPriorities
+        );
         this.fireSearchOptionEvent(searchOptions);
     }
 
@@ -79,7 +87,7 @@ export default class EngagementKanbanOptions extends LightningElement {
         }
     }
 
-    handleSearchPhraseChange(event) {        
+    handleSearchPhraseChange(event) {
         if (event.detail.value) {
             this.searchPhrase = event.detail.value;
         }
@@ -88,8 +96,8 @@ export default class EngagementKanbanOptions extends LightningElement {
     handleOwnerSelection(event) {
         if (event && event.detail.value) {
             const selectedOwner = event.detail.value;
-            if (selectedOwner === allOwners
-                && !this.selectedOwners.find(option => option === selectedOwner)) {
+            if (selectedOwner === allOwnersLabel && !this.selectedOwners.find(option => option === selectedOwner)) {
+                this.selectedOwners = [];
                 this.selectedOwners.push(selectedOwner);
             } else if (selectedOwner === findOwner) {
                 this.showOwnerSearchDialog = true;
@@ -127,14 +135,32 @@ export default class EngagementKanbanOptions extends LightningElement {
     handleStatusDelete(event) {
         let status = event.currentTarget.label;
         if (status) {
-            this.selectedStatuses = this.removeOptionFromList(status, this.selectedStatuses)
+            this.selectedStatuses = this.removeOptionFromList(status, this.selectedStatuses);
+        }
+    }
+
+    handleOwnerDelete(event) {
+        let ownerId = event.target.dataset.id;
+        if (ownerId) {
+            this.selectedOwners = this.selectedOwners.filter(elem => elem.id != ownerId);
+        }
+
+        if(this.selectedOwners.length === 0){
+            this.addAllOwnerOption();
+        }
+    }
+
+    handleStatusDelete(event) {
+        let status = event.currentTarget.label;
+        if (status) {
+            this.selectedStatuses = this.removeOptionFromList(status, this.selectedStatuses);
         }
     }
 
     handlePriorityDelete(event) {
         let priority = event.currentTarget.label;
         if (priority) {
-            this.selectedPriorities = this.removeOptionFromList(priority, this.selectedPriorities)
+            this.selectedPriorities = this.removeOptionFromList(priority, this.selectedPriorities);
         }
     }
 
@@ -142,7 +168,25 @@ export default class EngagementKanbanOptions extends LightningElement {
         return targetList.filter(currentOption => currentOption !== option);
     }
 
-    closeOwnerSearchDialog(event){
+    closeOwnerSearchDialog(event) {
         this.showOwnerSearchDialog = false;
+    }
+
+    handleOptionSelected(event) {
+        const selectedOwner = event.detail.selectedOption;
+        if (selectedOwner && selectedOwner.id) {
+            this.removeAllOwnerOption();
+            this.selectedOwners.push(event.detail.selectedOption);
+        }
+    }
+
+    removeAllOwnerOption(){
+        if(this.selectedOwners.find(elem => elem.id === allOwnersId)){
+            this.selectedOwners = this.selectedOwners.filter(elem => elem.id != allOwnersId);
+        }
+    }
+
+    addAllOwnerOption(){
+        this.selectedOwners.push(allOwners);
     }
 }

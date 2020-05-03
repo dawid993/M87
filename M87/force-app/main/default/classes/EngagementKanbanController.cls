@@ -1,9 +1,8 @@
 public with sharing class EngagementKanbanController {
     
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static ApexActionResult retrieveEngagementCases(String searchOptions){
-        try{
-            System.debug(searchOptions);
+        try{            
             SearchEngagementCaseOptions parsedSearchOptions = 
                 (SearchEngagementCaseOptions) JSON.deserialize(searchOptions, SearchEngagementCaseOptions.class);
             EngagementService service = (EngagementService) Application.Service.newInstance(EngagementService.class);
@@ -26,5 +25,18 @@ public with sharing class EngagementKanbanController {
         }
 
         return ApexActionResult.success();
-    }    
+    }   
+    
+    @AuraEnabled
+    public static ApexActionResult searchOwners(String searchPhrase){
+        try{
+            UserService userService = (UserService) Application.Service.newInstance(UserService.class);
+            return ApexActionResult.success(
+                userService.searchOwnerByName(searchPhrase)
+            );
+        }catch(Exception ex){
+            System.debug(ex.getMessage());
+            return ApexActionResult.fail(ex.getMessage());
+        }
+    }
 }

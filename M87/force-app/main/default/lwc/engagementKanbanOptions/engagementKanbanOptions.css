@@ -24,8 +24,9 @@
 }
 
 .owner-search-box > .owner-search-container{  
+  background-color: white;
   width: 25%;
-  height: 20%;
+  min-height: 200px;  
 }
 
 .button-container {

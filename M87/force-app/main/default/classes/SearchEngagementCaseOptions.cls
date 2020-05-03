@@ -1,4 +1,6 @@
 public with sharing class SearchEngagementCaseOptions {
+    public static final String ALL_OWNER_OPTION_ID = 'ALL_OWNERS_SEARCH' ;
+
     @AuraEnabled        
     public String phrase {get; set;}
 

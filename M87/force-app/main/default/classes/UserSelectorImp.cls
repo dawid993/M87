@@ -1,4 +1,4 @@
-public with sharing class UserSelectorImp extends fflib_SObjectSelector{
+public with sharing class UserSelectorImp extends fflib_SObjectSelector implements UserSelector{
     public Schema.SObjectType getSObjectType() {
         return User.sObjectType;
     }
@@ -8,5 +8,14 @@ public with sharing class UserSelectorImp extends fflib_SObjectSelector{
             User.ID,                    
             User.Name                 
         };
-    }    
+    }
+    
+    public List<User> searchUserByName(String name){
+        String condition = 'NAME LIKE \'%'+name+'%\'';
+        return Database.query(
+            newQueryFactory()
+            .setCondition(condition)
+            .toSOQL()
+        );
+    }
 }

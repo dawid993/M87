@@ -11,7 +11,8 @@ public with sharing class Application {
 		new fflib_Application.ServiceFactory( 
 			new Map<Type, Type> {
 				CaseService.class => CaseServiceImp.class,
-				EngagementService.class => EngagementServiceImp.class
+				EngagementService.class => EngagementServiceImp.class,
+				UserService.class => UserServiceImp.class
             }
         );
 
@@ -19,7 +20,8 @@ public with sharing class Application {
 	public static final fflib_Application.SelectorFactory Selector = 
 		new fflib_Application.SelectorFactory(
 			new Map<SObjectType, Type> {
-                Case.sObjectType => CaseSelectorImp.class
+				Case.sObjectType => CaseSelectorImp.class,
+				User.sObjectType => UserSelectorImp.class
             }
         );
 

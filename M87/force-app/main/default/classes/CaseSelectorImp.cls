@@ -24,24 +24,25 @@ public with sharing class CaseSelectorImp extends fflib_SObjectSelector implemen
             }
         );
 
-        fflib_QueryFactory queryFactoy = newQueryFactory();
-        new UserSelectorImp().configureQueryFactoryFields(queryFactoy,'Owner');
-        System.debug(conditionString);
+        fflib_QueryFactory queryFactory = newQueryFactory();
+        new UserSelectorImp().configureQueryFactoryFields(queryFactory,'Owner');
+        
         return Database.query(
-            queryFactoy
+            queryFactory
             .setCondition(conditionString)
             .toSOQL()
         );
     }
 
-    public List<Case> retrieveEngagementCases(SearchEngagementCaseOptions searchOptions){  
-        System.debug(searchOptions);
+    public List<Case> retrieveEngagementCases(SearchEngagementCaseOptions searchOptions){         
         final List<String> statuses = searchOptions.selectedStatuses;
         final List<String> priorities = searchOptions.selectedPriorities;
         final List<String> owners = searchOptions.selectedOwners;
 
         String conditionString = 'RecordTypeId = {0} AND Status IN : statuses AND Priority IN :priorities';
-        if(searchOptions.selectedOwners.size() > 1 || searchOptions.selectedOwners[0] != 'All'){
+        if(searchOptions.selectedOwners.size() > 1 || 
+            searchOptions.selectedOwners[0] != SearchEngagementCaseOptions.ALL_OWNER_OPTION_ID
+        ){
             conditionString+=' AND OwnerId IN : owners';
         }
 
