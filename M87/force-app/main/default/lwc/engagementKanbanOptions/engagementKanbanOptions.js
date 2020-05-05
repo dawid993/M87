@@ -13,11 +13,26 @@ const highPriority = 'High';
 
 const allOwnersLabel = 'All';
 const allOwnersId = 'ALL_OWNERS_SEARCH';
-const allOwners = { id: allOwnersId , label: allOwnersLabel };
+const allOwners = { id: allOwnersId, label: allOwnersLabel };
 const findOwner = 'Find owner';
 
+const pharseFieldId = 'phrase';
+const ownerFieldId = 'owner';
+const statusFieldId = 'status';
+const priorityFieldId = 'priority';
+
+const comboboxInvalidMessage = 'Please select at least one value.';
+const phraseInvalidMessage = 'Phrase must be longer than 1 character.';
+
+/*
+* Because when phrase is 0 character long its ok, then we dont apply this option.
+* When we want then search need to be longer than 1 character long.
+*/
+const phraseValidationFunction = phrase => phrase.length != 1;
+const comboboxValidationFunction = comboboxValues => comboboxValues.length >= 1;
+
 export default class EngagementKanbanOptions extends LightningElement {
-    searchPhrase
+    searchPhrase = '';
 
     @track
     selectedOwners = [allOwners];
@@ -32,6 +47,35 @@ export default class EngagementKanbanOptions extends LightningElement {
     showOwnerSearchDialog = false;
 
     searchFunction = apexSearchOwners;
+
+    get validationDescription() {
+        return [
+            {
+                field: this.template.querySelector(`[data-id='${pharseFieldId}']`),
+                propertyValue: this.searchPhrase,
+                errorMsg: phraseInvalidMessage,
+                validationFunction: phraseValidationFunction
+            },
+            {
+                field: this.template.querySelector(`[data-id='${ownerFieldId}']`),
+                propertyValue: this.selectedOwners,
+                errorMsg: comboboxInvalidMessage,
+                validationFunction: comboboxValidationFunction,
+            },
+            {
+                field: this.template.querySelector(`[data-id='${statusFieldId}']`),
+                propertyValue: this.selectedStatuses,
+                errorMsg: comboboxInvalidMessage,
+                validationFunction: comboboxValidationFunction,
+            },
+            {
+                field: this.template.querySelector(`[data-id='${priorityFieldId}']`),
+                propertyValue: this.selectedPriorities,
+                errorMsg: comboboxInvalidMessage,
+                validationFunction: comboboxValidationFunction,
+            },
+        ];
+    }
 
     get statusOptions() {
         return ImmutabilityService.deepFreeze([
@@ -58,21 +102,36 @@ export default class EngagementKanbanOptions extends LightningElement {
     }
 
     applySearchOptions() {
-        const searchOptions = this.createOptionsObject(
-            this.searchPhrase,
-            this.selectedOwners.map(owner => owner.id),
-            this.selectedStatuses,
-            this.selectedPriorities
-        );
-        this.fireSearchOptionEvent(searchOptions);
+        if (this.validateSearchOptions()) {
+            const searchOptions = this.createOptionsObject(
+                this.searchPhrase,
+                this.selectedOwners.map(owner => owner.id),
+                this.selectedStatuses,
+                this.selectedPriorities
+            );
+            this.fireSearchOptionEvent(searchOptions);
+        }
+    }
+
+    validateSearchOptions() {
+        const areSearchOptionsValid = this.validationDescription.reduce((acc, searchOption) => {
+            const currentFieldResult = searchOption.validationFunction(searchOption.propertyValue);
+            searchOption.field.setCustomValidity(currentFieldResult ? '' : searchOption.errorMsg);
+            searchOption.field.showHelpMessageIfInvalid();
+            return acc && currentFieldResult;
+
+        }, true);
+
+        return areSearchOptionsValid;
+
     }
 
     createOptionsObject(phrase, owners, statuses, priorities) {
         return {
-            searchPhrase: phrase,
-            selectedOwners: owners,
-            selectedStatuses: statuses,
-            selectedPriorities: priorities,
+            'phrase': phrase,
+            'selectedOwners': owners,
+            'selectedStatuses': statuses,
+            'selectedPriorities': priorities,
         };
     }
 
@@ -88,9 +147,7 @@ export default class EngagementKanbanOptions extends LightningElement {
     }
 
     handleSearchPhraseChange(event) {
-        if (event.detail.value) {
-            this.searchPhrase = event.detail.value;
-        }
+        this.searchPhrase = event.detail.value ? event.detail.value : '';    
     }
 
     handleOwnerSelection(event) {
@@ -98,7 +155,7 @@ export default class EngagementKanbanOptions extends LightningElement {
             const selectedOwner = event.detail.value;
             if (selectedOwner === allOwnersLabel && !this.selectedOwners.find(option => option === selectedOwner)) {
                 this.selectedOwners = [];
-                this.selectedOwners.push(selectedOwner);
+                this.selectedOwners.push(allOwners);
             } else if (selectedOwner === findOwner) {
                 this.showOwnerSearchDialog = true;
             }
@@ -145,7 +202,7 @@ export default class EngagementKanbanOptions extends LightningElement {
             this.selectedOwners = this.selectedOwners.filter(elem => elem.id != ownerId);
         }
 
-        if(this.selectedOwners.length === 0){
+        if (this.selectedOwners.length === 0) {
             this.addAllOwnerOption();
         }
     }
@@ -180,13 +237,13 @@ export default class EngagementKanbanOptions extends LightningElement {
         }
     }
 
-    removeAllOwnerOption(){
-        if(this.selectedOwners.find(elem => elem.id === allOwnersId)){
+    removeAllOwnerOption() {
+        if (this.selectedOwners.find(elem => elem.id === allOwnersId)) {
             this.selectedOwners = this.selectedOwners.filter(elem => elem.id != allOwnersId);
         }
     }
 
-    addAllOwnerOption(){
+    addAllOwnerOption() {
         this.selectedOwners.push(allOwners);
     }
 }

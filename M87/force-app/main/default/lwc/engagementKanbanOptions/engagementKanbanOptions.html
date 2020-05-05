@@ -1,7 +1,7 @@
 <template>
     <lightning-card title="">
         <div class="kanban-options">
-            <lightning-input name="enter-search" placeholder="Search" type="search" label="Search"
+            <lightning-input data-id="phrase" name="enter-search" placeholder="Search" type="search" label="Search"
                 variant="label-hidden" onchange={handleSearchPhraseChange}></lightning-input>
             <div class="search-options">
                 <div>
@@ -9,11 +9,11 @@
                         options={ownerOptions} onchange={handleOwnerSelection}></lightning-combobox>
                 </div>
                 <div>
-                    <lightning-combobox name="status" label="Status" placeholder="Status" options={statusOptions}
+                    <lightning-combobox data-id="status" name="status" label="Status" placeholder="Status" options={statusOptions}
                         onchange={handleStatusSelection}></lightning-combobox>
                 </div>
                 <div>
-                    <lightning-combobox name="priority" label="Priority" placeholder="Priority"
+                    <lightning-combobox data-id="priority" name="priority" label="Priority" placeholder="Priority"
                         options={priorityOptions} onchange={handlePrioritySelection}></lightning-combobox>
                 </div>
             </div>

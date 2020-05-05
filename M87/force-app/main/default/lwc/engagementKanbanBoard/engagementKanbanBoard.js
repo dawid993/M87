@@ -90,8 +90,7 @@ export default class EngagementKanbanBoard extends LightningElement {
     applySearchOptions(searchOptions){
         this.toggleSpinner();        
         retrieveEngagementCases({'searchOptions' : JSON.stringify(searchOptions)})
-        .then(response => { 
-            console.log('applySearchOptions')           
+        .then(response => {                      
             this.processEngagementCasesResponse(response.detailedResult)
         });
 
