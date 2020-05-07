@@ -3,14 +3,24 @@ import { registerLdsTestWireAdapter } from '@salesforce/sfdx-lwc-jest';
 import engagementKanbanBoard from 'c/engagementKanbanBoard';
 import retrieveEngagementCases from '@salesforce/apex/EngagementKanbanController.retrieveEngagementCases';
 import changeCaseStatus from '@salesforce/apex/EngagementKanbanController.changeCaseStatus';
-
+import {flushPromises} from 'c/testUtility';
 
 jest.mock(
     '@salesforce/apex/EngagementKanbanController.changeCaseStatus',
     () => {
         return {
             default: jest.fn()
-        }
+        };
+    },
+    { virtual: true }
+);
+
+jest.mock(
+    '@salesforce/apex/EngagementKanbanController.retrieveEngagementCases',
+    () => {
+        return {
+            default: jest.fn()
+        };
     },
     { virtual: true }
 );
@@ -26,11 +36,11 @@ const createBubbledEvent = (type, props = {}) => {
 
 const createDraggableDiv = () => {
     const draggableDiv = document.createElement('div');
-    draggableDiv.setAttribute('draggable',true)
+    draggableDiv.setAttribute('draggable', true)
 
     return draggableDiv
 }
-        
+
 
 describe('c-engagement-kanban-board tests', () => {
     afterEach(() => {
@@ -48,18 +58,18 @@ describe('c-engagement-kanban-board tests', () => {
         expect(engagementBoard).toBeTruthy()
     })
 
-    it('is drop event supported', () => {       
+    it('is drop event supported', () => {
         const engagementKanbanBoardElement = createElement('c-engagement-kanban-board', {
             is: engagementKanbanBoard
         })
 
-        changeCaseStatus.mockResolvedValue({success : true})
+        changeCaseStatus.mockResolvedValue({ success: true })
         document.body.appendChild(engagementKanbanBoardElement)
 
-        const column = engagementKanbanBoardElement.shadowRoot.querySelector("div[data-status='To Do']")        
+        const column = engagementKanbanBoardElement.shadowRoot.querySelector("div[data-status='To Do']")
         const draggableDiv = column.appendChild(createDraggableDiv())
         const dataTransfer = {
-            getData : function(param){
+            getData: function (param) {
                 return '1'
             }
         }
@@ -68,28 +78,26 @@ describe('c-engagement-kanban-board tests', () => {
 
         draggableDiv.dispatchEvent(dropEvent)
         expect(column.appendChild.mock.calls.length).toBe(1)
-        return new Promise((resolve) => {
-            console.log(1)
+        return new Promise((resolve) => {            
             expect(changeCaseStatus).toHaveBeenCalled()
-            expect(changeCaseStatus.mock.calls[0][0]).toEqual({ caseId: '1', status: 'To Do' })          
-            resolve() 
+            expect(changeCaseStatus.mock.calls[0][0]).toEqual({ caseId: '1', status: 'To Do' })
+            resolve()
         })
 
     })
 
     it('does case retrieval work', () => {
+        retrieveEngagementCases.mockResolvedValue(engagementCases);
         const engagementKanbanBoardElement = createElement('c-engagement-kanban-board', {
             is: engagementKanbanBoard
         })
-         
-        document.body.appendChild(engagementKanbanBoardElement)
 
-        retrieveEngagementCasesAdapter.emit(engagementCases)
-
-        return Promise.resolve().then(() => {
+        document.body.appendChild(engagementKanbanBoardElement);
+        engagementKanbanBoardElement.applySearchOptions({});
+        return flushPromises().then(() => {
             const taskId = engagementKanbanBoardElement.shadowRoot.querySelector("[data-task-id]").getAttribute('data-task-id');
-            expect(taskId).toBe('00000001') 
-        }); 
+            expect(taskId).toBe('00000001')
+        });
 
     })
 })

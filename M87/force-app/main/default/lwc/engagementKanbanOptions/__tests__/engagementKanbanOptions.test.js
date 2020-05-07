@@ -8,7 +8,7 @@ const predefinedPrioritiesNumber = 3;
 const predefinedPriorities = ['Low', 'Medium', 'High'];
 
 const predefinedOwnersNumber = 1;
-const predefinedOwners = ['All'];
+const expectedPredefinedOwners = ['ALL_OWNERS_SEARCH'];
 
 const createElementAndReturn = () => {
     const kanbanOptionsElement = createElement('c-engagement-kanban-options', {
@@ -124,8 +124,8 @@ describe('c-egagement-kanban-options test', () => {
         const kanbanOptionsElement = createElementAndReturn();
         const predefinedOwnerOptions = retrieveOptionsElements('owners', kanbanOptionsElement);
         expect(predefinedOwnerOptions.length).toBe(predefinedOwnersNumber);
-        const predefinedOwners = Array.from(predefinedOwnerOptions).map(ownerElement => ownerElement.dataset.id);
-            expect(predefinedOwners.sort()).toEqual(['All']);
+        const currentPredefinedOwners = Array.from(predefinedOwnerOptions).map(ownerElement => ownerElement.dataset.id);
+            expect(currentPredefinedOwners.sort()).toEqual(expectedPredefinedOwners);
 
     });
 

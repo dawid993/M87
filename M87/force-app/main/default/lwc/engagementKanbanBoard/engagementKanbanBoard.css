@@ -62,11 +62,6 @@
   height: 100%;
 }
 
-div > c-engagement-task {
-  height: 100%;
-  width: 100%;
-}
-
 [data-task-id] > .footer-element:nth-child(2) {
   margin-right: 5px;
   width: 50%;

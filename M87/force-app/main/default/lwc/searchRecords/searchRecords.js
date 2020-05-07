@@ -36,7 +36,7 @@ export default class SearchRecords extends LightningElement {
         ]).then(result => console.log('result',result)).catch(err => console.log(err));
     }
 
-    searchRecords(event) {
+    searchRecords(event) {       
         const searchPhrase = event.target.value;
         if (searchPhrase) {
             if (this.timeoutId) {
@@ -52,9 +52,9 @@ export default class SearchRecords extends LightningElement {
     performSearch(searchPhrase) {
         this.showSpinner = true;
         this.searchFunction({ 'searchPhrase': searchPhrase })
-            .then(result => {
+            .then(result => {                
                 this.searchResults = [];
-                this.searchResults.push(...LwcImmutabilityService.deepFreeze(result.detailedResult));
+                this.searchResults.push(...LwcImmutabilityService.deepFreeze(result.detailedResult));                
                 this.showSearchResults = true;
                 this.showSpinner = false;
             })
@@ -65,7 +65,7 @@ export default class SearchRecords extends LightningElement {
     }
 
     notifyOptionSelected(event) {
-        const resultId = event.target.dataset.id;
+        const resultId = event.target.dataset.id;       
         if (resultId) {
             const selectedOption = this.searchResults.find(elem => elem.id === resultId);
             this.dispatchEvent(new CustomEvent('optionselected', {

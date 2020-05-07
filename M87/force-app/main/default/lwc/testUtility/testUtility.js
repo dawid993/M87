@@ -1,5 +1,14 @@
-function flushPromises(){
+function flushPromises() {
     return new Promise(resolve => setImmediate(resolve));
 }
 
-export {flushPromises}
+function clearDocument(document){
+    while (document.body.firstChild) {
+        document.body.removeChild(document.body.firstChild);
+    }
+}
+
+export {
+    flushPromises,    
+    clearDocument
+}

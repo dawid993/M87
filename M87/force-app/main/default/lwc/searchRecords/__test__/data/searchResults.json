@@ -1,0 +1,12 @@
+{
+    "detailedResult": [
+        {
+            "id" : "1",
+            "label" : "result 1"
+        },
+        {
+            "id" : "2",
+            "label" : "result 2"
+        }
+    ]
+}
