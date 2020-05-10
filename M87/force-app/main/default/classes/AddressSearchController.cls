@@ -5,14 +5,14 @@ public with sharing class AddressSearchController {
     
     @AuraEnabled(continuation = true cacheable = false)
     public static Continuation searchByPostCode(final String postCode){
-        AddressSearchService searchService = new AddressSearchServiceImp();
+        AddressSearchService searchService = getAddressSearchService();
         searchService.setSearchByPostCode(postCode);
         return createAndReturnContinuation(searchService);
     }
 
     @AuraEnabled(continuation = true cacheable = false)
     public static Continuation searchByPostCodeOrStreet(final String postCode,final String street){
-        AddressSearchService searchService = new AddressSearchServiceImp();
+        AddressSearchService searchService = getAddressSearchService();
         searchService.setSearchByPostCodeOrStreet(postCode,street);
         return createAndReturnContinuation(searchService);
     }
@@ -22,7 +22,7 @@ public with sharing class AddressSearchController {
         final String postCode,
         final String city,
         final String street){
-        AddressSearchService searchService = new AddressSearchServiceImp();
+        AddressSearchService searchService = getAddressSearchService();
         searchService.setSearchByPostCodeAndCityAndStreet(postCode,city,street);
         return createAndReturnContinuation(searchService);
     }
@@ -34,7 +34,7 @@ public with sharing class AddressSearchController {
         final String street,
         final String houseNumber){
 
-        AddressSearchService searchService = new AddressSearchServiceImp();
+        AddressSearchService searchService = getAddressSearchService();
         searchService.setFullSearchParameters(postCode,city,street,houseNumber);
         return createAndReturnContinuation(searchService);
     }
@@ -43,7 +43,7 @@ public with sharing class AddressSearchController {
     public static Object processResponse(List<String> labels,Object state) {      
         final HttpResponse response = Continuation.getResponse(labels[0]);     
         if(response.getStatusCode() == HttpUtils.HTTP_OK_CODE_STATUS){
-            return new AddressSearchServiceImp().parseResponseAndReturnAddresses(response.getBody());            
+            return getAddressSearchService().parseResponseAndReturnAddresses(response.getBody());            
         }else{
             return new List<Object>();
         }    
@@ -54,4 +54,8 @@ public with sharing class AddressSearchController {
         searchContinuation.ContinuationMethod = callbackMethodName;
         return searchContinuation;
     }
+
+    private static AddressSearchService getAddressSearchService(){
+        return (AddressSearchService) Application.Service.newInstance(AddressSearchService.class);
+    } 
 }

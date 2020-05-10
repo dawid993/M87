@@ -12,7 +12,12 @@ public with sharing class Application {
 			new Map<Type, Type> {
 				CaseService.class => CaseServiceImp.class,
 				EngagementService.class => EngagementServiceImp.class,
-				UserService.class => UserServiceImp.class
+				UserService.class => UserServiceImp.class,
+				AddressSearchService.class => AddressSearchServiceImp.class,
+				AddressSearchParametersStorage.class => AddressSearchParametersStorageImp.class,
+				AddressSearchStrategyFactory.class => AddressSearchStrategyFactoryImp.class,
+				ContinuationSupplier.class => ContinuationSupplierImp.class,
+				AddressSearchContinuationCreator.class => AddressSearchContinuationCreatorImp.class
             }
         );
 

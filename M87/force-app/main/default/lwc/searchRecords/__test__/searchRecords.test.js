@@ -51,7 +51,7 @@ describe('c-search-records', () => {
         let eventFired = false;
         document.body.addEventListener('optionselected',() => {
             eventFired = true;
-        })
+        });
 
         return flushPromises().then(() => {
             const liElement = searchRecordsElement.shadowRoot.querySelector('li:nth-child(1)');
