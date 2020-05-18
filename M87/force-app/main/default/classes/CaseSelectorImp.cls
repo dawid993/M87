@@ -44,7 +44,7 @@ public with sharing class CaseSelectorImp extends fflib_SObjectSelector implemen
         final List<String> statuses = searchOptions.selectedStatuses;
         final List<String> priorities = searchOptions.selectedPriorities;
         final List<String> owners = searchOptions.selectedOwners;
-
+        
         String conditionString = 'RecordTypeId = {0} AND Status IN :statuses AND Priority IN :priorities';
         if(searchOptions.selectedOwners.size() > 1 || 
             searchOptions.selectedOwners[0] != SearchEngagementCaseOptions.ALL_OWNER_OPTION_ID

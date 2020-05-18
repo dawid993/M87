@@ -25,7 +25,6 @@ jest.mock(
     { virtual: true }
 );
 
-const retrieveEngagementCasesAdapter = registerLdsTestWireAdapter(retrieveEngagementCases)
 const engagementCases = require('./data/cases.json')
 
 const createBubbledEvent = (type, props = {}) => {
@@ -47,7 +46,7 @@ describe('c-engagement-kanban-board tests', () => {
         while (document.body.firstChild) {
             document.body.removeChild(document.body.firstChild);
         }
-    })
+    });
 
     it('has lightning card rendered', () => {
         const engagementKanbanBoardElement = createElement('c-engagement-kanban-board', {
@@ -56,12 +55,12 @@ describe('c-engagement-kanban-board tests', () => {
         document.body.appendChild(engagementKanbanBoardElement)
         const engagementBoard = engagementKanbanBoardElement.shadowRoot.querySelector('lightning-card')
         expect(engagementBoard).toBeTruthy()
-    })
+    });
 
     it('is drop event supported', () => {
         const engagementKanbanBoardElement = createElement('c-engagement-kanban-board', {
             is: engagementKanbanBoard
-        })
+        });
 
         changeCaseStatus.mockResolvedValue({ success: true })
         document.body.appendChild(engagementKanbanBoardElement)
@@ -84,7 +83,7 @@ describe('c-engagement-kanban-board tests', () => {
             resolve()
         })
 
-    })
+    });
 
     it('does case retrieval work', () => {
         retrieveEngagementCases.mockResolvedValue(engagementCases);
@@ -98,6 +97,55 @@ describe('c-engagement-kanban-board tests', () => {
             const taskId = engagementKanbanBoardElement.shadowRoot.querySelector("[data-task-id]").getAttribute('data-task-id');
             expect(taskId).toBe('00000001')
         });
+    });
 
-    })
+    it('Should invoke view case event', () => {
+        retrieveEngagementCases.mockResolvedValue(engagementCases);
+        const engagementKanbanBoardElement = createElement('c-engagement-kanban-board', {
+            is: engagementKanbanBoard
+        });
+
+        let viewCaseEventFired = false;
+
+        engagementKanbanBoardElement.addEventListener('viewtask',(event) => {
+            viewCaseEventFired = true;
+        });
+
+        document.body.appendChild(engagementKanbanBoardElement);
+        engagementKanbanBoardElement.applySearchOptions({});
+
+        return flushPromises().then(() => {
+            const headerContainer = engagementKanbanBoardElement.shadowRoot
+                .querySelector(".task-header-container .option-container");
+            headerContainer.dispatchEvent(new Event('mouseover'));
+            const viewCaseElement = headerContainer.querySelector('li:nth-child(1)');
+            viewCaseElement.dispatchEvent(new Event('click'));
+            expect(viewCaseEventFired).toBeTruthy();            
+        });
+    });
+
+    it('Should invoke flow event', () => {
+        retrieveEngagementCases.mockResolvedValue(engagementCases);
+        const engagementKanbanBoardElement = createElement('c-engagement-kanban-board', {
+            is: engagementKanbanBoard
+        });
+
+        let invokeFlowEvent = false;
+
+        engagementKanbanBoardElement.addEventListener('invokeflow',(event) => {
+            invokeFlowEvent = true;
+        });
+
+        document.body.appendChild(engagementKanbanBoardElement);
+        engagementKanbanBoardElement.applySearchOptions({});
+
+        return flushPromises().then(() => {
+            const headerContainer = engagementKanbanBoardElement.shadowRoot
+                .querySelector(".task-header-container .option-container");
+            headerContainer.dispatchEvent(new Event('mouseover'));
+            const viewCaseElement = headerContainer.querySelector('li:nth-child(2)');
+            viewCaseElement.dispatchEvent(new Event('click'));
+            expect(invokeFlowEvent).toBeTruthy();            
+        });
+    });
 })

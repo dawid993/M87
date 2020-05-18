@@ -1,6 +1,4 @@
-public with sharing class AddressSearchController {
-    private static final String doneParameterName = 'done';
-    private static final String recordsParameterName = 'records';
+public with sharing class AddressSearchController {   
     private static final String callbackMethodName = 'processResponse';
     
     @AuraEnabled(continuation = true cacheable = false)

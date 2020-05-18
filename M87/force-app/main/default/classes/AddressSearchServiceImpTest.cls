@@ -2,12 +2,13 @@
 public class AddressSearchServiceImpTest {
     private static final Integer DEFAULT_TIMEOUT = 60;
 
-    private static fflib_ApexMocks mocks = new fflib_ApexMocks();
-    private static AddressSearchStrategyFactory searchFactoryMock = mockAddressSearchStrategyFactory(mocks);            
-    private static AddressSearchStrategy addressSearchStrategyMock = mockAddressSearchStrategy(mocks);
-    private static AddressSearchParametersStorage paramsStorageMock = mockParameterStorage(mocks);
-    private static AddressSearchContinuationCreator continuationCreatorMock = mockContinuationCreator(mocks);
-    private static Continuation testContinuation = new Continuation(DEFAULT_TIMEOUT);      
+    private static fflib_ApexMocks mocks;
+    private static AddressSearchStrategyFactory searchFactoryMock;            
+    private static AddressSearchStrategy addressSearchStrategyMock;
+    private static AddressSearchParametersStorage paramsStorageMock;
+    private static AddressSearchContinuationCreator continuationCreatorMock;
+    private static AddressParser addressParser;
+    private static Continuation testContinuation;      
     
     public static void resetTestSuite(){
         mocks = new fflib_ApexMocks();
@@ -15,6 +16,7 @@ public class AddressSearchServiceImpTest {
         addressSearchStrategyMock = mockAddressSearchStrategy(mocks);
         paramsStorageMock = mockParameterStorage(mocks);
         continuationCreatorMock = mockContinuationCreator(mocks);
+        addressParser = mockAddressParser(mocks);
         testContinuation = new Continuation(DEFAULT_TIMEOUT);
 
         mocks.startStubbing();
@@ -145,6 +147,52 @@ public class AddressSearchServiceImpTest {
             .createContinuation(paramsStorageMock,addressSearchStrategyMock);        
     }
 
+    @isTest
+    public static void shouldParseResponseAndReturnAddresses(){
+        resetTestSuite();
+
+        List<AddressStructure> addressStructures = new List<AddressStructure>{
+            new AddressStructure('1',null,null,null,null,null)
+        };
+
+        mocks.startStubbing();
+        mocks.when(addressParser.parseAddresses(fflib_Match.anyString())).thenReturn(addressStructures);
+        mocks.stopStubbing();
+
+        AddressSearchServiceImp addressService = new AddressSearchServiceImp();
+        List<AddressStructure> returnedStructures = addressService.parseResponseAndReturnAddresses('Example response');
+        fflib_System.assertEquals(fflib_Match.refEq(addressStructures),returnedStructures);
+
+        ((AddressParser) mocks.verify(addressParser)).parseAddresses(fflib_Match.anyString()); 
+    }
+
+    @isTest
+    public static void shouldParseBlankResponseAndReturnEmptyList(){
+        resetTestSuite();
+
+        AddressSearchServiceImp addressService = new AddressSearchServiceImp();
+        List<AddressStructure> returnedStructures = addressService.parseResponseAndReturnAddresses('');
+        System.assertEquals(0, returnedStructures.size());       
+    }
+
+    @isTest
+    public static void shouldParseInvalidResponseAndReturnEmptyListBecauseOfException(){
+        resetTestSuite();       
+
+        List<AddressStructure> addressStructures = new List<AddressStructure>{
+            new AddressStructure('1',null,null,null,null,null)
+        };
+
+        mocks.startStubbing();
+        mocks.when(addressParser.parseAddresses(fflib_Match.anyString())).thenReturn(new IllegalArgumentException());
+        mocks.stopStubbing();
+
+        AddressSearchServiceImp addressService = new AddressSearchServiceImp();
+        List<AddressStructure> returnedStructures = addressService.parseResponseAndReturnAddresses('Invalid response');
+        System.assertEquals(0, returnedStructures.size());       
+        ((AddressParser) mocks.verify(addressParser)).parseAddresses(fflib_Match.anyString()); 
+    }
+
     private static AddressSearchStrategyFactory mockAddressSearchStrategyFactory(fflib_ApexMocks mocks){
         return (AddressSearchStrategyFactory) MocksUtils.mockServiceAndReturn(AddressSearchStrategyFactory.class, mocks);
     }
@@ -161,6 +209,10 @@ public class AddressSearchServiceImpTest {
     private static AddressSearchContinuationCreator mockContinuationCreator(fflib_ApexMocks mocks){
         return (AddressSearchContinuationCreator)
             MocksUtils.mockServiceAndReturn(AddressSearchContinuationCreator.class, mocks);    
+    }
+
+    private static AddressParser mockAddressParser(fflib_ApexMocks mocks){
+        return (AddressParser) MocksUtils.mockServiceAndReturn(AddressParser.class, mocks);
     }
     
 }

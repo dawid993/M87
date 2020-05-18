@@ -82,7 +82,6 @@ export default class AddressSearchLookup extends LightningElement {
         ]
     }
 
-
     get reducer() {           
         return reducers.reducer
     }

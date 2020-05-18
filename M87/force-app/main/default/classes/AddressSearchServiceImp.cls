@@ -1,9 +1,4 @@
-public with sharing class AddressSearchServiceImp implements AddressSearchService{
-    private String postCode;
-    private String city;
-    private String street;
-    private String houseNumber;
-
+public with sharing class AddressSearchServiceImp implements AddressSearchService{  
     private AddressSearchStrategy searchStrategy;
     private AddressSearchParametersStorage addressParamStorage;    
     
@@ -48,28 +43,18 @@ public with sharing class AddressSearchServiceImp implements AddressSearchServic
     }
     
     public List<AddressStructure> parseResponseAndReturnAddresses(String jsonResponse){
-        return String.isBlank(jsonResponse)
-            ? new List<AddressStructure>()
-            : parseResponse(jsonResponse);  
+        try{
+            return String.isBlank(jsonResponse)
+                ? new List<AddressStructure>()
+                : parseResponse(jsonResponse);  
+        }catch(Exception ex){
+            System.debug(ex.getMessage()+' '+ex.getStackTraceString());
+            return new List<AddressStructure>();
+        }       
     }
 
     private List<AddressStructure> parseResponse(String jsonResponse){
-        List<AddressStructure> addressStructure = new List<AddressStructure>();
-        try{
-            for(AddressResponseParser.Records record : AddressResponseParser.parse(jsonResponse).records){
-                addressStructure.add(new AddressStructure(
-                record.Id,
-                record.Street,
-                record.City,
-                record.Province,
-                record.PostCode,
-                record.House_number));
-            }
-        }catch(Exception ex){
-            System.debug(ex.getMessage()+' '+ex.getStackTraceString());
-            addressStructure = new List<AddressStructure>();
-        }
-
-        return addressStructure;
+        AddressParser parser = (AddressParser) Application.Service.newInstance(AddressParser.class);
+        return parser.parseAddresses(jsonResponse);
     }
 }

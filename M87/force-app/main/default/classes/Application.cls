@@ -17,7 +17,8 @@ public with sharing class Application {
 				AddressSearchParametersStorage.class => AddressSearchParametersStorageImp.class,
 				AddressSearchStrategyFactory.class => AddressSearchStrategyFactoryImp.class,
 				ContinuationSupplier.class => ContinuationSupplierImp.class,
-				AddressSearchContinuationCreator.class => AddressSearchContinuationCreatorImp.class
+				AddressSearchContinuationCreator.class => AddressSearchContinuationCreatorImp.class,
+				AddressParser.class => AddressParserImp.class
             }
         );
 

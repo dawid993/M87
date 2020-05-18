@@ -41,21 +41,59 @@
   box-shadow: 5px 5px 2px grey;
 }
 
-.kanban-board .task-element img {
-  background-color: orange;
+.kanban-board .task-header-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.kanban-board .task-element img.case-icon {
   transform: scale(0.6);
-  display: inline-block;
-  margin-right: 5px;
-  width: 25%;
+  background-color: orange;
+}
+
+.kanban-board .task-element img.option-icon {
+  transform: scale(0.4);
+}
+
+.kanban-board .task-element img.option-icon:hover {
+  transform: scale(0.5);
 }
 
 .kanban-board .task-element h2 {
   display: inline-block;
   font-size: 16px;
-  padding-left: 30px;
+  padding-top: 10px;
+  padding-left: 10px;
   box-sizing: border-box;
-  width: 70%;
+  width: 50%;
   font-weight: bold;
+}
+
+.kanban-board .option-container:hover .option-box {
+  display: block;
+  box-shadow: 5px 5px 2px grey;
+  z-index: 99999;
+  right: 10px;
+  bottom: 5px;
+}
+
+.kanban-board .option-box ul > li {
+  min-height: 30px;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 5px;
+}
+
+li:hover {
+  background-color: rgba(128, 128, 128, 0.575);
+}
+
+.kanban-board .option-box {
+  position: absolute;
+  height: 200px;
+  width: 150px;
+  background-color: white;
+  display: none;
 }
 
 .kanban-column-drop {
@@ -90,25 +128,25 @@
   height: 50%;
 }
 
-div[data-status] .task-element{
+div[data-status] .task-element {
   border-left-width: 3px;
   border-left-style: solid;
 }
 
 div[data-status="To Do"] .task-element {
-  border-left-color: rgba(0, 89, 255, 0.596);  
-} 
+  border-left-color: rgba(0, 89, 255, 0.596);
+}
 
 div[data-status="In Progress"] .task-element {
-  border-left-color: orange;  
+  border-left-color: orange;
 }
 
 div[data-status="Done - success"] .task-element {
-  border-left-color: green;  
+  border-left-color: green;
 }
 
 div[data-status="Done - failure"] .task-element {
-  border-left-color: red;  
+  border-left-color: red;
 }
 
 .task-element > .description:hover {

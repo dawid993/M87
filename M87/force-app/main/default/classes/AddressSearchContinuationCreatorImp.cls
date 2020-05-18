@@ -13,7 +13,7 @@ public with sharing class AddressSearchContinuationCreatorImp implements Address
                 .authorize(new JWTAuthorization())
                 .createContinuation();
         }catch(Exception ex){
-            throw new CreateContinuationException('Cannot create continuation',ex);
+            throw new Exceptions.CreateContinuationException('Cannot create continuation',ex);
         }        
     }
 
