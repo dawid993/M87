@@ -176,7 +176,7 @@
             <componentName>flexipage:tabset</componentName>
         </componentInstances>
         <componentInstances>
-            <componentName>addressSearchLookup</componentName>
+            <componentName>accountAddressSelect</componentName>
         </componentInstances>
         <mode>Replace</mode>
         <name>sidebar</name>

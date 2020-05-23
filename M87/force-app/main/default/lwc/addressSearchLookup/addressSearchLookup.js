@@ -46,12 +46,7 @@ export default class AddressSearchLookup extends LightningElement {
     selectedAddress = {}
 
     @track
-    showSpinner = false
-
-    @api
-    get saveMethod() {
-        return this.addressSaveMethod;
-    }
+    showSpinner = false  
 
     get splitPhrases() {
         return (separator) => (phrase) => ImmutabilityService.deepFreeze(phrase.split(separator))  
@@ -84,11 +79,7 @@ export default class AddressSearchLookup extends LightningElement {
 
     get reducer() {           
         return reducers.reducer
-    }
-
-    set saveMethod(value) {
-        this.addressSaveMethod = value;
-    }
+    }  
 
     searchAddresses(event) {             
         const searchPhrase = event.target.value;
@@ -190,16 +181,12 @@ export default class AddressSearchLookup extends LightningElement {
         }
     }
 
-    saveAddress() {
-        if (this.saveMethod && this.selectedAddress) {
-            this.showSpinner = true;
-
-            new Promise(resolve => {
-                this.saveMethod(this.selectedAddress);
-                resolve();
-            })
-            .then(() => (this.showSpinner = false))
-            .catch(err => console.log(err));
+    onSaveAddress() {   
+        if (this.selectedAddress) {   
+            this.dispatchEvent(new CustomEvent('addressselected',{
+                bubbles : true,
+                detail : {'selectedAddress' : this.selectedAddress}   
+            }));                   
         }
     }
 }

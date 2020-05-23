@@ -1,5 +1,5 @@
-import { LightningElement, api } from 'lwc'
-import { updateRecord } from 'lightning/uiRecordApi'
+import { LightningElement, api } from 'lwc';
+import { updateRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import ImmutabilityService from "c/immutabilityService";
 
@@ -18,9 +18,10 @@ export default class AccountAddressSelect extends LightningElement {
 
     saveMethod = this.saveAddress.bind(this)
 
-    saveAddress(address){
-        const recordInput = this.createSaveRecord(address)
-        updateRecord(recordInput).then(() => {
+    saveAddress(event){        
+        const selectedAddress = event.detail.selectedAddress;       
+        const recordInput = this.createSaveRecord(selectedAddress)
+        updateRecord(recordInput).then(() => {                     
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Success',
