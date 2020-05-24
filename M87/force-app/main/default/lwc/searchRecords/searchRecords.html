@@ -1,0 +1,28 @@
+<template>
+    <div class="gM87-search-record-container">
+        <template if:true={showSpinner}>
+            <div class="gM87-search-spinner">
+                <lightning-spinner size="large" alternative-text="Searching"></lightning-spinner>
+            </div>
+        </template>
+        <div class='gM87-search-box' onclick={hideResults}>
+            <div class="gM87-search-header">
+                <lightning-icon icon-name={iconName} title="Search">
+                </lightning-icon>
+                <h3>Please find owners</h3>
+            </div>
+            <lightning-input name="enter-search" variant="label-hidden" label="Search" type="search"
+                onchange={searchRecords}>
+            </lightning-input>
+            <template if:true={showSearchResults}>
+                <div class="gM87-search-result-box">
+                    <ul onclick={notifyOptionSelected}>
+                        <template for:each={searchResults} for:item="result">
+                            <li key={result.id} data-id={result.id}>{result.label}</li>
+                        </template>
+                    </ul>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

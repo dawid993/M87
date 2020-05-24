@@ -1,0 +1,17 @@
+.dialog-bar{
+    background-color: rgba(0, 68, 255);
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.title{
+    padding: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+.centered-icon{
+    padding: 3px;
+}

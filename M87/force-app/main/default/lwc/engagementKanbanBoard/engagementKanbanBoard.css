@@ -1,0 +1,178 @@
+.kanban-board {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  min-height: 600px;
+}
+
+.kanban-board h3 {
+  position: sticky;
+  text-align: center;
+  padding-top: 18px;
+  font-size: 18px;
+  background-color: #32af5c;
+  min-height: 60px;
+}
+
+.kanban-board div.kanban-column {
+  background-color: #d8d8d8;
+  border-left: 2px solid #acacac;
+  width: 25%;
+}
+
+.kanban-board > div:nth-child(1) {
+  margin-left: 10px;
+}
+
+.kanban-board > div:nth-child(4) {
+  margin-right: 10px;
+}
+
+.kanban-board .task-element {
+  height: 250px;
+  width: 90%;
+  margin: 10px auto;
+  background-color: white;
+  position: relative;
+}
+
+.kanban-board .task-element:hover {
+  box-shadow: 5px 5px 2px grey;
+}
+
+.kanban-board .task-header-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.kanban-board .task-element img.case-icon {
+  transform: scale(0.6);
+  background-color: orange;
+}
+
+.kanban-board .task-element img.option-icon {
+  transform: scale(0.4);
+}
+
+.kanban-board .task-element img.option-icon:hover {
+  transform: scale(0.5);
+}
+
+.kanban-board .task-element h2 {
+  display: inline-block;
+  font-size: 16px;
+  padding-top: 10px;
+  padding-left: 10px;
+  box-sizing: border-box;
+  width: 50%;
+  font-weight: bold;
+}
+
+.kanban-board .option-container:hover .option-box {
+  display: block;
+  box-shadow: 5px 5px 2px grey;
+  z-index: 99999;
+  right: 10px;
+  bottom: 5px;
+}
+
+.kanban-board .option-box ul > li {
+  min-height: 30px;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 5px;
+}
+
+li:hover {
+  background-color: rgba(128, 128, 128, 0.575);
+}
+
+.kanban-board .option-box {
+  position: absolute;
+  height: 200px;
+  width: 150px;
+  background-color: white;
+  display: none;
+}
+
+.kanban-column-drop {
+  height: 100%;
+}
+
+[data-task-id] > .footer-element:nth-child(2) {
+  margin-right: 5px;
+  width: 50%;
+}
+
+.footer-container {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  background-color: #f1f0f0;
+  padding: 2px 5px;
+}
+
+.footer-element {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-element > div:nth-child(1) {
+  font-weight: bold;
+}
+
+.task-element > .description {
+  margin: 2px 5px;
+  overflow: hidden;
+  height: 50%;
+}
+
+div[data-status] .task-element {
+  border-left-width: 3px;
+  border-left-style: solid;
+}
+
+div[data-status="To Do"] .task-element {
+  border-left-color: rgba(0, 89, 255, 0.596);
+}
+
+div[data-status="In Progress"] .task-element {
+  border-left-color: orange;
+}
+
+div[data-status="Done - success"] .task-element {
+  border-left-color: green;
+}
+
+div[data-status="Done - failure"] .task-element {
+  border-left-color: red;
+}
+
+.task-element > .description:hover {
+  overflow: auto;
+}
+
+.task-element:hover > div.description::-webkit-scrollbar {
+  width: 5px;
+  right: -20px;
+}
+
+.task-element:hover > div.description::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px #d8d8d8;
+  border-radius: 10px;
+}
+
+.task-element:hover > div.description::-webkit-scrollbar-thumb {
+  background-color: grey;
+  border-radius: 10px;
+}
+
+.spinner {
+  top: 0px;
+  left: 0px;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 98;
+}

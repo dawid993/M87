@@ -1,0 +1,144 @@
+.search-container {
+  position: relative;
+  background-color: rgb(255, 255, 255);
+  min-width: 350px;
+  box-shadow: 0px 1px 1px 1.5px rgb(190, 190, 190),
+    0px -1px 1px 1.5px rgb(190, 190, 200);
+  border-radius: 4px;
+}
+
+.search-header {
+  display: flex;
+  justify-content: space-between;
+  background-color: rgb(236, 235, 234);
+  padding: 10px 10px 10px 10px;
+}
+
+.search-help:hover > .help-content {
+  display: block;
+}   
+
+.help-content {
+  position: absolute;
+  width: 450px;
+  height: 250px;
+  background-color: #d8d8d8;
+  display: none;
+  right: 60px;
+  top: 12px;
+  z-index: 10;
+  border-radius: 5px;
+}
+
+.help-content div {
+  height: 90%;
+  width: 95%;
+  display: block;
+  margin: 10px auto;
+  overflow: auto;
+  text-align: justify;
+}
+.help-content div > p {    
+    margin-right: 5px;
+}
+
+.help-content div::-webkit-scrollbar {
+  width: 10px;
+  right: -20px;
+}
+
+.help-content div::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px #d8d8d8;  
+  border-radius: 10px;  
+}
+
+.help-content div::-webkit-scrollbar-thumb {
+  background-color: #32af5c;
+  border-radius: 10px;
+  
+}
+
+.help-content:after {
+  border: 13px solid #d8d8d8;
+  position: absolute;
+  content: "";
+  right: -38px;
+  top: 0px;
+  border-top-color: transparent;
+  border-left-color: #d8d8d8;
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+  border-width: 20px;
+  margin-left: -25px;
+}
+
+.search-header > div:nth-child(1) > lightning-icon {
+  display: inline-block;
+}
+
+.search-header > div:nth-child(1) > h3 {
+  display: inline-block;
+  font-size: 1.2em;
+  margin-left: 5px;
+}
+
+.search-box {
+  position: relative;
+  width: 80%;
+  min-height: 250px;
+  margin: auto;
+}
+
+.search-box > .search-results {
+  position: absolute;
+  margin-top: 2px;
+  height: 200px;
+  width: 100%;
+  overflow: auto;
+  z-index: 2;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.search-box > .search-results.active {
+  display: block;
+}
+
+.search-box > .search-results.inactive {
+  display: none;
+}
+
+.search-box > .current-address {
+  position: absolute;
+  z-index: 1;
+  margin-top: 30px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  padding: 10px 5px;
+  z-index: 1;
+}
+
+.address-element {
+  box-sizing: border-box;
+  padding: 10px;
+  height: 60px;
+  display: flexbox;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.address-element:hover {
+  background-color: #e9e5e4;
+}
+
+lightning-card[data-id="address-card"] {
+  background-color: green;
+}
+
+article .slds-card__header {
+  background-color: green;
+}
