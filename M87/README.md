@@ -60,3 +60,4 @@ Deploy your changes to production using [packaging](https://developer.salesforce
 1.sfdx force:mdapi:deploy -d apex-mocks --wait 1  
 2.sfdx force:mdapi:deploy -d apex-commons/src --wait  1        
 3.sfdx force:data:tree:import -p data/cases/Case-plan.json
+4.Fill engagement record types for cases.

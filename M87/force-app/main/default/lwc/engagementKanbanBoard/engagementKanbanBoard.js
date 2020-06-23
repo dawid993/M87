@@ -255,11 +255,9 @@ export default class EngagementKanbanBoard extends LightningElement {
         return invokeFlowOption;
     }
 
-    fireViewCaseEvent(taskId) {
-        console.log('fireViewCaseEvent', taskId);
+    fireViewCaseEvent(taskId) {        
         if (taskId) {
-            this.dispatchEvent(new CustomEvent('viewtask', {
-                bubbles: true,
+            this.dispatchEvent(new CustomEvent('viewtask', {                
                 detail: {
                     'taskId': taskId
                 }
@@ -268,10 +266,12 @@ export default class EngagementKanbanBoard extends LightningElement {
     }
 
     fireInvokeCaseFlowEvent(taskId) {
-        if (taskId) {
-            this.dispatchEvent(new CustomEvent('invokeflow', {
-                bubbles: true,
-                detail: {
+        if (taskId) {          
+            
+            this.dispatchEvent(new CustomEvent('invokeflow_pub_comp', {    
+                bubbles : true,     
+                composed : true,                               
+                detail: {                    
                     'taskId': taskId
                 }
             }));

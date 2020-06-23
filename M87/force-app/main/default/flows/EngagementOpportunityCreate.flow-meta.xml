@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <interviewLabel>Engagement Opportunity Create {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Engagement Opportunity Create</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <screens>
+        <name>Engagement_Opportunity</name>
+        <label>Engagement Opportunity</label>
+        <locationX>240</locationX>
+        <locationY>55</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <fields>
+            <name>Message</name>
+            <fieldText>&lt;p&gt;Create opportunity flow from engagement case.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <stages>
+        <name>CommunityUserConfiguration</name>
+        <isActive>true</isActive>
+        <label>Community user configuration</label>
+        <stageOrder>2</stageOrder>
+    </stages>
+    <stages>
+        <name>LeadInformation</name>
+        <isActive>true</isActive>
+        <label>Lead Information</label>
+        <stageOrder>1</stageOrder>
+    </stages>
+    <stages>
+        <name>ProductConfiguration</name>
+        <isActive>true</isActive>
+        <label>Product Configuration</label>
+        <stageOrder>3</stageOrder>
+    </stages>
+    <stages>
+        <name>Review</name>
+        <isActive>true</isActive>
+        <label>Review</label>
+        <stageOrder>4</stageOrder>
+    </stages>
+    <start>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>Engagement_Opportunity</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+</Flow>

@@ -1,0 +1,18 @@
+<aura:component implements="flexipage:availableForAllPageTypes">
+    <ltng:require styles="{!$Resource.gM87_css_popups}"/>
+
+    <aura:attribute name="showFlowContainer" type="Boolean" default="false" access="private"/>
+
+    <aura:if isTrue="{!v.showFlowContainer}">
+        <div class="gM87-popup-background" style="flex-direction: column;">            
+            <div class="gM87-popup-container flow-container">
+                <c:dialogBar title="Flow" ondialogclose="{!c.closeFlowDialog}"></c:dialogBar>
+                <c:engagementFlowContainer aura:id="engagementFlowsContainer"/>
+            </div>
+        </div>
+    </aura:if>
+    
+    <div>
+        <c:engagementKanban oninvokeflow_pub_comp="{!c.invokeFlow}"/>
+    </div>    
+</aura:component>	

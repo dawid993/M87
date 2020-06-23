@@ -71,13 +71,26 @@
 
 .kanban-board .option-container:hover .option-box {
   display: block;
+  background-color:rgb(211, 211, 211);
   box-shadow: 5px 5px 2px grey;
   z-index: 99999;
   right: 10px;
   bottom: 5px;
+  margin-top: 5px;
 }
 
-.kanban-board .option-box ul > li {
+.kanban-board .option-container:hover .option-box::after {
+    content: "";
+    position: absolute;
+    top: -24px;
+    right: 15px;
+    border-color: transparent transparent rgb(211, 211, 211) transparent;
+    border-width: 12px;
+    border-style: solid;
+}
+
+
+.kanban-board .option-box ul > li { 
   min-height: 30px;
   font-weight: bold;
   text-align: center;
@@ -90,10 +103,10 @@ li:hover {
 
 .kanban-board .option-box {
   position: absolute;
-  height: 200px;
+  height: 190px;
   width: 150px;
   background-color: white;
-  display: none;
+  display: none;  
 }
 
 .kanban-column-drop {

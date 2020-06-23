@@ -1,0 +1,19 @@
+.lead-details-content{
+    width: 95%;
+    margin: 10px auto;
+}
+
+.lead-inputs{
+    display: flex;    
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.lead-inputs lightning-accordion{
+    width: 60%;
+}
+
+.lead-inputs .image-section{
+    width: 30%;
+}

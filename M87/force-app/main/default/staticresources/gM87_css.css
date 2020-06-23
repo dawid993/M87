@@ -56,3 +56,11 @@
   left: 0px;
   z-index: 99999;
 }
+
+.gM87-flows-navigation-section{
+  position: absolute;
+  bottom: 10px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}

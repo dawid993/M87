@@ -1,0 +1,15 @@
+<template>
+    <div>
+        <template if:true={isLeadDetailsStep}>
+            <div class='lead-details'>
+                <c-lead-details navigation-context={currentStepOption} onevaluation={evaluateFlowStep} step-data={currentStepData} ></c-lead-details>
+            </div>
+        </template>
+        <template if:true={isCommunityUserStep}>
+            <c-community-user-creation navigation-context={currentStepOption} onrevertstep={revertStep}></c-community-user-creation>
+        </template>
+        <template if:true={isReviewStep}>
+
+        </template>
+    </div>
+</template>

@@ -10,7 +10,7 @@
     </flexiPageRegions>
     <flexiPageRegions>
         <componentInstances>
-            <componentName>engagementKanban</componentName>
+            <componentName>kanbanBoardWithFlow</componentName>
         </componentInstances>
         <name>region3</name>
         <type>Region</type>

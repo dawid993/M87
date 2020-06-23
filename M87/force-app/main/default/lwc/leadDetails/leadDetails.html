@@ -1,0 +1,53 @@
+<template>
+    <div>
+        <div class='lead-details-content'>
+            <lightning-card title="Lead Details" icon-name="standard:account"></lightning-card>
+            <div class="lead-inputs" onchange={onFormFieldChange}>
+                <lightning-accordion>
+                    <lightning-accordion-section name='personal-details' label='Personal Details'>
+                        <lightning-input type="text" data-name="leadTitle" label="Title" value={leadInfo.leadTitle}>
+                        </lightning-input>
+                        <lightning-input type="text" data-name="leadName" label="Name" value={leadInfo.leadName}>
+                        </lightning-input>
+                        <lightning-input type="email" data-name="email" label="Email" value={leadInfo.email}>
+                        </lightning-input>
+                        <lightning-input type="phone" data-name="phone" label="Phone" value={leadInfo.phone}>
+                        </lightning-input>
+                    </lightning-accordion-section>
+                    <lightning-accordion-section name='company-details' label='Company Details'>
+                        <lightning-input type="text" data-name="companyName" label="Company Name"
+                            value={leadInfo.companyName}>
+                        </lightning-input>
+                        <lightning-combobox data-name="industry" label="Industry" value={leadInfo.industry}
+                            options={industryPicklistOptions}>
+                        </lightning-combobox>
+                        <lightning-input type="text" data-name="numberOfEmployees" label="Number of Employees"
+                            value={leadInfo.numberOfEmployees}>
+                        </lightning-input>
+                        <lightning-input type="text" data-name="annualRevenue" label="Annual revenue"
+                            value={leadInfo.annualRevenue}>
+                        </lightning-input>
+                    </lightning-accordion-section>
+                    <lightning-accordion-section name='other-details' label='Other Details'>
+                        <lightning-input type="text" data-name="doNotCall" label="Do not call"
+                            value={leadInfo.doNotCall}>
+                        </lightning-input>
+                        <lightning-combobox data-name="status" label="Status" value={leadInfo.status}
+                            options={statusPicklistOptions}>
+                        </lightning-combobox>
+                        <lightning-combobox data-name="rating" label="Rating" value={leadInfo.rating}
+                            options={ratingPicklistOptions}></lightning-combobox>
+                    </lightning-accordion-section>
+                </lightning-accordion>
+                <div class="image-section">
+                    <img src={newLeadImageSrc}></img>
+                </div>
+            </div>
+        </div>
+        <div class="gM87-flows-navigation-section">
+            <c-flow-navigation show-back={navigationContext.showBack} show-continue={navigationContext.showContinue}
+                show-finish={navigationContext.showFinish} oncontinueflow={saveLeadDetails}>
+            </c-flow-navigation>
+        </div>
+    </div>
+</template>

@@ -8,7 +8,14 @@ function clearDocument(document){
     }
 }
 
+function createElementAndAddToDocument(elementName,document,isParam,createFunction){
+    const element = createFunction(elementName,{ is : isParam});
+    document.body.appendChild(element);
+    return element;
+}
+
 export {
     flushPromises,    
-    clearDocument
+    clearDocument,
+    createElementAndAddToDocument
 }
