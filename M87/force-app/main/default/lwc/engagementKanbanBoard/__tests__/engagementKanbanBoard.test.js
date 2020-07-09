@@ -132,7 +132,7 @@ describe('c-engagement-kanban-board tests', () => {
 
         let invokeFlowEvent = false;
 
-        engagementKanbanBoardElement.addEventListener('invokeflow',(event) => {
+        engagementKanbanBoardElement.addEventListener('invokeflow_pub_comp',(event) => {
             invokeFlowEvent = true;
         });
 
@@ -142,8 +142,8 @@ describe('c-engagement-kanban-board tests', () => {
         return flushPromises().then(() => {
             const headerContainer = engagementKanbanBoardElement.shadowRoot
                 .querySelector(".task-header-container .option-container");
-            headerContainer.dispatchEvent(new Event('mouseover'));
-            const viewCaseElement = headerContainer.querySelector('li:nth-child(2)');
+            headerContainer.dispatchEvent(new Event('mouseover'));            
+            const viewCaseElement = headerContainer.querySelector('li:nth-child(2)');            
             viewCaseElement.dispatchEvent(new Event('click'));
             expect(invokeFlowEvent).toBeTruthy();            
         });

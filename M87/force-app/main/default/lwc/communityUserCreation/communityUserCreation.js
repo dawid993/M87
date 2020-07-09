@@ -1,7 +1,7 @@
 import { LightningElement,api } from 'lwc';
 
 export default class CommunityUserCreation extends LightningElement {
-    _navigationContext;
+    _navigationContext = {};
 
     @api
     set navigationContext(value) {
@@ -12,7 +12,7 @@ export default class CommunityUserCreation extends LightningElement {
         return this._navigationContext;
     }
 
-    backToPreviousStep(event){        
+    backToPreviousStep(event){                
         this.dispatchEvent(new CustomEvent('revertstep'));
     }
 }

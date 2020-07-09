@@ -1,0 +1,13 @@
+<template>
+    <div class="center">
+        <div>
+            <lightning-radio-group label="Would you like to create community account for lead?"
+                options={options} value={value} onchange={handleChange} required></lightning-radio-group>
+        </div>
+    </div>
+    <div class="gM87-flows-navigation-section">
+        <c-flow-navigation show-back={navigationContext.showBack} show-continue={navigationContext.showContinue}
+            show-finish={navigationContext.showFinish} oncontinueflow={saveChoice} onbackflow={backToPreviousStep}>
+        </c-flow-navigation>
+    </div>
+</template>

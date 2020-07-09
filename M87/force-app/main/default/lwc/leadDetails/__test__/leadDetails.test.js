@@ -28,8 +28,7 @@ describe('c-lead-details', () => {
         expect(leadDetailsElement.shadowRoot.querySelector('lightning-input[data-name="companyName"]')).toBeTruthy();
         expect(leadDetailsElement.shadowRoot.querySelector('lightning-combobox[data-name="industry"]')).toBeTruthy();
         expect(leadDetailsElement.shadowRoot.querySelector('lightning-combobox[data-name="status"]')).toBeTruthy();
-        expect(leadDetailsElement.shadowRoot.querySelector('lightning-combobox[data-name="rating"]')).toBeTruthy();
-        console.log(leadDetailsElement.industryPicklistOptions);
+        expect(leadDetailsElement.shadowRoot.querySelector('lightning-combobox[data-name="rating"]')).toBeTruthy();        
     });
 
     it('should render flow navigation', () => {

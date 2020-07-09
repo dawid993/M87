@@ -42,8 +42,7 @@ describe('c-engagement-lead-flow', () => {
         }));
         
         return flushPromises().then(() => {
-            const communityUserCreation = element.shadowRoot.querySelector('c-community-user-creation');
-            console.log(communityUserCreation);
+            const communityUserCreation = element.shadowRoot.querySelector('c-community-user-creation');           
             communityUserCreation.dispatchEvent(new CustomEvent('revertstep'));
             return flushPromises();
         }).then(() => {

@@ -265,7 +265,7 @@ export default class EngagementKanbanBoard extends LightningElement {
         }
     }
 
-    fireInvokeCaseFlowEvent(taskId) {
+    fireInvokeCaseFlowEvent(taskId) {        
         if (taskId) {          
             
             this.dispatchEvent(new CustomEvent('invokeflow_pub_comp', {    

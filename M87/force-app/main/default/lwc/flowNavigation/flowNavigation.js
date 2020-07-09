@@ -10,11 +10,11 @@ export default class FlowNavigation extends LightningElement {
     @api
     showFinish
     
-    sendContinueEvent(event){
+    sendContinueEvent(event){        
         this.dispatchEvent(new CustomEvent('continueflow'));
     }
 
-    back(event){
+    back(event){       
         this.dispatchEvent(new CustomEvent('backflow'));
     }
 }

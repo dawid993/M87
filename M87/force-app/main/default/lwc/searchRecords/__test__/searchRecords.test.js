@@ -36,8 +36,7 @@ describe('c-search-records', () => {
         expect(apexSearchFunctionMock).toBeCalled();
 
         return flushPromises().then(() => {
-            const unorderedList = searchRecordsElement.shadowRoot.querySelectorAll('ul li');
-            console.log(unorderedList);
+            const unorderedList = searchRecordsElement.shadowRoot.querySelectorAll('ul li');            
             expect(unorderedList.length).toBe(2);
         });
     });

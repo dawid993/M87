@@ -1,23 +1,6 @@
-const LwcImmutabilityService = Object.freeze({
-    deepFreeze: Object.freeze(deepFreeze)
-})
+export default class ImmutableUtils  {
 
-function deepFreeze(currentObject){
-    if (currentObject) {
-        for (let [key, value] of Object.entries(currentObject)) {
-            if (currentObject.hasOwnProperty(key) && typeof value == "object") {
-                deepFreeze(value);
-            }
-        }
-
-        Object.freeze(currentObject);
-        return currentObject        
-    }    
-    return null  
-}
-
-class ImmutableUtils {
-    deepClone(currentObject){
+    static deepClone(currentObject){
         if(currentObject){
             const clonedObject = {};
             for(let [key, value] of Object.entries(currentObject)){
@@ -30,11 +13,11 @@ class ImmutableUtils {
         return currentObject;
     }
 
-    deepFreeze(currentObject){
+    static deepFreeze(currentObject){
         if (currentObject) {
             for (let [key, value] of Object.entries(currentObject)) {
                 if (currentObject.hasOwnProperty(key) && typeof value == "object") {
-                    deepFreeze(value);
+                    this.deepFreeze(value);
                 }
             }
     
@@ -43,6 +26,10 @@ class ImmutableUtils {
         }    
         return null;            
     }
-}
 
-export default LwcImmutabilityService
+    static deepCloneAndFreeze(currentObject){
+        if(currentObject){
+            return this.deepFreeze(this.deepClone(currentObject));
+        }
+    }
+}

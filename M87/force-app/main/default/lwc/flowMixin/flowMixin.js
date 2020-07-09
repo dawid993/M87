@@ -26,15 +26,17 @@ const FlowMixin = (superclass) => class extends superclass {
         this._stepDirector.performActionForCurrentStep(currentStepData);
     }
 
-    evaluateFlowStep(event) {        
+    evaluateFlowStep(event) {    
+        debugger;    
         const currentStepData = event.detail.stepData;
         if (currentStepData) {
             this.performCurrentStepAction(currentStepData);
         }
     }
 
-    revertStep(event) { 
-        const snapshotData = this._stepDirector.onStepRevertion();
+    revertStep(event) {     
+        debugger;    
+        const snapshotData = this._stepDirector.onStepRevertion();        
         this._revertFunction(snapshotData);
         this.currentStepData = snapshotData.stepData;
         this._currentStep = snapshotData.currentStep;        

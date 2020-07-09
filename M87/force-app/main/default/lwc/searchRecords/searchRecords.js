@@ -33,7 +33,7 @@ export default class SearchRecords extends LightningElement {
         super();       
         Promise.all([
             loadStyle(this, globalStyles)
-        ]).then(result => console.log('result',result)).catch(err => console.log(err));
+        ]).catch(err => console.log(err));
     }
 
     searchRecords(event) {       

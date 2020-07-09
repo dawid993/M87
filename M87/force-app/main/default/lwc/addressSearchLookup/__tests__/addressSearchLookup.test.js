@@ -200,8 +200,8 @@ describe('c-address-search-lookup tests', () => {
             is: AddressSearchLookup
         })
 
-        let savePerformed = false
-        addressLookupElement.saveMethod = jest.fn((address) => savePerformed = true)
+        let eventFired = false;
+        addressLookupElement.addEventListener('addressselected',() => eventFired = true);
 
         document.body.appendChild(addressLookupElement)
 
@@ -220,7 +220,7 @@ describe('c-address-search-lookup tests', () => {
             saveButton.click()              
             return new Promise((resolve) => resolve())
         }).then(() => {
-            expect(savePerformed).toBeTruthy()   
+            expect(eventFired).toBeTruthy()   
         })
     })
 })

@@ -34,16 +34,14 @@ export default class LeadDetails extends LightningElement {
     _leadObjectInfo;
 
     @wire(getPicklistValues, { recordTypeId: '$_leadObjectInfo.data.defaultRecordTypeId', fieldApiName: INDUSTRY_FIELD })
-    _industryPicklist({ error, data }) {
-        console.log(data);
+    _industryPicklist({ error, data }) {        
         if (data) {
             this.industryPicklistOptions = data.values;
         }
     }
 
     @wire(getPicklistValues, { recordTypeId: '$_leadObjectInfo.data.defaultRecordTypeId', fieldApiName: STATUS_FIELD })
-    _statusPicklist({ error, data }) {
-        console.log(data);
+    _statusPicklist({ error, data }) {        
         if (data) {
             this.statusPicklistOptions = data.values;
         }

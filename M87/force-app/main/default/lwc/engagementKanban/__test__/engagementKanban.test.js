@@ -46,11 +46,9 @@ describe('c-engagement-kanban tests', () => {
             detail : {searchOptions : 'status'}
         }));
 
-        return flushPromises().then(() => {
-            console.log('flushPromises');
-            expect(engagementBoard.applySearchOptions).toHaveBeenCalled();
-            console.log(engagementBoard.applySearchOptions.mock.calls[0])
-        })
+        return flushPromises().then(() => {            
+            expect(engagementBoard.applySearchOptions).toHaveBeenCalled();           
+        });
         
     });
 

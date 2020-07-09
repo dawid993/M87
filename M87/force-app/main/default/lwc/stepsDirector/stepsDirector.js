@@ -1,4 +1,5 @@
 import StepListener from 'c/stepListener';
+import LwcImmutabilityService from 'c/immutabilityService';
 
 const INVALID_STEPS_EXCEPTION_MESSAGE = 'Invalid format of steps.';
 const NO_MORE_STEPS_EXCEPTION_MESSAGE = 'Cannot find next steps to perform.';
@@ -31,11 +32,11 @@ export default class StepsDirector {
             throw new Error(INVALID_STEPS_EXCEPTION_MESSAGE);
         }
 
-        this._steps = value;    
+        this._steps = [...value];    
     }  
 
     get steps(){
-       return Object.assign([...this._steps]);
+       return [...this._steps];
     }
 
     get currentStepNumber(){
@@ -43,7 +44,7 @@ export default class StepsDirector {
     }
 
     get currentStepNavigationOption(){
-        return Object.assign({},this._stepNavigationOption);
+        return this._stepNavigationOption;
     }
 
     registerStepListener(stepName,stepFunction){
@@ -75,7 +76,7 @@ export default class StepsDirector {
         this._stepSnapshots.push(stepSnapshot);
 
         if(skippedSteps.length > 0){
-            skippedSteps.forEach(this._skippedSteps.add,this._skippedSteps)
+            skippedSteps.forEach(this._skippedSteps.add,this._skippedSteps);
         }           
 
         this._currentStepNumber = this._calculateNewStep();    
@@ -96,11 +97,11 @@ export default class StepsDirector {
     }
 
     _calculateStepNavigationOption(stepNumber){
-        return {
+        return LwcImmutabilityService.deepFreeze({
             showBack : stepNumber > 1,
             showContinue : stepNumber < this._steps.length,
             showFinish : stepNumber == this.steps.length,
-        }
+        });
     }
 
     _calculateNewStep(){
@@ -122,7 +123,7 @@ export default class StepsDirector {
         }
     } 
 
-    onStepRevertion(){
+    onStepRevertion(){        
         if(this._currentStepNumber === 1){
             throw new Error(NO_PREVIOUS_STEPS_EXCEPTION_MESSAGE);
         }
@@ -139,7 +140,7 @@ export default class StepsDirector {
             stepData : stepSnapshot.stepData,
             skippedSteps : stepSnapshot.skippedSteps,
             currentStep : this._currentStepNumber,
-        };
+        }
 
     }
 
