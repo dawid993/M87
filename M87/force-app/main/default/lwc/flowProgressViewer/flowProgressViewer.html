@@ -1,4 +1,14 @@
 <template>
-    
-    <slot></slot>
+    <div>
+        <div class="navigation">
+            <ul>
+                <template for:each={steps} for:item="step">
+                    <li class={step.assignedClass} key={step.order}>{step.label}</li>
+                </template>
+            </ul>
+        </div>
+        <div class='content'>
+            <slot onnavigationupdate={updateNavigationBar}></slot>
+        </div>
+    </div>
 </template>

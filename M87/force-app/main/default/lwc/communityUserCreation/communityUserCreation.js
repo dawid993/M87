@@ -1,18 +1,13 @@
-import { LightningElement,api } from 'lwc';
+import { LightningElement } from 'lwc';
+import FlowComponentMixin from 'c/flowComponentMixin';
 
-export default class CommunityUserCreation extends LightningElement {
-    _navigationContext = {};
-
-    @api
-    set navigationContext(value) {
-        this._navigationContext = value;
-    }
-
-    get navigationContext() {
-        return this._navigationContext;
-    }
+export default class CommunityUserCreation extends FlowComponentMixin(LightningElement) {  
 
     backToPreviousStep(event){                
-        this.dispatchEvent(new CustomEvent('revertstep'));
+        this.dispatchRevertEvent();
+    }
+
+    saveCommunityUser(event){        
+        this.dispatchEvaluationEvent();
     }
 }

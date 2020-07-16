@@ -1,3 +1,37 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, track } from 'lwc';
 
-export default class FlowProgressViewer extends LightningElement {}
+const ACTIVE_STEP_CLASS = 'active';
+const INACTIVE_STEP_CLASS = '';
+
+export default class FlowProgressViewer extends LightningElement {
+
+    _steps = [];
+    _currentStep = 0;
+
+    get steps() {
+        return this._steps;
+    }
+
+    get currentStep() {
+        return this._currentStep;
+    }
+
+    updateNavigationBar(event) {
+        const steps = event.detail.steps ? event.detail.steps : [];
+        this._currentStep = event.detail.currentStep ? event.detail.currentStep : 0;
+        this._steps = this.processSteps(steps,this._currentStep);
+    }
+
+    processSteps(steps, currentStep) {
+        const uiSteps = [];
+        for (let step of steps) {
+            uiSteps.push({
+                label: step.label,
+                order : step.order,
+                assignedClass: step.order === currentStep ? ACTIVE_STEP_CLASS : INACTIVE_STEP_CLASS
+            })
+        }
+       
+        return uiSteps;
+    }
+}

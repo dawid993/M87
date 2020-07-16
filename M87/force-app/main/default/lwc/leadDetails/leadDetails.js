@@ -11,6 +11,7 @@ import RATING_FIELD from '@salesforce/schema/Lead.Rating';
 import { getObjectInfo } from 'lightning/uiObjectInfoApi';
 import { getPicklistValues } from 'lightning/uiObjectInfoApi';
 
+import FlowComponentMixin from 'c/flowComponentMixin';
 const leadFormFields = [
     { name: 'leadTitle', defaultValue: '' },
     { name: 'leadName', defaultValue: '' },
@@ -25,8 +26,7 @@ const leadFormFields = [
     { name: 'rating', defaultValue: '' },
 ];
 
-export default class LeadDetails extends LightningElement {
-    _navigationContext = {};
+export default class LeadDetails extends FlowComponentMixin(LightningElement) {  
 
     _leadMasterRecordTypeId;
 
@@ -65,16 +65,7 @@ export default class LeadDetails extends LightningElement {
     statusPicklistOptions;
 
     @track
-    ratingPicklistOptions;
-
-    @api
-    set navigationContext(value) {
-        this._navigationContext = value;
-    }
-
-    get navigationContext() {
-        return this._navigationContext;
-    } 
+    ratingPicklistOptions;    
 
     @api
     set stepData(value) {             
@@ -101,11 +92,7 @@ export default class LeadDetails extends LightningElement {
     }
 
     saveLeadDetails(event) {        
-        this.dispatchEvent(new CustomEvent('evaluation', {
-            detail: {
-                stepData: this.leadInfo
-            }
-        }))
+        this.dispatchEvaluationEvent(this.leadInfo);
     }
 
     _createDefaultLead() {

@@ -1,0 +1,18 @@
+
+.navigation{
+    display: flex;
+    justify-content: center;
+}
+
+.navigation > ul{
+    list-style-type: none;    
+}
+
+.navigation > ul > li{
+    float: left;
+    margin: 2px 5px;
+}
+
+.active{
+    color: grey;
+}

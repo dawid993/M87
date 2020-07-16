@@ -1,16 +1,28 @@
 import StepDirector from 'c/stepsDirector';
 
 const FlowMixin = (superclass) => class extends superclass {
-    _stepDirector;
+    _stepDirector;    
 
     _currentStep;
 
     _revertFunction;
 
+    _afterRevertFunction;
+
+    _afterCurrentStepActions;
+
     currentStepData;
 
     set revertFunction(func) {
         this._revertFunction = func;
+    }
+
+    set afterRevertFunction(func) {
+        this._afterRevertFunction = func;
+    }
+
+    set afterCurrentStepActions(func) {
+        this._afterCurrentStepActions = func;
     }
 
     get currentStepOption() {
@@ -22,25 +34,43 @@ const FlowMixin = (superclass) => class extends superclass {
         this._stepDirector = new StepDirector(steps);
     }
 
+    onCurrentStepContinuation(applicationState,currentStepData,skippedSteps = []){
+        return this._stepDirector.onCurrentStepContinuation(applicationState,currentStepData,skippedSteps);
+    }
+
+    registerStepListener(stepName,stepFunction){
+        this._stepDirector.registerStepListener(stepName,stepFunction);
+    }
+
     performCurrentStepAction(currentStepData) {
         this._stepDirector.performActionForCurrentStep(currentStepData);
     }
 
-    evaluateFlowStep(event) {    
-        debugger;    
-        const currentStepData = event.detail.stepData;
-        if (currentStepData) {
-            this.performCurrentStepAction(currentStepData);
-        }
+    evaluateFlowStep(event) { 
+        const currentStepData = event.detail.stepData != undefined   ?  event.detail.stepData : {};        
+        this.performCurrentStepAction(currentStepData); 
+        this._afterCurrentStepActions();       
     }
 
-    revertStep(event) {     
-        debugger;    
+    revertStep(event) {  
         const snapshotData = this._stepDirector.onStepRevertion();        
         this._revertFunction(snapshotData);
         this.currentStepData = snapshotData.stepData;
-        this._currentStep = snapshotData.currentStep;        
+        this._currentStep = snapshotData.currentStep;  
+        this._afterRevertFunction();      
     }
+
+    fireUpdateNavigationBarEvent(steps,currentStep){
+        debugger;
+        this.dispatchEvent(new CustomEvent('navigationupdate',{
+            detail : {
+                'steps' : steps,
+                'currentStep' : currentStep,
+            },
+            bubbles : true
+        }));
+    }
+
 }
 
 export default FlowMixin;

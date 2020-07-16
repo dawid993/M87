@@ -14,8 +14,15 @@ function createElementAndAddToDocument(elementName,document,isParam,createFuncti
     return element;
 }
 
+function dispatchEvent(eventName,eventDetail,srcComponent){
+    srcComponent.dispatchEvent(new CustomEvent(eventName,{
+        detail : eventDetail
+    }));
+}
+
 export {
     flushPromises,    
     clearDocument,
-    createElementAndAddToDocument
+    createElementAndAddToDocument,
+    dispatchEvent
 }

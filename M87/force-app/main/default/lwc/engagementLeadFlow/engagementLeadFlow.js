@@ -1,4 +1,4 @@
-import { LightningElement, track, api } from 'lwc';
+import { LightningElement } from 'lwc';
 import FlowMixin from 'c/flowMixin';
 
 const LEAD_DETAILS_STEP = {
@@ -37,6 +37,12 @@ export default class EngagementLeadFlow extends FlowMixin(LightningElement) {
         this._leadFlowData = {};
         this.registerStepsListeners();
         this.revertFunction = this.restoreFlowData.bind(this);
+        this.afterRevertFunction = this.fireNavigationEventWithCurrentState.bind(this);
+        this.afterCurrentStepActions = this.fireNavigationEventWithCurrentState.bind(this);
+    }
+
+    connectedCallback() {
+        this.fireNavigationEventWithCurrentState();
     }
 
     get isLeadDetailsStep() {
@@ -56,23 +62,32 @@ export default class EngagementLeadFlow extends FlowMixin(LightningElement) {
     }
 
     registerStepsListeners() {
-        this._stepDirector.registerStepListener(LEAD_DETAILS_STEP.id, this.onLeadDetailsFinish.bind(this));
-        this._stepDirector.registerStepListener(CREATE_COMMUNITY_USER_DECISION_STEP.id,this.onCommunityUserCreationDecision.bind(this));
+        this.registerStepListener(LEAD_DETAILS_STEP.id, this.onLeadDetailsFinish.bind(this));
+        this.registerStepListener(CREATE_COMMUNITY_USER_DECISION_STEP.id, this.onCommunityUserCreationDecision.bind(this));
+        this.registerStepListener(COMMUNITY_USER_STEP.id, this.onCommunityUserCreation.bind(this));
     }
 
     onLeadDetailsFinish(data) {
-        debugger;
         this._leadFlowData[LEAD_DETAILS_STEP.id] = data;
-        this._currentStep = this._stepDirector.onCurrentStepContinuation(this._leadFlowData, data);
+        this._currentStep = this.onCurrentStepContinuation(this._leadFlowData, data);        
     }
 
     onCommunityUserCreationDecision(data) {
         this._leadFlowData[CREATE_COMMUNITY_USER_DECISION_STEP.id] = data;
-        const skippedSteps = data ? [] : [COMMUNITY_USER_STEP.id];
-        this._currentStep = this._stepDirector.onCurrentStepContinuation(this._leadFlowData, data, skippedSteps);
+        const skippedSteps = data ? [] : [COMMUNITY_USER_STEP.order];
+        this._currentStep = this.onCurrentStepContinuation(this._leadFlowData, data, skippedSteps);       
+    }
+
+    onCommunityUserCreation(data) {
+        this._leadFlowData[COMMUNITY_USER_STEP.id] = data;
+        this._currentStep = this.onCurrentStepContinuation(this._leadFlowData, data);        
     }
 
     restoreFlowData(snapshot) {
-        this._leadFlowData = snapshot.applicationState;
+        this._leadFlowData = snapshot.applicationState;        
+    }
+
+    fireNavigationEventWithCurrentState(){
+        this.fireUpdateNavigationBarEvent(STEPS_DESCRIPTION, this._currentStep);
     }
 }
