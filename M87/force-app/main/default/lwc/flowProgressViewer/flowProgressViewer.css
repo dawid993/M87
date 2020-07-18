@@ -1,18 +1,30 @@
 
 .navigation{
+    font-size: 1rem;
     display: flex;
     justify-content: center;
+    align-items: center;
+    margin: 5px;
+    height: 50px;
 }
 
 .navigation > ul{
+    border: 1px solid green;
+    border-radius: 8px;
+    padding: 5px;
     list-style-type: none;    
 }
 
 .navigation > ul > li{
     float: left;
-    margin: 2px 5px;
+    margin: 2px 10px;
 }
 
 .active{
+    color: green;
+    font-weight: bold;
+}
+
+.excluded{
     color: grey;
 }

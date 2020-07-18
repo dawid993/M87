@@ -32,13 +32,13 @@ export default class EngagementLeadFlow extends FlowMixin(LightningElement) {
     _leadFlowData;
 
     constructor() {
-        super(STEPS_DESCRIPTION.map(stepDesc => stepDesc.id));
+        super(STEPS_DESCRIPTION);
         this._currentStep = 1;
         this._leadFlowData = {};
         this.registerStepsListeners();
-        this.revertFunction = this.restoreFlowData.bind(this);
-        this.afterRevertFunction = this.fireNavigationEventWithCurrentState.bind(this);
-        this.afterCurrentStepActions = this.fireNavigationEventWithCurrentState.bind(this);
+        this.registerOnRevertFunction(this.restoreFlowData.bind(this));
+        this.registerOnAfterRevertFunction(this.fireNavigationEventWithCurrentState.bind(this));
+        this.registerOnAfterCurrentStepActions(this.fireNavigationEventWithCurrentState.bind(this));
     }
 
     connectedCallback() {
@@ -46,19 +46,19 @@ export default class EngagementLeadFlow extends FlowMixin(LightningElement) {
     }
 
     get isLeadDetailsStep() {
-        return this._currentStep === LEAD_DETAILS_STEP.order;
+        return this.currentStepNumber === LEAD_DETAILS_STEP.order;
     }
 
     get isCommunityUserCreationDecision() {
-        return this._currentStep === CREATE_COMMUNITY_USER_DECISION_STEP.order;
+        return this.currentStepNumber === CREATE_COMMUNITY_USER_DECISION_STEP.order;
     }
 
     get isCommunityUserStep() {
-        return this._currentStep === COMMUNITY_USER_STEP.order;
+        return this.currentStepNumber === COMMUNITY_USER_STEP.order;
     }
 
     get isReviewStep() {
-        return this._currentStep === REVIEW_STEP.order;
+        return this.currentStepNumber === REVIEW_STEP.order;
     }
 
     registerStepsListeners() {
@@ -69,25 +69,25 @@ export default class EngagementLeadFlow extends FlowMixin(LightningElement) {
 
     onLeadDetailsFinish(data) {
         this._leadFlowData[LEAD_DETAILS_STEP.id] = data;
-        this._currentStep = this.onCurrentStepContinuation(this._leadFlowData, data);        
+        this.currentStepNumber = this.onCurrentStepContinuation(this._leadFlowData, data);
     }
 
     onCommunityUserCreationDecision(data) {
         this._leadFlowData[CREATE_COMMUNITY_USER_DECISION_STEP.id] = data;
         const skippedSteps = data ? [] : [COMMUNITY_USER_STEP.order];
-        this._currentStep = this.onCurrentStepContinuation(this._leadFlowData, data, skippedSteps);       
+        this.currentStepNumber = this.onCurrentStepContinuation(this._leadFlowData, data, skippedSteps);
     }
 
     onCommunityUserCreation(data) {
         this._leadFlowData[COMMUNITY_USER_STEP.id] = data;
-        this._currentStep = this.onCurrentStepContinuation(this._leadFlowData, data);        
+        this.currentStepNumber = this.onCurrentStepContinuation(this._leadFlowData, data);
     }
 
     restoreFlowData(snapshot) {
-        this._leadFlowData = snapshot.applicationState;        
+        this._leadFlowData = snapshot.applicationState;
     }
 
-    fireNavigationEventWithCurrentState(){
-        this.fireUpdateNavigationBarEvent(STEPS_DESCRIPTION, this._currentStep);
+    fireNavigationEventWithCurrentState() {
+        this.fireUpdateNavigationBarEvent(STEPS_DESCRIPTION, this.currentStepNumber, this.skippedSteps);
     }
 }

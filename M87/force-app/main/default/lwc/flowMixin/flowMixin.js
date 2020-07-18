@@ -9,24 +9,24 @@ const FlowMixin = (superclass) => class extends superclass {
 
     _afterRevertFunction;
 
-    _afterCurrentStepActions;
+    _afterCurrentStepActions;   
 
-    currentStepData;
-
-    set revertFunction(func) {
-        this._revertFunction = func;
-    }
-
-    set afterRevertFunction(func) {
-        this._afterRevertFunction = func;
-    }
-
-    set afterCurrentStepActions(func) {
-        this._afterCurrentStepActions = func;
-    }
+    currentStepData;    
 
     get currentStepOption() {
         return this._stepDirector.currentStepNavigationOption;
+    }
+
+    get skippedSteps(){
+        return this._stepDirector.skippedSteps;
+    }
+
+    get currentStepNumber(){
+        return this._currentStep;
+    }
+
+    set currentStepNumber(value){
+        this._currentStep = value;
     }
 
     constructor(steps) {
@@ -47,28 +47,42 @@ const FlowMixin = (superclass) => class extends superclass {
     }
 
     evaluateFlowStep(event) { 
-        const currentStepData = event.detail.stepData != undefined   ?  event.detail.stepData : {};        
-        this.performCurrentStepAction(currentStepData); 
-        this._afterCurrentStepActions();       
+        if(event.detail){
+            const currentStepData = event.detail.stepData != undefined   ?  event.detail.stepData : {};        
+            this.performCurrentStepAction(currentStepData); 
+            this._afterCurrentStepActions();       
+        }        
     }
 
     revertStep(event) {  
-        const snapshotData = this._stepDirector.onStepRevertion();        
+        const snapshotData = this._stepDirector.onStepRevertion();   
         this._revertFunction(snapshotData);
         this.currentStepData = snapshotData.stepData;
         this._currentStep = snapshotData.currentStep;  
         this._afterRevertFunction();      
     }
 
-    fireUpdateNavigationBarEvent(steps,currentStep){
-        debugger;
+    fireUpdateNavigationBarEvent(steps,currentStep, skippedSteps = []){        
         this.dispatchEvent(new CustomEvent('navigationupdate',{
             detail : {
                 'steps' : steps,
                 'currentStep' : currentStep,
+                'skippedSteps' : new Set(skippedSteps)
             },
             bubbles : true
         }));
+    }
+
+    registerOnRevertFunction(func){
+        this._revertFunction = func;
+    }
+
+    registerOnAfterRevertFunction(func){
+        this._afterRevertFunction = func;
+    }
+
+    registerOnAfterCurrentStepActions(func){
+        this._afterCurrentStepActions = func; 
     }
 
 }

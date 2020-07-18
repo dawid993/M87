@@ -1,6 +1,36 @@
 import StepsDirector from 'c/stepsDirector';
 
-const STEPS = ['STEP_1','STEP_2','STEP_3','STEP_4','STEP_5'];
+const STEP_1 = {
+    id: 'STEP_1',
+    label: 'STEP_1',
+    order: 1,
+};
+
+const STEP_2 = {
+    id: 'STEP_2',
+    label: 'STEP_2',
+    order: 2,
+};
+
+const STEP_3 = {
+    id: 'STEP_3',
+    label: 'STEP_3',
+    order: 3,
+};
+
+const STEP_4 = {
+    id: 'STEP_4',
+    label: 'STEP_4',
+    order: 4,
+};
+
+const STEP_5 = {
+    id: 'STEP_5',
+    label: 'STEP_5',
+    order: 5,
+};
+
+const STEPS = [STEP_1,STEP_2,STEP_3,STEP_4,STEP_5];
 
 const EXAMPLE_STEP_DATA = [
     {applicationState : 'TEST'},
@@ -18,7 +48,7 @@ describe('c-steps-director',() => {
         let exceptionThrown = false;
         try{
             const stepDirector = new StepsDirector({});
-        }catch(err){
+        }catch(err){            
             exceptionThrown = true;
         }
 
@@ -133,5 +163,29 @@ describe('c-steps-director',() => {
 
         expect(step).toBe(5);
         expect(stepDirector.currentStepNumber).toBe(5);
+    });
+
+    it('should register step listener', () => {
+        const stepDirector = new StepsDirector(STEPS);
+        let exceptionThrown = false;
+        try{
+            stepDirector.registerStepListener(STEPS[0].id);
+        }catch(err){
+            exceptionThrown = true;
+        }
+
+        expect(exceptionThrown).toBeFalsy();
+    });
+
+    it('should throw exception when register step listener', () => {
+        const stepDirector = new StepsDirector(STEPS);
+        let exceptionThrown = false;
+        try{
+            stepDirector.registerStepListener('NO_EXISTING_STEP');
+        }catch(err){
+            exceptionThrown = true;
+        }
+
+        expect(exceptionThrown).toBeTruthy();
     });
 });
