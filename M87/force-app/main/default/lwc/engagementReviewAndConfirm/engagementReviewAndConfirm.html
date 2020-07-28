@@ -1,7 +1,10 @@
 <template>
+    <div>
+        <c-manual-file-upload></c-manual-file-upload>
+    </div>
     <div class="gM87-flows-navigation-section">
         <c-flow-navigation show-back={navigationContext.showBack} show-continue={navigationContext.showContinue}
-            show-finish={navigationContext.showFinish} onbackflow={backToPreviousStep}>
+            show-finish={navigationContext.showFinish} onbackflow={backToPreviousStep} oncontinueflow={saveApplication}>
         </c-flow-navigation>
     </div>
 </template>

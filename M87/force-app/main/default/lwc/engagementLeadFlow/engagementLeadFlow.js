@@ -27,14 +27,11 @@ const REVIEW_STEP = {
 
 const STEPS_DESCRIPTION = [LEAD_DETAILS_STEP, CREATE_COMMUNITY_USER_DECISION_STEP, COMMUNITY_USER_STEP, REVIEW_STEP];
 
-export default class EngagementLeadFlow extends FlowMixin(LightningElement) {
-
-    _leadFlowData;
+export default class EngagementLeadFlow extends FlowMixin(LightningElement) {    
 
     constructor() {
         super(STEPS_DESCRIPTION);
-        this._currentStep = 1;
-        this._leadFlowData = {};
+        this._currentStep = 1;        
         this.registerStepsListeners();
         this.registerOnRevertFunction(this.restoreFlowData.bind(this));
         this.registerOnAfterRevertFunction(this.fireNavigationEventWithCurrentState.bind(this));
@@ -68,23 +65,23 @@ export default class EngagementLeadFlow extends FlowMixin(LightningElement) {
     }
 
     onLeadDetailsFinish(data) {
-        this._leadFlowData[LEAD_DETAILS_STEP.id] = data;
-        this.currentStepNumber = this.onCurrentStepContinuation(this._leadFlowData, data);
+        this.applicationState[LEAD_DETAILS_STEP.id] = data;
+        this.currentStepNumber = this.onCurrentStepContinuation(this.applicationState, data);
     }
 
     onCommunityUserCreationDecision(data) {
-        this._leadFlowData[CREATE_COMMUNITY_USER_DECISION_STEP.id] = data;
+        this.applicationState[CREATE_COMMUNITY_USER_DECISION_STEP.id] = data;
         const skippedSteps = data ? [] : [COMMUNITY_USER_STEP.order];
-        this.currentStepNumber = this.onCurrentStepContinuation(this._leadFlowData, data, skippedSteps);
+        this.currentStepNumber = this.onCurrentStepContinuation(this.applicationState, data, skippedSteps);
     }
 
     onCommunityUserCreation(data) {
-        this._leadFlowData[COMMUNITY_USER_STEP.id] = data;
-        this.currentStepNumber = this.onCurrentStepContinuation(this._leadFlowData, data);
+        this.applicationState[COMMUNITY_USER_STEP.id] = data;
+        this.currentStepNumber = this.onCurrentStepContinuation(this.applicationState, data);
     }
 
     restoreFlowData(snapshot) {
-        this._leadFlowData = snapshot.applicationState;
+        this.applicationState = snapshot.applicationState;
     }
 
     fireNavigationEventWithCurrentState() {

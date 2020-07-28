@@ -5,6 +5,9 @@
         </template>
         <template if:true={showContinue}>
             <lightning-button label="Continue" variant="success" onclick={sendContinueEvent}></lightning-button>
+        </template>  
+        <template if:true={showFinish}>
+            <lightning-button label="Finish" variant="success" onclick={sendContinueEvent}></lightning-button>
         </template>        
     </div>
 </template>

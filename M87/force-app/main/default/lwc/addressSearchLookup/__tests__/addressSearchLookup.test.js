@@ -135,7 +135,7 @@ describe('c-address-search-lookup tests', () => {
         searchInput.value = TEST_POST_CODE + ',' + TEST_STREET
         searchInput.dispatchEvent(new KeyboardEvent('keypress', { which: ENTER_KEY, bubbles: true }))
 
-        return flushPromises().then(() => {
+        return flushPromises().then(() => {            
             const searchResults = addressLookupElement.shadowRoot.querySelectorAll('.address-element')
             expect(searchResults.length).toEqual(SUCCESS_SEARCH_RESULTS.length)
             expect(searchByPostCodeOrStreetContinuation.mock.calls[0][0]).toEqual({ postCode: TEST_POST_CODE, street: TEST_STREET })

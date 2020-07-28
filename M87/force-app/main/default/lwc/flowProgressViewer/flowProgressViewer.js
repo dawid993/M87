@@ -7,6 +7,7 @@ const INACTIVE_STEP_CLASS = '';
 export default class FlowProgressViewer extends LightningElement {
 
     _steps = [];
+    
     _currentStep = 0;
 
     get steps() {

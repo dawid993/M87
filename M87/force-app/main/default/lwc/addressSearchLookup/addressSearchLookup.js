@@ -141,7 +141,7 @@ export default class AddressSearchLookup extends LightningElement {
 
     runSearchWithMethod(searchMethod) {        
         searchMethod()
-            .then(results => { 
+            .then(results => {
                 return this.publishResultComposition.reduce(this.reducer, results)
             })           
             .catch(err => console.log(err))

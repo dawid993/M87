@@ -1,7 +1,9 @@
 import StepDirector from 'c/stepsDirector';
 
 const FlowMixin = (superclass) => class extends superclass {
-    _stepDirector;    
+    _applicationState = {};
+
+    _stepDirector;
 
     _currentStep;
 
@@ -9,23 +11,31 @@ const FlowMixin = (superclass) => class extends superclass {
 
     _afterRevertFunction;
 
-    _afterCurrentStepActions;   
+    _afterCurrentStepActions;
 
-    currentStepData;    
+    currentStepData;
+
+    get applicationState(){
+        return this._applicationState;
+    }
+
+    set applicationState(value){
+        this._applicationState = value;
+    }
 
     get currentStepOption() {
         return this._stepDirector.currentStepNavigationOption;
     }
 
-    get skippedSteps(){
+    get skippedSteps() {
         return this._stepDirector.skippedSteps;
     }
 
-    get currentStepNumber(){
+    get currentStepNumber() {
         return this._currentStep;
     }
 
-    set currentStepNumber(value){
+    set currentStepNumber(value) {
         this._currentStep = value;
     }
 
@@ -34,55 +44,56 @@ const FlowMixin = (superclass) => class extends superclass {
         this._stepDirector = new StepDirector(steps);
     }
 
-    onCurrentStepContinuation(applicationState,currentStepData,skippedSteps = []){
-        return this._stepDirector.onCurrentStepContinuation(applicationState,currentStepData,skippedSteps);
+    onCurrentStepContinuation(applicationState, currentStepData, skippedSteps = []) {
+        return this._stepDirector.onCurrentStepContinuation(applicationState, currentStepData, skippedSteps);
     }
 
-    registerStepListener(stepName,stepFunction){
-        this._stepDirector.registerStepListener(stepName,stepFunction);
+    registerStepListener(stepName, stepFunction) {
+        this._stepDirector.registerStepListener(stepName, stepFunction);
     }
 
     performCurrentStepAction(currentStepData) {
         this._stepDirector.performActionForCurrentStep(currentStepData);
     }
 
-    evaluateFlowStep(event) { 
-        if(event.detail){
-            const currentStepData = event.detail.stepData != undefined   ?  event.detail.stepData : {};        
-            this.performCurrentStepAction(currentStepData); 
-            this._afterCurrentStepActions();       
-        }        
+    evaluateFlowStep(event) {
+        if (event.detail) {
+            const currentStepData = event.detail.stepData != undefined ? event.detail.stepData : {};
+            this.performCurrentStepAction(currentStepData);
+            this._afterCurrentStepActions();
+        }
     }
 
-    revertStep(event) {  
-        const snapshotData = this._stepDirector.onStepRevertion();   
+    revertStep(event) {
+        const snapshotData = this._stepDirector.onStepRevertion();
         this._revertFunction(snapshotData);
+        this._applicationState = snapshotData.applicationState;
         this.currentStepData = snapshotData.stepData;
-        this._currentStep = snapshotData.currentStep;  
-        this._afterRevertFunction();      
+        this._currentStep = snapshotData.currentStep;
+        this._afterRevertFunction();
     }
 
-    fireUpdateNavigationBarEvent(steps,currentStep, skippedSteps = []){        
-        this.dispatchEvent(new CustomEvent('navigationupdate',{
-            detail : {
-                'steps' : steps,
-                'currentStep' : currentStep,
-                'skippedSteps' : new Set(skippedSteps)
+    fireUpdateNavigationBarEvent(steps, currentStep, skippedSteps = []) {
+        this.dispatchEvent(new CustomEvent('navigationupdate', {
+            detail: {
+                'steps': steps,
+                'currentStep': currentStep,
+                'skippedSteps': new Set(skippedSteps)
             },
-            bubbles : true
+            bubbles: true
         }));
     }
 
-    registerOnRevertFunction(func){
+    registerOnRevertFunction(func) {
         this._revertFunction = func;
     }
 
-    registerOnAfterRevertFunction(func){
+    registerOnAfterRevertFunction(func) {
         this._afterRevertFunction = func;
     }
 
-    registerOnAfterCurrentStepActions(func){
-        this._afterCurrentStepActions = func; 
+    registerOnAfterCurrentStepActions(func) {
+        this._afterCurrentStepActions = func;
     }
 
 }
