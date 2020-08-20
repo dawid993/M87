@@ -1,9 +1,8 @@
 import { createElement } from 'lwc'
-import { registerLdsTestWireAdapter } from '@salesforce/sfdx-lwc-jest';
 import engagementKanbanBoard from 'c/engagementKanbanBoard';
 import retrieveEngagementCases from '@salesforce/apex/EngagementKanbanController.retrieveEngagementCases';
 import changeCaseStatus from '@salesforce/apex/EngagementKanbanController.changeCaseStatus';
-import {flushPromises} from 'c/testUtility';
+import { flushPromises, createElementAndAddToDocument, clearDocument } from 'c/testUtility';
 
 jest.mock(
     '@salesforce/apex/EngagementKanbanController.changeCaseStatus',
@@ -25,6 +24,8 @@ jest.mock(
     { virtual: true }
 );
 
+const toDoColumnSelector = "div[data-status='To Do']";
+
 const engagementCases = require('./data/cases.json')
 
 const createBubbledEvent = (type, props = {}) => {
@@ -33,69 +34,62 @@ const createBubbledEvent = (type, props = {}) => {
     return event;
 };
 
+const getFakeDataTransfer = () => (
+    {
+        getData: function (param) {
+            return '1'
+        }
+    }
+);
+
 const createDraggableDiv = () => {
     const draggableDiv = document.createElement('div');
-    draggableDiv.setAttribute('draggable', true)
-
-    return draggableDiv
+    draggableDiv.setAttribute('draggable', true);
+    return draggableDiv;
 }
 
-
 describe('c-engagement-kanban-board tests', () => {
-    afterEach(() => {
-        while (document.body.firstChild) {
-            document.body.removeChild(document.body.firstChild);
-        }
-    });
+    afterEach(() => clearDocument(document));
 
-    it('has lightning card rendered', () => {
-        const engagementKanbanBoardElement = createElement('c-engagement-kanban-board', {
-            is: engagementKanbanBoard
-        })
-        document.body.appendChild(engagementKanbanBoardElement)
-        const engagementBoard = engagementKanbanBoardElement.shadowRoot.querySelector('lightning-card')
-        expect(engagementBoard).toBeTruthy()
+    it('has lightning card been rendered', () => {
+        const engagementKanbanBoardElement = 
+            createElementAndAddToDocument('c-engagement-kanban-board', document, engagementKanbanBoard, createElement);
+        const engagementBoard = engagementKanbanBoardElement.shadowRoot.querySelector('lightning-card');
+        expect(engagementBoard).toBeTruthy();
     });
 
     it('is drop event supported', () => {
-        const engagementKanbanBoardElement = createElement('c-engagement-kanban-board', {
-            is: engagementKanbanBoard
+        changeCaseStatus.mockResolvedValue({ success: true });
+        const engagementKanbanBoardElement =
+            createElementAndAddToDocument('c-engagement-kanban-board', document, engagementKanbanBoard, createElement);
+
+        const column = engagementKanbanBoardElement.shadowRoot.querySelector(toDoColumnSelector);
+        const draggableDiv = column.appendChild(createDraggableDiv());
+        const dataTransfer = getFakeDataTransfer();
+
+        column.appendChild = jest.fn();
+        const dropEvent = createBubbledEvent('drop', { 'dataTransfer': dataTransfer });
+
+        draggableDiv.dispatchEvent(dropEvent);
+        expect(column.appendChild.mock.calls.length).toBe(1);
+
+        return new Promise((resolve) => {
+            expect(changeCaseStatus).toHaveBeenCalled();
+            expect(changeCaseStatus.mock.calls[0][0]).toEqual({ caseId: '1', status: 'To Do' });
+            resolve();
         });
-
-        changeCaseStatus.mockResolvedValue({ success: true })
-        document.body.appendChild(engagementKanbanBoardElement)
-
-        const column = engagementKanbanBoardElement.shadowRoot.querySelector("div[data-status='To Do']")
-        const draggableDiv = column.appendChild(createDraggableDiv())
-        const dataTransfer = {
-            getData: function (param) {
-                return '1'
-            }
-        }
-        column.appendChild = jest.fn()
-        const dropEvent = createBubbledEvent('drop', { 'dataTransfer': dataTransfer })
-
-        draggableDiv.dispatchEvent(dropEvent)
-        expect(column.appendChild.mock.calls.length).toBe(1)
-        return new Promise((resolve) => {            
-            expect(changeCaseStatus).toHaveBeenCalled()
-            expect(changeCaseStatus.mock.calls[0][0]).toEqual({ caseId: '1', status: 'To Do' })
-            resolve()
-        })
-
     });
 
     it('does case retrieval work', () => {
         retrieveEngagementCases.mockResolvedValue(engagementCases);
-        const engagementKanbanBoardElement = createElement('c-engagement-kanban-board', {
-            is: engagementKanbanBoard
-        })
-
-        document.body.appendChild(engagementKanbanBoardElement);
+        const engagementKanbanBoardElement =
+            createElementAndAddToDocument('c-engagement-kanban-board', document, engagementKanbanBoard, createElement);    
         engagementKanbanBoardElement.applySearchOptions({});
+
         return flushPromises().then(() => {
-            const taskId = engagementKanbanBoardElement.shadowRoot.querySelector("[data-task-id]").getAttribute('data-task-id');
-            expect(taskId).toBe('00000001')
+            const taskId = engagementKanbanBoardElement.shadowRoot.querySelector("[data-task-id]")
+                .getAttribute('data-task-id');
+            expect(taskId).toBe('00000001');
         });
     });
 
@@ -107,7 +101,7 @@ describe('c-engagement-kanban-board tests', () => {
 
         let viewCaseEventFired = false;
 
-        engagementKanbanBoardElement.addEventListener('viewtask',(event) => {
+        engagementKanbanBoardElement.addEventListener('viewtask_pub_comp', (event) => {
             viewCaseEventFired = true;
         });
 
@@ -120,7 +114,7 @@ describe('c-engagement-kanban-board tests', () => {
             headerContainer.dispatchEvent(new Event('mouseover'));
             const viewCaseElement = headerContainer.querySelector('li:nth-child(1)');
             viewCaseElement.dispatchEvent(new Event('click'));
-            expect(viewCaseEventFired).toBeTruthy();            
+            expect(viewCaseEventFired).toBeTruthy();
         });
     });
 
@@ -132,7 +126,7 @@ describe('c-engagement-kanban-board tests', () => {
 
         let invokeFlowEvent = false;
 
-        engagementKanbanBoardElement.addEventListener('invokeflow_pub_comp',(event) => {
+        engagementKanbanBoardElement.addEventListener('invokeflow_pub_comp', (event) => {
             invokeFlowEvent = true;
         });
 
@@ -142,10 +136,10 @@ describe('c-engagement-kanban-board tests', () => {
         return flushPromises().then(() => {
             const headerContainer = engagementKanbanBoardElement.shadowRoot
                 .querySelector(".task-header-container .option-container");
-            headerContainer.dispatchEvent(new Event('mouseover'));            
-            const viewCaseElement = headerContainer.querySelector('li:nth-child(2)');            
+            headerContainer.dispatchEvent(new Event('mouseover'));
+            const viewCaseElement = headerContainer.querySelector('li:nth-child(2)');
             viewCaseElement.dispatchEvent(new Event('click'));
-            expect(invokeFlowEvent).toBeTruthy();            
+            expect(invokeFlowEvent).toBeTruthy();
         });
     });
 })

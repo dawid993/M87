@@ -1,4 +1,3 @@
-
 export default class DomElementsUtils {
     static removeAllChild(element) {
         while (element.firstChild) {

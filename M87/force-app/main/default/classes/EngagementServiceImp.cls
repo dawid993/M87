@@ -32,6 +32,7 @@ public with sharing class EngagementServiceImp implements EngagementService {
         List<Case> engagementCases = new List<Case>();
 
         try{
+            System.debug(searchOptions);
             CaseService caseService = newCaseServiceInstance();
             engagementCases = caseService.retrieveEngagementCases(searchOptions);
         }catch(Exception ex){

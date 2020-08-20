@@ -1,0 +1,11 @@
+.header{
+    width: 95%;
+    margin: 20px auto;
+}
+
+.form-container {
+  width: 95%;
+  margin: 10px auto;  
+  height: 550px;
+  overflow: auto;
+}

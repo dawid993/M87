@@ -1,7 +1,7 @@
 import { createElement } from 'lwc';
 import engagementKanban from 'c/engagementKanban';
 
-import {flushPromises} from 'c/testUtility';
+import { flushPromises } from 'c/testUtility';
 
 describe('c-engagement-kanban tests', () => {
     afterEach(() => {
@@ -10,7 +10,7 @@ describe('c-engagement-kanban tests', () => {
         }
     })
 
-    it('Has c-engagement-kanban-options rendered', () =>{
+    it('Has c-engagement-kanban-options rendered', () => {
         const engagementKanbanElement = createElement('c-engagement-kanban', {
             is: engagementKanban
         })
@@ -21,7 +21,7 @@ describe('c-engagement-kanban tests', () => {
         expect(engagementOptions).toBeTruthy();
     });
 
-    it('Has c-engagement-kanban-board rendered', () =>{
+    it('Has c-engagement-kanban-board rendered', () => {
         const engagementKanbanElement = createElement('c-engagement-kanban', {
             is: engagementKanban
         })
@@ -32,7 +32,7 @@ describe('c-engagement-kanban tests', () => {
         expect(engagementBoard).toBeTruthy();
     });
 
-    it('Should invoke kanban board search method.', () =>{
+    it('Should invoke kanban board search method.', () => {
         const engagementKanbanElement = createElement('c-engagement-kanban', {
             is: engagementKanban
         })
@@ -41,16 +41,16 @@ describe('c-engagement-kanban tests', () => {
 
         const engagementOptions = engagementKanbanElement.shadowRoot.querySelector('c-engagement-kanban-options');
         const engagementBoard = engagementKanbanElement.shadowRoot.querySelector('c-engagement-kanban-board');
-        engagementBoard.applySearchOptions = jest.fn((x) => {});
-        engagementOptions.dispatchEvent(new CustomEvent('search',{
-            detail : {searchOptions : 'status'}
+        engagementBoard.applySearchOptions = jest.fn((x) => { });
+        engagementOptions.dispatchEvent(new CustomEvent('search', {
+            detail: { searchOptions: 'status' }
         }));
 
-        return flushPromises().then(() => {            
-            expect(engagementBoard.applySearchOptions).toHaveBeenCalled();           
+        return flushPromises().then(() => {
+            expect(engagementBoard.applySearchOptions).toHaveBeenCalled();
         });
-        
+
     });
 
-   
+
 })

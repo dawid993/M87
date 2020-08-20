@@ -1,0 +1,22 @@
+<template>
+    <lightning-record-view-form record-id={caseId} object-api-name="Case">
+        <div class="slds-grid">
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-output-field field-name="Name"></lightning-output-field>
+                <lightning-output-field field-name="Subject"></lightning-output-field>
+                <lightning-output-field field-name="Origin"></lightning-output-field>
+                <lightning-output-field field-name="Status"></lightning-output-field>
+                <lightning-output-field field-name="Priority"></lightning-output-field>
+                <lightning-output-field field-name="Phone"></lightning-output-field>
+                <lightning-output-field field-name="SuppliedPhone"></lightning-output-field>
+                <lightning-output-field field-name="IsEscalated"></lightning-output-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-output-field field-name="LastModifiedById"></lightning-output-field>
+                <lightning-output-field field-name="CreatedDate"></lightning-output-field>
+                <lightning-output-field field-name="Comments"></lightning-output-field>
+                <lightning-output-field field-name="Description"></lightning-output-field>
+            </div>
+        </div>
+    </lightning-record-view-form>
+</template>

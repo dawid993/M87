@@ -1,4 +1,4 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, api } from 'lwc';
 import ImmutabilityService from "c/immutabilityService";
 import apexSearchOwners from '@salesforce/apex/EngagementKanbanController.searchOwners';
 
@@ -99,6 +99,16 @@ export default class EngagementKanbanOptions extends LightningElement {
             { label: allOwnersLabel, value: allOwnersLabel },
             { label: findOwner, value: findOwner },
         ]);
+    }
+
+    @api
+    getCurrentSearchOptions(){
+        return this.createOptionsObject(
+            this.searchPhrase,
+            this.selectedOwners.map(owner => owner.id),
+            this.selectedStatuses,
+            this.selectedPriorities
+        );
     }
 
     applySearchOptions() {

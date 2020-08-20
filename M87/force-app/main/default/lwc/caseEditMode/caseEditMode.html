@@ -1,0 +1,23 @@
+<template>
+    <lightning-record-edit-form record-id={caseId} object-api-name="Case">
+        <div class="slds-grid">
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Name"></lightning-input-field>
+                <lightning-input-field field-name="Subject"></lightning-input-field>
+                <lightning-input-field field-name="Origin"></lightning-input-field>
+                <lightning-input-field field-name="Status"></lightning-input-field>
+                <lightning-input-field field-name="Priority"></lightning-input-field>
+                <lightning-input-field field-name="Phone"></lightning-input-field>
+                <lightning-input-field field-name="SuppliedPhone"></lightning-input-field>
+                <lightning-input-field field-name="IsEscalated"></lightning-input-field>     
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Comments"></lightning-input-field>
+                <lightning-input-field field-name="Description" style="height: 50px;"></lightning-input-field>
+            </div>            
+        </div>
+        <div class="slds-m-top_medium">
+            <lightning-button type="submit" variant="brand" label="Save"></lightning-button>
+        </div>
+    </lightning-record-edit-form>
+</template>

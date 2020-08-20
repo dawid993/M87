@@ -1,0 +1,17 @@
+<template>
+    <div class="header">
+        <lightning-card variant="Narrow" title="Case review" icon-name="standard:case">
+            <lightning-button-icon icon-name="utility:settings" variant="border-filled" alternative-text="Show More"
+                slot="actions" onclick={_changeMode}></lightning-button-icon>
+            <p class="slds-p-horizontal_small">You can view and edit case.</p>
+        </lightning-card>
+    </div>
+    <div class="form-container">
+        <template if:true={isReadMode}>
+            <c-case-read-mode case-id={caseId}></c-case-read-mode>
+        </template>
+        <template if:true={isEditMode}>
+            <c-case-edit-mode case-id={caseId} onsuccess={performOnSuccessActions}></c-case-edit-mode>
+        </template>
+    </div>
+</template>

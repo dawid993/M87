@@ -1,103 +1,95 @@
 import { LightningElement, track, api } from 'lwc';
 import retrieveEngagementCases from '@salesforce/apex/EngagementKanbanController.retrieveEngagementCases';
 import changeCaseStatus from '@salesforce/apex/EngagementKanbanController.changeCaseStatus';
-import ImmutabilityService from "c/immutabilityService";
 import DomElementsUtils from 'c/domElementsUtils';
 
 const caseIconUrl = '/resource/Case_Icon';
 const customIconUrl = '/resource/Custom_Icon';
 
-const inProgressStatus = 'In Progress';
-const toDoStatus = 'To Do';
-const doneSuccessStatus = 'Done - success';
-const doneFailureStatus = 'Done - failure';
+const casesStatuses = [
+    'In Progress',
+    'To Do',
+    'Done - success',
+    'Done - failure',
+];
+
+const kanbanColumnSelector = '.kanban-column .kanban-column-drop';
 
 export default class EngagementKanbanBoard extends LightningElement {
 
     @track
     showSpinner = false
 
-    purgeAllColumns() {
-        this.template.querySelectorAll('.kanban-column [data-status]').forEach(DomElementsUtils.removeAllChild);
+    _purgeAllColumns() {
+        this.template.querySelectorAll(kanbanColumnSelector).forEach(DomElementsUtils.removeAllChild);
     }
 
-    mapTaskToDivElements(casesContainers = new Map(), casesTasks = []) {
-        casesTasks.forEach((caseElement) => {
-            if (casesContainers.has(caseElement.Status)) {
-                casesContainers.get(caseElement.Status).push(this.createTaskElement(caseElement))
-            }
+    _mapTaskToDivElements(casesTasks = []) {
+        const casesContainers = this._createCaseContainers()
+        casesTasks.forEach(caseElement => {
+            if (casesContainers.has(caseElement.Status))
+                casesContainers.get(caseElement.Status).push(this._createTaskElement(caseElement));
         });
 
-        return ImmutabilityService.deepFreeze(casesContainers);
+        return casesContainers;
     }
 
-    renderColumns(casesContainers = new Map()) {
+    _renderColumns(casesContainers = new Map()) {
         casesContainers.forEach((cases, key) => {
-            let column = this.template.querySelector(`[data-status='${key}']`);
-            if (column) {
-                cases.forEach(caseDiv => {
-                    column.appendChild(caseDiv)
-                })
-            }
+            const column = this.template.querySelector(`[data-status='${key}']`);
+            if (column)
+                cases.forEach(caseDiv => column.appendChild(caseDiv));
         });
     }
 
-    moveTaskBetweenColumns(targetColumn, taskId) {
-        let result;
+    _moveTaskBetweenColumns(targetColumn, taskId) {
+        let result = {};
+        const createResult = () => ({
+            "taskId": taskId,
+            "status": targetColumn.dataset.status
+        });
+
         if (targetColumn && taskId) {
             targetColumn.appendChild(this.template.querySelector("[data-task-id='" + taskId + "']"));
-            result = {
-                "taskId": taskId,
-                "status": targetColumn.dataset.status
-            };
-        } else {
-            result = {};
+            result = createResult();
         }
 
-        return ImmutabilityService.deepFreeze(result);
-
+        return result;
     }
 
-    apexChangeCaseStatus(caseDesc) {
+    _apexChangeCaseStatus(caseDesc) {
         if (caseDesc.taskId && caseDesc.status) {
             changeCaseStatus({ "caseId": caseDesc.taskId, "status": caseDesc.status })
-                .then(result => this.toggleSpinner())
+                .then(result => this._toggleSpinner())
                 .catch(err => console.log(err));
         } else {
             console.log('Cannot call service. Invalid parameters');
         }
     }
 
-    toggleSpinner() {
+    _toggleSpinner() {
         this.showSpinner = !this.showSpinner;
     }
 
     @api
     applySearchOptions(searchOptions) {
-        this.toggleSpinner();
-        retrieveEngagementCases({ 'searchOptions': JSON.stringify(searchOptions) })
-            .then(response => {
-                this.processEngagementCasesResponse(response.detailedResult)
-            });
+        this._toggleSpinner();
+        return retrieveEngagementCases({ 'searchOptions': JSON.stringify(searchOptions) })
+            .then(response => this._processEngagementCasesResponse(response.detailedResult))
+            .catch(err => console.log(err));
     }
 
-
-    processEngagementCasesResponse(response) {
+    _processEngagementCasesResponse(response) {
         if (response) {
-            const casesContainers = this.createCaseContainers();
-            this.purgeAllColumns();
-            this.mapTaskToDivElements(casesContainers, response);
-            this.renderColumns(casesContainers);
-            this.toggleSpinner();
+            this._purgeAllColumns();
+            this._renderColumns(this._mapTaskToDivElements(response));
+            this._toggleSpinner();
         }
     }
-
-    createCaseContainers() {
+    
+    _createCaseContainers() {
         const casesContainers = new Map();
-        casesContainers.set(inProgressStatus, []);
-        casesContainers.set(toDoStatus, []);
-        casesContainers.set(doneSuccessStatus, []);
-        casesContainers.set(doneFailureStatus, []);
+        casesStatuses.forEach(status => casesContainers.set(status, []));
 
         return casesContainers;
     }
@@ -107,9 +99,9 @@ export default class EngagementKanbanBoard extends LightningElement {
         const taskId = event.dataTransfer.getData('task-id');
 
         if (targetColumn && taskId) {
-            this.toggleSpinner();
-            const targetTask = this.moveTaskBetweenColumns(targetColumn, taskId);
-            this.apexChangeCaseStatus(targetTask);
+            this._toggleSpinner();
+            const targetTask = this._moveTaskBetweenColumns(targetColumn, taskId);
+            this._apexChangeCaseStatus(targetTask);
         }
     }
 
@@ -124,13 +116,13 @@ export default class EngagementKanbanBoard extends LightningElement {
         event.preventDefault();
     }
 
-    createTaskElement(caseTask) {   
+    _createTaskElement(caseTask) {
         const elementsFunctions = [
             this.createTaskElementHeader.bind(this, caseTask),
             this.createCaseDescription.bind(null, caseTask),
             this.createFooterSection.bind(this, caseTask)
         ];
-        
+
         return elementsFunctions.reduce(DomElementsUtils.divReduceAppend, this.createDraggableDiv(caseTask));
     }
 
@@ -148,13 +140,13 @@ export default class EngagementKanbanBoard extends LightningElement {
     createTaskElementHeader(caseTask) {
         const taskElementHeaderFunctions = [
             this.createCaseImage.bind(this),
-            this.createCaseHeader.bind(this,caseTask),
+            this.createCaseHeader.bind(this, caseTask),
             this.createOptionIcon.bind(this)
         ];
 
         const container = document.createElement('div');
         container.classList.add('task-header-container');
-        return taskElementHeaderFunctions.reduce(DomElementsUtils.divReduceAppend,container);        
+        return taskElementHeaderFunctions.reduce(DomElementsUtils.divReduceAppend, container);
     }
 
     createCaseImage() {
@@ -255,9 +247,11 @@ export default class EngagementKanbanBoard extends LightningElement {
         return invokeFlowOption;
     }
 
-    fireViewCaseEvent(taskId) {        
+    fireViewCaseEvent(taskId) {
         if (taskId) {
-            this.dispatchEvent(new CustomEvent('viewtask', {                
+            this.dispatchEvent(new CustomEvent('viewtask_pub_comp', {
+                bubbles: true,
+                composed: true,
                 detail: {
                     'taskId': taskId
                 }
@@ -265,13 +259,13 @@ export default class EngagementKanbanBoard extends LightningElement {
         }
     }
 
-    fireInvokeCaseFlowEvent(taskId) {        
-        if (taskId) {          
-            
-            this.dispatchEvent(new CustomEvent('invokeflow_pub_comp', {    
-                bubbles : true,     
-                composed : true,                               
-                detail: {                    
+    fireInvokeCaseFlowEvent(taskId) {
+        if (taskId) {
+
+            this.dispatchEvent(new CustomEvent('invokeflow_pub_comp', {
+                bubbles: true,
+                composed: true,
+                detail: {
                     'taskId': taskId
                 }
             }));
