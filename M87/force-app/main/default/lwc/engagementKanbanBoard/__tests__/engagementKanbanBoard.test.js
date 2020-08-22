@@ -25,7 +25,6 @@ jest.mock(
 );
 
 const toDoColumnSelector = "div[data-status='To Do']";
-
 const engagementCases = require('./data/cases.json')
 
 const createBubbledEvent = (type, props = {}) => {
@@ -34,8 +33,7 @@ const createBubbledEvent = (type, props = {}) => {
     return event;
 };
 
-const getFakeDataTransfer = () => (
-    {
+const getFakeDataTransfer = () => (    {
         getData: function (param) {
             return '1'
         }
@@ -70,13 +68,12 @@ describe('c-engagement-kanban-board tests', () => {
         column.appendChild = jest.fn();
         const dropEvent = createBubbledEvent('drop', { 'dataTransfer': dataTransfer });
 
-        draggableDiv.dispatchEvent(dropEvent);
-        expect(column.appendChild.mock.calls.length).toBe(1);
+        draggableDiv.dispatchEvent(dropEvent);        
 
-        return new Promise((resolve) => {
+        return new flushPromises(() => {
+            expect(column.appendChild.mock.calls.length).toBe(1);
             expect(changeCaseStatus).toHaveBeenCalled();
-            expect(changeCaseStatus.mock.calls[0][0]).toEqual({ caseId: '1', status: 'To Do' });
-            resolve();
+            expect(changeCaseStatus.mock.calls[0][0]).toEqual({ caseId: '1', status: 'To Do' });           
         });
     });
 
