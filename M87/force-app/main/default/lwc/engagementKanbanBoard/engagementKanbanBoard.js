@@ -84,12 +84,8 @@ export default class EngagementKanbanBoard extends LightningElement {
         }
     }
 
-    handleDrag(event) {
-        debugger;
-        let taskId = event.target.dataset.taskId;
-        if (taskId) {
-            event.dataTransfer.setData('task-id', taskId);
-        }
+    handleDrag(event) {        
+        event.dataTransfer.setData('task-id',  event.target.dataset.taskId);        
     }
 
     handleDragOver(event) {

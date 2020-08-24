@@ -66,10 +66,57 @@ function dispatchEvent(eventName, eventDetail, srcComponent) {
     }));
 }
 
+/*
+* Intention for this is to replace all ungrouped function above.
+* I want to group function by type like -> htmlelement, event and so on
+*/
+
+const jestUtils = {
+    flushPromises: () => new Promise(resolve => setImmediate(resolve)),
+};
+
+const htmlTestUtils = {
+    clearDocument: document => {
+        while (document.body.firstChild) {
+            document.body.removeChild(document.body.firstChild);
+        }
+    },
+
+    createElementAndAddToDocument: (elementName, document, isParam, createFunction) => {
+        const element = createFunction(elementName, { is: isParam });
+        document.body.appendChild(element);
+        return element;
+    },
+
+    createDraggableDiv: () => {
+        const draggableDiv = document.createElement('div');
+        draggableDiv.setAttribute('draggable', true);
+        return draggableDiv;
+    }
+
+};
+
+const eventTestUtils = {
+    dispatchEvent: (eventName, eventDetail, srcComponent) => {
+        srcComponent.dispatchEvent(new CustomEvent(eventName, {
+            detail: eventDetail
+        }));
+    },
+
+    createBubbledEvent: (type, props = {}) => {
+        const event = new Event(type, { bubbles: true });
+        Object.assign(event, props);
+        return event;
+    }
+}
+
 export {
     TEST_STEPS_DATA,
     flushPromises,
     clearDocument,
     createElementAndAddToDocument,
-    dispatchEvent
+    dispatchEvent,
+    jestUtils,
+    htmlTestUtils,
+    eventTestUtils
 }
