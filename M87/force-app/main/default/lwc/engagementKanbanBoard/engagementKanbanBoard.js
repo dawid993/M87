@@ -3,6 +3,7 @@ import retrieveEngagementCases from '@salesforce/apex/EngagementKanbanController
 import changeCaseStatus from '@salesforce/apex/EngagementKanbanController.changeCaseStatus';
 import DomElementsUtils from 'c/domElementsUtils';
 import KanbanBoardElementCreator from 'c/kanbanBoardElementCreator'
+import KanbanBoardElementCreatorBuilder from 'c/kanbanBoardElementCreatorBuilder';
 
 const caseIconUrl = '/resource/Case_Icon';
 const customIconUrl = '/resource/Custom_Icon';
@@ -27,13 +28,17 @@ export default class EngagementKanbanBoard extends LightningElement {
     _elementCreator;
 
     connectedCallback() {
-        this._elementCreator = new KanbanBoardElementCreator(
-            caseIconUrl,
-            customIconUrl,
-            this.handleDrag,
-            this._fireViewCaseEventComposition(this),
-            this._fireInvokeCaseFlowEventComposition(this)
-        );
+        this._elementCreator = this._createKanbanElementCreator();        
+    }
+
+    _createKanbanElementCreator(){
+        return new KanbanBoardElementCreatorBuilder()
+        .setCaseIconUrl(caseIconUrl)
+        .setCustomIconUrl(customIconUrl)
+        .setDragFunction(this.handleDrag)
+        .setFireViewCaseEventFunction(this._fireViewCaseEventComposition(this))
+        .setFireInvokeCaseFlowEventFunction(this._fireInvokeCaseFlowEventComposition(this))
+        .build();       
     }
 
     _fireViewCaseEventComposition = (sourceComponent) => (taskId) => () => {

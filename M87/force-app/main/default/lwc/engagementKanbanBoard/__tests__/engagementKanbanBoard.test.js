@@ -46,7 +46,7 @@ describe('c-engagement-kanban-board tests', () => {
         expect(engagementBoard).toBeTruthy();
     });
 
-    it.only('should have draggable element with inner elements', () => {
+    it('should have draggable element with inner elements', () => {
         retrieveEngagementCases.mockResolvedValue(engagementCases);
         const engagementKanbanBoardElement = htmlTestUtils.createElementAndAddToDocument('c-engagement-kanban-board',
             document, engagementKanbanBoard, createElement);

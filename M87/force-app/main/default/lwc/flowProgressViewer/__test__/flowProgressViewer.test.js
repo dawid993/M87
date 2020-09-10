@@ -22,7 +22,7 @@ describe('c-flow-progress-viewer', () => {
     afterEach(() => {
         clearDocument(document);
     });
-    it.only('should update navigation bar', () => {
+    it('should update navigation bar', () => {
         const flowProgressViewerElement =
             createElementAndAddToDocument('c-flow-progress-viewer', document, flowProgressViewer, createElement);
         const slot = flowProgressViewerElement.shadowRoot.querySelector('slot');
@@ -36,7 +36,7 @@ describe('c-flow-progress-viewer', () => {
         });
     });
 
-    it.only('should update navigation bar with skipped steps', () => {
+    it('should update navigation bar with skipped steps', () => {
         const flowProgressViewerElement =
             createElementAndAddToDocument('c-flow-progress-viewer', document, flowProgressViewer, createElement);
         const slot = flowProgressViewerElement.shadowRoot.querySelector('slot');
