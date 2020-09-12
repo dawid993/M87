@@ -1,19 +1,74 @@
 const exists = x => x != null && x != undefined;
 
+/*
+* Maybe
+*/
 const Just = value => ({
-    map: f => Just(f(value)),
+    then: f => Just(f(value)),
 });
 
 const Nothing = () => ({
-    map: () => Nothing(),
+    then: () => Nothing(),
 });
 
 const Maybe = value => exists(value) ?
     Just(value) :
     Nothing();
 
-const MaybeNot = value => !exists(value) ?
-    Just() :
-    Nothing();
+Maybe.getNothing = () => Maybe();
 
-export {Maybe,MaybeNot}
+/*
+* Empty
+*/
+const ifEmpty = () => ({
+    then: func => Empty(func()),
+});
+
+const ifNotEmpty = (value) => ({
+    then: func => Empty(func(value)),
+});
+
+const Empty = value => !exists(value) ?
+    ifEmpty() :
+    ifNotEmpty(value);
+
+Empty.getEmpty = () => Empty();
+
+/*
+* Either
+*/
+const Resolved = value => ({
+    then: func => {
+        try {
+            return Resolved(func(value));
+        } catch (err) {
+            return Rejected(err);
+        }
+
+    },
+    catch: () => Resolved(value)
+});
+
+const Rejected = error => ({
+    then: () => Rejected(error),
+    catch: func => {
+        try {
+            return Resolved(func(error));
+        } catch (err) {
+            return Rejected(err);
+        }
+    }
+});
+
+const Either = func => {
+    try {
+        return func(Either.getResolved, Either.getRejected);
+    } catch (err) {
+        return Either.getRejected(err);
+    }
+}
+
+Either.getResolved = (value) => Resolved(value);
+Either.getRejected = (error) => Rejected(error);
+
+export { Maybe, Empty, Either }

@@ -2,8 +2,9 @@ import { LightningElement, track, api } from 'lwc';
 import retrieveEngagementCases from '@salesforce/apex/EngagementKanbanController.retrieveEngagementCases';
 import changeCaseStatus from '@salesforce/apex/EngagementKanbanController.changeCaseStatus';
 import DomElementsUtils from 'c/domElementsUtils';
-import KanbanBoardElementCreator from 'c/kanbanBoardElementCreator'
 import KanbanBoardElementCreatorBuilder from 'c/kanbanBoardElementCreatorBuilder';
+
+import { Either } from 'c/jsFunctional';
 
 const caseIconUrl = '/resource/Case_Icon';
 const customIconUrl = '/resource/Custom_Icon';
@@ -28,39 +29,41 @@ export default class EngagementKanbanBoard extends LightningElement {
     _elementCreator;
 
     connectedCallback() {
-        this._elementCreator = this._createKanbanElementCreator();        
+        this._elementCreator = this._createKanbanElementCreator();
     }
 
-    _createKanbanElementCreator(){
+    _createKanbanElementCreator() {
         return new KanbanBoardElementCreatorBuilder()
-        .setCaseIconUrl(caseIconUrl)
-        .setCustomIconUrl(customIconUrl)
-        .setDragFunction(this.handleDrag)
-        .setFireViewCaseEventFunction(this._fireViewCaseEventComposition(this))
-        .setFireInvokeCaseFlowEventFunction(this._fireInvokeCaseFlowEventComposition(this))
-        .build();       
+            .setCaseIconUrl(caseIconUrl)
+            .setCustomIconUrl(customIconUrl)
+            .setDragFunction(this.handleDrag)
+            .setFireViewCaseEventFunction(this._fireViewCaseEventComposition(this))
+            .setFireInvokeCaseFlowEventFunction(this._fireInvokeCaseFlowEventComposition(this))
+            .build();
     }
 
     _fireViewCaseEventComposition = (sourceComponent) => (taskId) => () => {
-        if (!taskId) return;
-        sourceComponent.dispatchEvent(new CustomEvent(viewTaskPublicEventName, {
-            bubbles: true,
-            composed: true,
-            detail: {
-                'taskId': taskId
-            }
-        }));
+        Either((resolve, reject) => taskId ? resolve() : reject())
+            .then(() => sourceComponent.dispatchEvent(
+                this._createCustomEventWithNameAndTaskId(viewTaskPublicEventName, taskId)
+            ));
     }
 
     _fireInvokeCaseFlowEventComposition = (sourceComponent) => (taskId) => () => {
-        if (!taskId) return
-        sourceComponent.dispatchEvent(new CustomEvent(invokeFlowPublicEventName, {
+        Either((resolve, reject) => taskId ? resolve() : reject())
+            .then(() => sourceComponent.dispatchEvent(
+                this._createCustomEventWithNameAndTaskId(invokeFlowPublicEventName, taskId)
+            ));
+    }
+
+    _createCustomEventWithNameAndTaskId(eventName, taskId) {
+        return new CustomEvent(eventName, {
             bubbles: true,
             composed: true,
             detail: {
                 'taskId': taskId
             }
-        }));
+        });
     }
 
     @api
@@ -79,18 +82,16 @@ export default class EngagementKanbanBoard extends LightningElement {
     handleDrop(event) {
         const targetColumn = event.currentTarget;
         const taskId = event.dataTransfer.getData('task-id');
-        if (targetColumn && taskId) {
-            return Promise.resolve()
-                .then(() => this._toggleSpinner())
-                .then(() => this._moveTaskBetweenColumns(targetColumn, taskId))
-                .then((result) => changeCaseStatus({ "caseId": result.taskId, "status": result.status }))
-                .then(() => this._toggleSpinner())
-                .catch(err => console.log(err));
-        }
+        return new Promise((resolve, rejected) => targetColumn && taskId ? resolve() : rejected())
+            .then(() => this._toggleSpinner())
+            .then(() => this._moveTaskBetweenColumns(targetColumn, taskId))
+            .then((result) => changeCaseStatus({ "caseId": result.taskId, "status": result.status }))
+            .then(() => this._toggleSpinner())
+            .catch(err => console.log(err));
     }
 
-    handleDrag(event) {        
-        event.dataTransfer.setData('task-id',  event.target.dataset.taskId);        
+    handleDrag(event) {
+        event.dataTransfer.setData('task-id', event.target.dataset.taskId);
     }
 
     handleDragOver(event) {
@@ -131,7 +132,7 @@ export default class EngagementKanbanBoard extends LightningElement {
         }
 
         return result;
-    }   
+    }
 
     _toggleSpinner() {
         this.showSpinner = !this.showSpinner;

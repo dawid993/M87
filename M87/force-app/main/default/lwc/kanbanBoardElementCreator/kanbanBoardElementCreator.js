@@ -1,5 +1,5 @@
 import DomElementsUtils from 'c/domElementsUtils';
-import { MaybeNot } from 'c/jsFunctional';
+import { Empty,Maybe } from 'c/jsFunctional';
 
 export default class KanbanBoardElementCreator{
 
@@ -167,17 +167,21 @@ export default class KanbanBoardElementCreator{
     }
 
     _onOptionContainerHover(event) {
-        if (event.currentTarget) {
-            const taskElement = event.currentTarget.closest('.task-element');
-            const optionBox = event.currentTarget.querySelector('.option-box');
-            const ulElement = event.currentTarget.querySelector('.option-box ul');
-            console.log(ulElement);
+        const addOptions = (elements) => elements.optionBox.appendChild(
+            this._createOptionList(elements.taskElement.dataset.taskId)
+        );
 
-            MaybeNot(ulElement)
-            .map(() => optionBox.appendChild(
-                this._createOptionList(taskElement.dataset.taskId)
-            ));                
-        }
+        Maybe(event)
+        .then(event => this._findTargetOptionElements(event))
+        .then(elements => Empty(elements.ulElement).then(() => addOptions(elements)));               
+    }
+
+    _findTargetOptionElements(event) {
+        return {
+            taskElement: event.currentTarget.closest('.task-element'),
+            optionBox: event.currentTarget.querySelector('.option-box'),
+            ulElement: event.currentTarget.querySelector('.option-box ul')
+        };
     }
 
     _createOptionList(taskId) {
