@@ -12,6 +12,7 @@ import { getObjectInfo } from 'lightning/uiObjectInfoApi';
 import { getPicklistValues } from 'lightning/uiObjectInfoApi';
 
 import FlowComponentMixin from 'c/flowComponentMixin';
+
 const leadFormFields = [
     { name: 'leadTitle', defaultValue: '' },
     { name: 'leadName', defaultValue: '' },

@@ -42,8 +42,7 @@ export default class EngagementKanbanOptions extends LightningElement {
 
     @track
     selectedPriorities = [lowPriority, mediumPriority, highPriority];
-
-    @track
+    
     showOwnerSearchDialog = false;
 
     searchFunction = apexSearchOwners;

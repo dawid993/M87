@@ -20,17 +20,17 @@ Maybe.getNothing = () => Maybe();
 /*
 * Empty
 */
-const ifEmpty = () => ({
-    then: func => Empty(func()),
+const ifEmpty = (value) => ({
+    then: func => ifNotEmpty(func(value)),
 });
 
-const ifNotEmpty = (value) => ({
-    then: func => Empty(func(value)),
+const ifNotEmpty = () => ({
+    then: () => ifNotEmpty(),
 });
 
 const Empty = value => !exists(value) ?
-    ifEmpty() :
-    ifNotEmpty(value);
+    ifEmpty(value) :
+    ifNotEmpty();
 
 Empty.getEmpty = () => Empty();
 

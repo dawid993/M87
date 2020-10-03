@@ -1,5 +1,4 @@
 import StepListener from 'c/stepListener';
-import LwcImmutabilityService from 'c/immutabilityService';
 
 const INVALID_STEPS_EXCEPTION_MESSAGE = 'Invalid format of steps.';
 const NO_MORE_STEPS_EXCEPTION_MESSAGE = 'Cannot find next steps to perform.';

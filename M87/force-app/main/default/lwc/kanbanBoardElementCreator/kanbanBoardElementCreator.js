@@ -169,8 +169,7 @@ export default class KanbanBoardElementCreator{
     _onOptionContainerHover(event) {
         const addOptions = (elements) => elements.optionBox.appendChild(
             this._createOptionList(elements.taskElement.dataset.taskId)
-        );
-
+        );          
         Maybe(event)
         .then(event => this._findTargetOptionElements(event))
         .then(elements => Empty(elements.ulElement).then(() => addOptions(elements)));               
