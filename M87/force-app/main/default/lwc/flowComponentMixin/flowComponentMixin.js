@@ -1,7 +1,5 @@
 import { LightningElement,api } from 'lwc';
-
-const EVALUATION_EVENT_NAME = 'evaluation';
-const REVERT_EVENT_NAME = 'revertstep';
+import { EVALUATION_EVENT_NAME,REVERT_EVENT_NAME } from 'c/flowsUtils';
 
 const FlowComponentMixin = (superclass) => class extends superclass {
     _navigationContext = {};

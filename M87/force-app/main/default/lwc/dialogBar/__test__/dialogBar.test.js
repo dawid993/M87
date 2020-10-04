@@ -1,8 +1,6 @@
 import { createElement } from 'lwc';
 import dialogBar from 'c/dialogBar';
 
-import {flushPromises} from 'c/testUtility';
-
 function createDialogBar(){
     return createElement('c-dialog-bar', {
         is: dialogBar

@@ -96,6 +96,8 @@ const htmlTestUtils = {
 
 };
 
+const BLUR_EVENT_NAME = 'blur';
+
 const eventTestUtils = {
     dispatchEvent: (eventName, eventDetail, srcComponent) => {
         srcComponent.dispatchEvent(new CustomEvent(eventName, {
@@ -107,7 +109,9 @@ const eventTestUtils = {
         const event = new Event(type, { bubbles: true });
         Object.assign(event, props);
         return event;
-    }
+    },
+
+    createBlurEvent : () => new Event(BLUR_EVENT_NAME) ,
 }
 
 export {

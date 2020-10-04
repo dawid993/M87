@@ -38,12 +38,12 @@ export default class CommunityUserCreation extends FlowComponentMixin(LightningE
         this.dispatchRevertEvent();
     }
 
-    saveCommunityUser(event) {
+    saveCommunityUser(event) {       
         return this._validateFormData();
         this.dispatchEvaluationEvent();
     }
 
-    handleFieldUpdate(event) {       
+    handleFieldUpdate(event) { 
         canFieldBeSaved(validFieldNames,event)
         .then(canBeSaved => {
             if(!canBeSaved){
@@ -56,7 +56,7 @@ export default class CommunityUserCreation extends FlowComponentMixin(LightningE
     }
 
     _validateFormData(){        
-        const inputsValid = areLightningInputsValid(this._selectAllLightningInputs());
+        const inputsValid = areLightningInputsValid(this._selectAllLightningInputs());        
         console.log(inputsValid);
     }
 
