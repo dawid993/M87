@@ -1,4 +1,5 @@
 public with sharing class UserSelectorImp extends fflib_SObjectSelector implements UserSelector{
+    
     public Schema.SObjectType getSObjectType() {
         return User.sObjectType;
     }
@@ -17,5 +18,13 @@ public with sharing class UserSelectorImp extends fflib_SObjectSelector implemen
             .setCondition(condition)
             .toSOQL()
         );
+    }
+
+    public Integer countUserByUsername(String username){
+        return [SELECT Count() FROM User WHERE Username = :username];
+    }
+
+    public Integer countUserByEmail(String email){
+        return [SELECT Count() FROM User WHERE Email = :email];
     }
 }

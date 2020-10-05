@@ -45,13 +45,7 @@ export default class CommunityUserCreation extends FlowComponentMixin(LightningE
 
     handleFieldUpdate(event) { 
         canFieldBeSaved(validFieldNames,event)
-        .then(canBeSaved => {
-            if(!canBeSaved){
-                throw new Error(event.target.dataset.fieldName + 'can not be saved.');                
-            }
-            this['_'+event.target.dataset.fieldName] = event.target.value;
-            return event;
-        })
+        .then(event => this['_'+event.target.dataset.fieldName] = event.target.value)
         .catch(() => this.dispatchEvent(createErrorToast('Something went wrong with field update.')));       
     }
 
