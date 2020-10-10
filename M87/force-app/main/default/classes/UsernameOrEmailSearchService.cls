@@ -1,5 +1,9 @@
 public with sharing class UsernameOrEmailSearchService {
-    UserSelector userSelector = new UserSelectorImp();
+    private UserSelector userSelector;
+
+    public UsernameOrEmailSearchService(UserSelector userSelector){
+        this.userSelector = userSelector;
+    }
 
     public UsernameAndEmailCountDTO searchForUsernameOrEmail(final String username, final String email){
         return performSearchAndReturnDTO(username, email);

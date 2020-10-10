@@ -2,10 +2,11 @@ public with sharing class CommunityUserCreationController {
     
     @AuraEnabled
     public static ApexActionResult searchForUsernameOrEmail(final String username, final String email){
-        ApexActionResult result;
+        ApexActionResult result;       
 
         try{
-            UsernameAndEmailCountDTO dto = new UsernameOrEmailSearchService().searchForUsernameOrEmail(username, email);
+            final UsernameOrEmailSearchService searchService = Modules.instance().service_getUsernameOrEmailSearch();
+            UsernameAndEmailCountDTO dto = searchService.searchForUsernameOrEmail(username, email);
             result = ApexActionResult.success(dto);
         }catch(Exception ex){
             result = ApexActionResult.fail(ApexUtils.APEX_ACTION_EXCEPTION_INFO);
@@ -13,5 +14,6 @@ public with sharing class CommunityUserCreationController {
         }
 
         return result;
-    }    
+    }     
+    
 }
