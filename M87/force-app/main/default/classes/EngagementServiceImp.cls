@@ -6,6 +6,12 @@ public with sharing class EngagementServiceImp implements EngagementService {
         'Done - failure'
     };
 
+    private final CaseServiceImp caseService;
+
+    public EngagementServiceImp(CaseServiceImp caseService){
+        this.caseService = caseService;
+    }
+
     public List<Case> retrieveEngagementCases(ID ownerId){
         if(String.isBlank(ownerId)){
             throw new Exceptions.UndefinedOwnerException('Cannot retrieve cases for undefined owner.');
@@ -13,8 +19,7 @@ public with sharing class EngagementServiceImp implements EngagementService {
 
         List<Case> engagementCases = new List<Case>();
 
-        try{
-            CaseService caseService = newCaseServiceInstance();
+        try{           
             engagementCases = caseService.retrieveEngagementCases(ownerId);
         }catch(Exception ex){
             System.debug(ex.getMessage());
@@ -31,9 +36,7 @@ public with sharing class EngagementServiceImp implements EngagementService {
 
         List<Case> engagementCases = new List<Case>();
 
-        try{
-            System.debug(searchOptions);
-            CaseService caseService = newCaseServiceInstance();
+        try{           
             engagementCases = caseService.retrieveEngagementCases(searchOptions);
         }catch(Exception ex){
             System.debug(ex.getMessage());
@@ -51,17 +54,11 @@ public with sharing class EngagementServiceImp implements EngagementService {
         if(!allowedStatuses.contains(status)){
             throw new Exceptions.InvalidServiceActionParametersException(status+' is invalid status for engagement case');
         }
-
-        CaseService caseService = newCaseServiceInstance();
-
+        
         try{
             caseService.changeCaseStatus(caseId, status);
         }catch(Exception ex){
             throw new Exceptions.UnableToSaveDataException('Cannot change case status',ex);
         }
-    }
-
-    private CaseService newCaseServiceInstance(){
-        return (CaseService) Application.Service.newInstance(CaseService.class);
     }
 }

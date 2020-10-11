@@ -1,22 +1,30 @@
 public abstract class Modular {
 
-    private Map<Type,ConstructModule> modules;
+    private Map<Type,Type> modules;
 
     public Modular(){
-        modules = new Map<Type,ConstructModule>();
+        modules = new Map<Type,Type>();
     }
 
-    public void addModule(Type moduleType, ConstructModule construct){
+    protected void addModule(Type moduleType, Type construct){
+        if(!ConstructModule.class.isAssignableFrom(construct)){
+            throw new IllegalArgumentException(moduleType +' is not subtype of ConstructModule.');
+        }
+
         modules.put(moduleType,construct);
     }
 
-    public Object createModule(Type moduleType){
+    protected ConstructModule getModuleConstruct(Type moduleType){
         if(!modules.containsKey(moduleType)){
             throw new IllegalArgumentException(moduleType +' is not available as a module.');
         }
 
-        ConstructModule module = modules.get(moduleType);
-        return module.construct();
+        return (ConstructModule) modules.get(moduleType).newInstance();
     }
+
+    public virtual Object createModule(Type moduleType){        
+        ConstructModule module = getModuleConstruct(moduleType);
+        return module.construct();
+    }         
 
 }

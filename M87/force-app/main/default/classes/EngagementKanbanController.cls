@@ -5,7 +5,7 @@ public with sharing class EngagementKanbanController {
         try{            
             SearchEngagementCaseOptions parsedSearchOptions = 
                 (SearchEngagementCaseOptions) JSON.deserialize(searchOptions, SearchEngagementCaseOptions.class);
-            EngagementService service = (EngagementService) Application.Service.newInstance(EngagementService.class);
+            EngagementServiceImp service = Modules.instance().service_getEngagementService();
             return ApexActionResult.success(service.retrieveEngagementCases(parsedSearchOptions));
         }catch(Exception ex){
             System.debug(ex.getMessage()+' : '+ex.getStackTraceString());
@@ -17,7 +17,7 @@ public with sharing class EngagementKanbanController {
     @AuraEnabled
     public static ApexActionResult changeCaseStatus(String caseId,String status){
         try{
-            EngagementService service = (EngagementService) Application.Service.newInstance(EngagementService.class);
+            EngagementServiceImp service = Modules.instance().service_getEngagementService();
             service.updateEngagementCaseStatus(caseId, status);            
         }catch(Exception ex){
             System.debug(ex.getMessage());
@@ -30,7 +30,7 @@ public with sharing class EngagementKanbanController {
     @AuraEnabled
     public static ApexActionResult searchOwners(String searchPhrase){
         try{
-            UserService userService = (UserService) Application.Service.newInstance(UserService.class);
+            UserService userService = Modules.instance().service_getUserService();
             return ApexActionResult.success(
                 userService.searchOwnerByName(searchPhrase)
             );

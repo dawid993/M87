@@ -30,4 +30,29 @@ public with sharing virtual class Modules {
     public virtual UsernameOrEmailSearchService service_getUsernameOrEmailSearch(){
         return (UsernameOrEmailSearchService) serviceModules.createModule(UsernameOrEmailSearchService.class);
     }
+
+    public virtual CaseServiceImp service_getCaseService(){
+        return (CaseServiceImp) serviceModules.createModule(CaseServiceImp.class);
+    }
+
+    public virtual EngagementServiceImp service_getEngagementService(){
+        return (EngagementServiceImp) serviceModules.createModule(EngagementServiceImp.class);
+    }
+
+    public virtual UserServiceImp service_getUserService(){
+        return (UserServiceImp) serviceModules.createModule(UserServiceImp.class);
+    }
+
+    /*
+    * Selectors start here.
+    */
+
+    public virtual UserSelectorImp selector_getUserSelector(){
+        return (UserSelectorImp) selectorModules.createModule(UserSelectorImp.class);
+    }
+
+    public virtual CaseSelectorImp selector_getCaseSelector(){
+        return (CaseSelectorImp) selectorModules.createModule(CaseSelectorImp.class);
+    }
+   
 }

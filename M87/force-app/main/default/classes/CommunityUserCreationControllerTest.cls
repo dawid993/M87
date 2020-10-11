@@ -2,15 +2,14 @@
 public with sharing class CommunityUserCreationControllerTest {  
 
     @TestSetup
-    public static void initData(){
+    public static void initData(){    
         insert new List<User> {
             UserTestDataFactory.buildSystemAdminUserWithUsername(TestUtils.DEFAULT_TEST_USERNAME),
             UserTestDataFactory.buildSystemAdminUserWithEmail(TestUtils.DEFAULT_TEST_EMAIL)           
         };
     }
 
-    @isTest
-    public static void shouldReturnResultWithDTO_username_found_email_found(){
+    @isTest    public static void shouldReturnResultWithDTO_username_found_email_found(){
         System.runAs(UserTestDataFactory.buildUserTestRun()){
             ApexActionResult result = CommunityUserCreationController.searchForUsernameOrEmail(
                 TestUtils.DEFAULT_TEST_USERNAME, TestUtils.DEFAULT_TEST_EMAIL
@@ -26,7 +25,7 @@ public with sharing class CommunityUserCreationControllerTest {
     }
 
     @isTest
-    public static void shouldReturnResultWithUnsuccess(){
+     public static void shouldReturnResultWithUnsuccess(){
         System.runAs(UserTestDataFactory.buildUserTestRun()){
             Modules.stubModule(new ModuleExceptionThrow());
 
