@@ -71,4 +71,13 @@ const Either = func => {
 Either.getResolved = (value) => Resolved(value);
 Either.getRejected = (error) => Rejected(error);
 
-export { Maybe, Empty, Either }
+/*
+* Reducers
+*/
+
+const reduceFunctions = (acc, currentFunction) => acc && currentFunction();
+/*
+* API exports
+*/
+
+export { Maybe, Empty, Either, reduceFunctions }

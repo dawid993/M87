@@ -1,25 +1,46 @@
 import { Either } from 'c/jsFunctional';
 
-function checkIfFieldIsValid(validFieldNames, fieldName) {
+function _checkIfFieldIsValid(validFieldNames, fieldName) {
     return validFieldNames.some(currentName => currentName === fieldName);
 }
 
-function isEventValid(event){
+function _isEventValid(event) {
     return event && event.target && event.target.dataset && event.target.dataset.fieldName;
 }
 
-function canFieldBeSaved(validFieldNames = [], event) {   
-    return Either((resolve, reject) => 
-        isEventValid(event) && checkIfFieldIsValid(validFieldNames, event.target.dataset.fieldName) ? 
-        resolve(event) : reject('Change field event is invalid.'));       
+function canFieldBeSaved(validFieldNames = [], event) {
+    return Either((resolve, reject) =>
+        _isEventValid(event) && _checkIfFieldIsValid(validFieldNames, event.target.dataset.fieldName) ?
+            resolve(event) : reject('Change field event is invalid.'));
 }
 
-function reduceLightningInputs(accumulator, currentField) {
+function _reduceLightningInputs(accumulator, currentField) {
     return accumulator && currentField.checkValidity();
 }
 
 function areLightningInputsValid(inputs = []) {
-    return inputs.reduce(reduceLightningInputs,true);
+    return inputs.reduce(_reduceLightningInputs, true);
 }
 
-export { canFieldBeSaved, areLightningInputsValid };
+function showErrorMessagesForLightningInputs(inputs = []) {
+    inputs.forEach((input) => input.reportValidity());
+}
+
+function resetLightningInputsErrorsMessages(inputs = []) {
+    inputs.forEach((input) => {
+        input.setCustomValidity('');
+        input.showHelpMessageIfInvalid();
+    });
+}
+
+function checkIfAllInputsHaveClassAssigned(inputs = [], className){
+    return inputs.reduce((acc, current) =>  acc && current.classList.contains(className),true);
+}
+
+export {
+    canFieldBeSaved,
+    areLightningInputsValid,
+    showErrorMessagesForLightningInputs,
+    resetLightningInputsErrorsMessages,
+    checkIfAllInputsHaveClassAssigned
+};

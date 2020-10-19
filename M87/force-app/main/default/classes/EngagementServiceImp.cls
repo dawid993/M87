@@ -4,61 +4,39 @@ public with sharing class EngagementServiceImp implements EngagementService {
         'In Progress',
         'Done - success',
         'Done - failure'
-    };
+    };    
 
-    private final CaseServiceImp caseService;
+    private final EngagementCaseSelector caseSelector;
 
-    public EngagementServiceImp(CaseServiceImp caseService){
-        this.caseService = caseService;
+    public EngagementServiceImp(EngagementCaseSelector caseSelector){
+        this.caseSelector = caseSelector;
     }
 
     public List<Case> retrieveEngagementCases(ID ownerId){
         if(String.isBlank(ownerId)){
-            throw new Exceptions.UndefinedOwnerException('Cannot retrieve cases for undefined owner.');
+            throw new IllegalArgumentException('Cannot retrieve cases for undefined owner.');
         }
-
-        List<Case> engagementCases = new List<Case>();
-
-        try{           
-            engagementCases = caseService.retrieveEngagementCases(ownerId);
-        }catch(Exception ex){
-            System.debug(ex.getMessage());
-            throw new Exceptions.UnableToReadDataException('Cannot retrieve data',ex);
-        }
-
-        return engagementCases;
+       
+        return caseSelector.retrieveEngagementCases(ownerId);   
     }
 
     public List<Case> retrieveEngagementCases(SearchEngagementCaseOptions searchOptions){
         if(searchOptions == null){
-            throw new Exceptions.InvalidServiceActionParametersException('Invalid parameter.');
+            throw new IllegalArgumentException('Invalid parameter.');
         }
 
-        List<Case> engagementCases = new List<Case>();
-
-        try{           
-            engagementCases = caseService.retrieveEngagementCases(searchOptions);
-        }catch(Exception ex){
-            System.debug(ex.getMessage());
-            throw new Exceptions.UnableToReadDataException('Cannot retrieve data',ex);
-        }
-
-        return engagementCases;
+        return caseSelector.retrieveEngagementCases(searchOptions);        
     }
 
     public void updateEngagementCaseStatus(ID caseId,String status){
         if(String.isBlank(caseId) || String.isBlank(status)){
-            throw new Exceptions.InvalidServiceActionParametersException('At least one of input param is empty.');
+            throw new IllegalArgumentException('At least one of input param is empty.');
         }
 
         if(!allowedStatuses.contains(status)){
-            throw new Exceptions.InvalidServiceActionParametersException(status+' is invalid status for engagement case');
+            throw new IllegalArgumentException(status+' is invalid status for engagement case');
         }
         
-        try{
-            caseService.changeCaseStatus(caseId, status);
-        }catch(Exception ex){
-            throw new Exceptions.UnableToSaveDataException('Cannot change case status',ex);
-        }
+        update new Case(Id=caseId,Status = status);       
     }
 }

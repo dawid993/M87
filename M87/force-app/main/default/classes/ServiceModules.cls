@@ -59,14 +59,14 @@ public with sharing class ServiceModules extends Modular {
 
     private class EngagementServiceModule extends ConstructServiceModule {
         public Object construct(){
-            CaseServiceImp caseService = (CaseServiceImp) getServiceModules().createModule(CaseServiceImp.class);            
-            return new EngagementServiceImp(caseService);
+            EngagementCaseSelector caseSelector = 
+                (EngagementCaseSelector) getSelectorModules().createModule(EngagementCaseSelector.class);            
+            return new EngagementServiceImp(caseSelector);
         }
     }
 
     private class UserServiceModule extends ConstructServiceModule {
-        public Object construct(){
-            UserServiceImp caseService = (UserServiceImp) getServiceModules().createModule(UserServiceImp.class);            
+        public Object construct(){                    
             return new UserServiceImp();
         }
     }

@@ -4,13 +4,14 @@
             <lightning-card title='Input user details'>
                 <div class='slds-var-m-left_x-small slds-var-m-right_xx-small'>
                     <lightning-input type='text' label='First name' data-field-name='firstName'
-                        onblur={handleFieldUpdate} pattern='[a-zA-Z]{2,20}'></lightning-input>
-                    <lightning-input type='text' label='Last name' data-field-name='lastName'
-                        onblur={handleFieldUpdate} pattern='[a-zA-Z]{2,50}'></lightning-input>
-                    <lightning-input type='email' label='Username' data-field-name='userName'
-                        onblur={handleFieldUpdate}>
+                        onblur={handleFieldUpdate} pattern='[a-zA-Z]{2,20}' required></lightning-input>
+                    <lightning-input type='text' label='Last name' data-field-name='lastName' onblur={handleFieldUpdate}
+                        pattern='[a-zA-Z]{2,50}' required></lightning-input>
+                    <lightning-input type='email' label='Username' data-field-name='userName' onblur={handleFieldUpdate}
+                        required>
                     </lightning-input>
-                    <lightning-input type='email' label='Email' data-field-name='email' onblur={handleFieldUpdate}>
+                    <lightning-input type='email' label='Email' data-field-name='email' onblur={handleFieldUpdate}
+                        required>
                     </lightning-input>
                 </div>
             </lightning-card>
@@ -18,8 +19,7 @@
     </div>
     <div class='gM87-flows-navigation-section'>
         <c-flow-navigation show-back={navigationContext.showBack} show-continue={navigationContext.showContinue}
-            show-finish={navigationContext.showFinish} onbackflow={backToPreviousStep}
-            oncontinueflow={saveCommunityUser}>
+            show-finish={navigationContext.showFinish} onbackflow={backToPreviousStep} oncontinueflow={submitUser}>
         </c-flow-navigation>
     </div>
 </template>

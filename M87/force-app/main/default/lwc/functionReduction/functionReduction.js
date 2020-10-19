@@ -5,4 +5,8 @@ const reducers = {
     }
 }
 
+function reduceFunctions(acc, currentFunction){
+    return acc && currentFunction();
+}
+
 export default reducers

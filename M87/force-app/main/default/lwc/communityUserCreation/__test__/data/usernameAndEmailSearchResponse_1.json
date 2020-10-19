@@ -1,0 +1,10 @@
+{
+    "detailedResult": { 
+        "emailCount": 0,
+        "searchedEmail": "",
+        "searchedUsername": "",
+        "usernameCount" : 0
+    },
+    
+    "success" : true
+}
