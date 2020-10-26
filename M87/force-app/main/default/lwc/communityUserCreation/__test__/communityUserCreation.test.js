@@ -108,13 +108,31 @@ describe('c-community-user-creation', () => {
 
         return jestUtils.flushPromises().then(() => {
             expect(eventFired).toBe(false);
+            expect(searchForUsernameOrEmail).toBeCalledTimes(0);
+        });        
+    });
+
+    it('should run apex validation because email input valid', () => {
+        const communityUserCreationElement = createCommunityUserCreationElement();
+        mockAllLightningInputsCheckValidityWithValue(communityUserCreationElement, false);
+        selectLightningInputWithFieldName('email',communityUserCreationElement).checkValidity = jest.fn(() => true);
+
+        searchForUsernameOrEmail.mockResolvedValue(apexSearchResponse_1);
+        let eventFired = false;
+        communityUserCreationElement.addEventListener(EVALUATION_EVENT_NAME, () => {
+            eventFired = true;
+        });
+
+        const navigationComponent = communityUserCreationElement.shadowRoot.querySelector('c-flow-navigation');
+        eventTestUtils.dispatchEvent(CONTINUE_FLOW_EVENT_NAME, {}, navigationComponent);
+
+        return jestUtils.flushPromises().then(() => {
+            expect(eventFired).toBe(false);
             expect(searchForUsernameOrEmail).toBeCalledTimes(1);
         });        
     });
 
     it('should be able to submit form, all fields valid', () => {
-        expect.assertions(2);
-
         const communityUserCreationElement = createCommunityUserCreationElement();
         mockAllLightningInputsCheckValidityWithValue(communityUserCreationElement, true);
         searchForUsernameOrEmail.mockResolvedValue(apexSearchResponse_1);
@@ -133,7 +151,6 @@ describe('c-community-user-creation', () => {
     });
 
     it('should not be able to save form, username and email unavailable', () => {
-        
         const communityUserCreationElement = createCommunityUserCreationElement();
         mockAllLightningInputsCheckValidityWithValue(communityUserCreationElement, true);
         searchForUsernameOrEmail.mockResolvedValue(apexSearchResponse_2);

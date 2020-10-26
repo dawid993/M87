@@ -1,18 +1,34 @@
-import searchForUsernameOrEmail from '@salesforce/apex/CommunityUserCreationController.searchForUsernameOrEmail';
 import globalStyles from '@salesforce/resourceUrl/gM87_css';
 import FlowComponentMixin from 'c/flowComponentMixin';
 import {
-    areLightningInputsValid, canFieldBeSaved,
-    resetLightningInputsErrorsMessages, showErrorMessagesForLightningInputs
+    canFieldBeSaved,
+    resetLightningInputsErrorsMessages
 } from 'c/inputs';
 import ResourcesLoader from 'c/resourcesLoader';
 import { createErrorToast } from 'c/toastDialogs';
 import { LightningElement } from 'lwc';
+import UserCreationValidator from './UserCreationValidator';
+
 
 
 const validFieldNames = [
     'firstName', 'lastName', 'userName', 'email'
 ];
+
+function validationReducer(acc, current) {
+    if (!current.isFormValid) {
+        this._selectLightningField(current.inputName).showHelpMessageIfInvalid();
+    }
+    if (current.isApexValidationFailed) {
+        if (current.inputName === 'email') {
+            this._showEmailInvalid();
+        } else if (current.inputName === 'userName') {
+            this._showUsernameInvalid();
+        }
+    }
+
+    return acc && current.isFieldValid && !current.isApexValidationFailed;
+}
 
 export default class CommunityUserCreation extends FlowComponentMixin(LightningElement) {
 
@@ -44,63 +60,13 @@ export default class CommunityUserCreation extends FlowComponentMixin(LightningE
     submitUser(event) {
         const inputs = this._selectAllLightningInputs();
         resetLightningInputsErrorsMessages(inputs);
-        this._validateUserSubmission(inputs, this._userName, this._email)
-            .then(this._mapResponses(inputs))
-            .then(this._validateResponses.bind(this))
-            .then(this._redirectIfSubmissionValid.bind(this))
-            .catch(this._showErrorToast.bind(this, 'Cannot submit form.'));
+        new UserCreationValidator()
+            .validate(this._selectAllLightningInputs())
+            .then(results => results.reduce(validationReducer.bind(this), true))
+            .then(this._redirectIfValid.bind(this))
+            .catch(this._showErrorToast.bind(this));
     }
 
-    _validateUserSubmission(formInputs, username, email) {
-        return Promise.all([
-            this._getFormDataCheckPromise(formInputs),
-            this._getUserDataCheckPromise(username, email),
-        ]);
-    }
-
-    _mapResponses(inputs) {
-        return (responses) => {
-            if (!responses[1].success) {
-                throw new Error('Cannot submit form.');
-            }
-
-            return [
-                this._createCheck(responses[0], showErrorMessagesForLightningInputs.bind(null, inputs)),
-
-                this._createCheck(
-                    responses[1].detailedResult.usernameCount === 0,
-                    this._showUsernameInvalid.bind(this)
-                ),
-
-                this._createCheck(
-                    responses[1].detailedResult.emailCount === 0,
-                    this._showEmailInvalid.bind(this)
-                ),
-            ];
-        }
-    }
-
-    _createCheck(isValid, callback) {
-        return {
-            isValid: isValid,
-            callbackWhenInvalid: callback
-        }
-    }
-
-    _validateResponses(responses) {
-        return responses.reduce(
-            (acc, currentCheck) => {
-                const result = currentCheck.isValid;
-                if (!result) {
-                    currentCheck.callbackWhenInvalid();
-                }
-
-                return acc && result;
-            },
-            true
-        );
-    }
-   
     _showUsernameInvalid() {
         const usernameInput = this.template.querySelector('[data-field-name ="userName"]');
         usernameInput.setCustomValidity('This username is unavailable.');
@@ -113,15 +79,7 @@ export default class CommunityUserCreation extends FlowComponentMixin(LightningE
         emailInput.showHelpMessageIfInvalid();
     }
 
-    _getUserDataCheckPromise(username = '', email = '') {
-        return searchForUsernameOrEmail({ 'username': username, 'email': email });
-    }
-
-    _getFormDataCheckPromise(formInputs = []) {
-        return areLightningInputsValid(formInputs);
-    }
-
-    _redirectIfSubmissionValid(isValid) {
+    _redirectIfValid(isValid) {
         if (isValid) {
             this.dispatchEvaluationEvent({
                 'firstName': this._firstName,
@@ -138,11 +96,16 @@ export default class CommunityUserCreation extends FlowComponentMixin(LightningE
             .catch(() => this._showErrorToast(('Something went wrong with field update.')));
     }
 
+    _selectLightningField(name) {
+        return this.template.querySelector('lightning-input[data-field-name="' + name + '"]');
+    }
+
     _selectAllLightningInputs() {
         return Array.from(this.template.querySelectorAll('lightning-input[data-field-name]'));
     }
 
     _showErrorToast(message) {
+        console.log(message)
         this.dispatchEvent(createErrorToast(message));
     }
 }
