@@ -1,19 +1,25 @@
 import globalStyles from '@salesforce/resourceUrl/gM87_css';
+
 import FlowComponentMixin from 'c/flowComponentMixin';
+
 import {
-    canFieldBeSaved,
     resetLightningInputsErrorsMessages
 } from 'c/inputs';
+
 import ResourcesLoader from 'c/resourcesLoader';
+
 import { createErrorToast } from 'c/toastDialogs';
-import { LightningElement } from 'lwc';
+
+import { api, LightningElement } from 'lwc';
+
 import UserCreationValidator from './UserCreationValidator';
 
-
-
-const validFieldNames = [
-    'firstName', 'lastName', 'userName', 'email'
-];
+import {
+    findFirstName,
+    findLastName,
+    findUserName,
+    findEmail
+} from './findInputFunctions';
 
 function validationReducer(acc, current) {
     if (!current.isFormValid) {
@@ -32,32 +38,45 @@ function validationReducer(acc, current) {
 
 export default class CommunityUserCreation extends FlowComponentMixin(LightningElement) {
 
-    get firstName() {
-        return this._firstName;
-    }
-
-    get lastName() {
-        return this._lastName;
-    }
-
-    get userName() {
-        return this._userName;
-    }
-
-    get email() {
-        return this._email;
-    }
+    _stepData;
 
     constructor() {
         super();
         ResourcesLoader.loadStyles(this, [globalStyles]);
     }
 
-    backToPreviousStep(event) {
+    @api
+    set stepData(value) {
+        if (value) {
+            this._stepData = value;
+        }
+    }
+
+    get stepData() {
+        const allFields = this._selectAllLightningInputs();
+        return {
+            'firstName': allFields.find(findFirstName).value,
+            'lastName': allFields.find(findLastName).value,
+            'userName': allFields.find(findUserName).value,
+            'email': allFields.find(findEmail).value
+        };
+    }
+
+    renderedCallback() {
+        if (this._stepData) {
+            const allFields = this._selectAllLightningInputs();
+            allFields.find(findFirstName).value = this._stepData.firstName;
+            allFields.find(findLastName).value = this._stepData.lastName;
+            allFields.find(findUserName).value = this._stepData.userName;
+            allFields.find(findEmail).value = this._stepData.email;
+        }
+    }
+
+    backToPreviousStep() {
         this.dispatchRevertEvent();
     }
 
-    submitUser(event) {
+    submitUser() {
         const inputs = this._selectAllLightningInputs();
         resetLightningInputsErrorsMessages(inputs);
         new UserCreationValidator()
@@ -81,19 +100,8 @@ export default class CommunityUserCreation extends FlowComponentMixin(LightningE
 
     _redirectIfValid(isValid) {
         if (isValid) {
-            this.dispatchEvaluationEvent({
-                'firstName': this._firstName,
-                'lastName': this._lastName,
-                'username': this._userName,
-                'email': this.email
-            });
+            this.dispatchEvaluationEvent(this.stepData);
         }
-    }
-
-    handleFieldUpdate(event) {
-        canFieldBeSaved(validFieldNames, event)
-            .then(event => this['_' + event.target.dataset.fieldName] = event.target.value)
-            .catch(() => this._showErrorToast(('Something went wrong with field update.')));
     }
 
     _selectLightningField(name) {

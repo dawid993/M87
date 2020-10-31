@@ -5,8 +5,6 @@ import { createElement } from 'lwc';
 import { htmlTestUtils, jestUtils, eventTestUtils } from 'c/testUtility';
 import { CONTINUE_FLOW_EVENT_NAME, EVALUATION_EVENT_NAME } from 'c/flowsUtils';
 
-import { checkIfAllInputsHaveClassAssigned } from 'c/inputs';
-
 const apexSearchResponse_1 = require('./data/usernameAndEmailSearchResponse_1.json');
 const apexSearchResponse_2 = require('./data/usernameAndEmailSearchResponse_2.json');
 
@@ -14,6 +12,13 @@ const firstNameFieldId = 'firstName';
 const lastNameFieldId = 'lastName';
 const userFieldId = 'userName';
 const emailFieldId = 'email';
+
+import {
+    findFirstName,
+    findLastName,
+    findUserName,
+    findEmail
+} from '../findInputFunctions';
 
 jest.mock(
     '@salesforce/apex/CommunityUserCreationController.searchForUsernameOrEmail',
@@ -64,6 +69,15 @@ function mockAllLightningInputsCheckValidityWithValue(element, withValue) {
     mockCheckValidityForElements(arr, withValue);
 }
 
+function createTestStepData() {
+    return {
+        firstName: 'test first name',
+        lastName: 'test last name',
+        userName: 'test username',
+        email: 'test email'
+    }
+}
+
 describe('c-community-user-creation', () => {
     afterEach(() => {
         htmlTestUtils.clearDocument(document);
@@ -109,13 +123,13 @@ describe('c-community-user-creation', () => {
         return jestUtils.flushPromises().then(() => {
             expect(eventFired).toBe(false);
             expect(searchForUsernameOrEmail).toBeCalledTimes(0);
-        });        
+        });
     });
 
     it('should run apex validation because email input valid', () => {
         const communityUserCreationElement = createCommunityUserCreationElement();
         mockAllLightningInputsCheckValidityWithValue(communityUserCreationElement, false);
-        selectLightningInputWithFieldName('email',communityUserCreationElement).checkValidity = jest.fn(() => true);
+        selectLightningInputWithFieldName('email', communityUserCreationElement).checkValidity = jest.fn(() => true);
 
         searchForUsernameOrEmail.mockResolvedValue(apexSearchResponse_1);
         let eventFired = false;
@@ -129,7 +143,7 @@ describe('c-community-user-creation', () => {
         return jestUtils.flushPromises().then(() => {
             expect(eventFired).toBe(false);
             expect(searchForUsernameOrEmail).toBeCalledTimes(1);
-        });        
+        });
     });
 
     it('should be able to submit form, all fields valid', () => {
@@ -143,8 +157,8 @@ describe('c-community-user-creation', () => {
 
         const navigationComponent = communityUserCreationElement.shadowRoot.querySelector('c-flow-navigation');
         eventTestUtils.dispatchEvent(CONTINUE_FLOW_EVENT_NAME, {}, navigationComponent);
-      
-        return jestUtils.flushPromises().then(() => {            
+
+        return jestUtils.flushPromises().then(() => {
             expect(eventFired).toBe(true);
             expect(searchForUsernameOrEmail).toBeCalledTimes(1);
         });
@@ -164,11 +178,25 @@ describe('c-community-user-creation', () => {
 
         eventTestUtils.dispatchEvent(CONTINUE_FLOW_EVENT_NAME, {}, navigationComponent);
 
-        return jestUtils.flushPromises().then(() => {            
+        return jestUtils.flushPromises().then(() => {
             expect(eventFired).toBe(false);
             expect(searchForUsernameOrEmail).toBeCalledTimes(1);
         });
-
     });
 
+    it('should set data passed from outside by api setter', () => {
+        const element = createElement('c-community-user-creation', {
+            is: communityUserCreation
+        });
+        const stepData = createTestStepData();
+        element.stepData = createTestStepData();
+        document.body.appendChild(element);
+
+        const arr = selectAllLightningInputsWithFieldNameAsArray(element);
+        
+        expect(arr.find(findFirstName).value).toEqual(stepData.firstName);
+        expect(arr.find(findLastName).value).toEqual(stepData.lastName);
+        expect(arr.find(findUserName).value).toEqual(stepData.userName);
+        expect(arr.find(findEmail).value).toEqual(stepData.email);        
+    });
 });

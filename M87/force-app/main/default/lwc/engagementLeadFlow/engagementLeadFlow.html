@@ -13,7 +13,7 @@
         </template>
         <template if:true={isCommunityUserStep}>
             <c-community-user-creation navigation-context={currentStepOption} onrevertstep={revertStep}
-                onevaluation={evaluateFlowStep}>
+                onevaluation={evaluateFlowStep} step-data={currentStepData}>
             </c-community-user-creation>
         </template>
         <template if:true={isReviewStep}>
