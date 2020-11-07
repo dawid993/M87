@@ -18,7 +18,7 @@
         </template>
         <template if:true={isReviewStep}>
             <c-engagement-review-and-confirm navigation-context={currentStepOption} onrevertstep={revertStep}
-                onevaluation={evaluateFlowStep}>
+                onevaluation={evaluateFlowStep} review-data={applicationState}>
             </c-engagement-review-and-confirm>
         </template>
     </div>

@@ -11,6 +11,5 @@
     <label>Engagement Tool</label>
     <navType>Standard</navType>
     <tabs>Engagement</tabs>
-    <uiType>Lightning</uiType>
-    <utilityBar>Engagement_Tool_UtilityBar</utilityBar>
+    <uiType>Lightning</uiType>    
 </CustomApplication>

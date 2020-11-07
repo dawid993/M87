@@ -1,37 +1,19 @@
 import { LightningElement } from 'lwc';
 import FlowMixin from 'c/flowMixin';
 
-const LEAD_DETAILS_STEP = {
-    id: 'LEAD_DETAIL',
-    label: 'Lead details',
-    order: 1,
-};
+import {
+    LEAD_DETAILS_STEP,
+    CREATE_COMMUNITY_USER_DECISION_STEP,
+    COMMUNITY_USER_STEP,
+    REVIEW_STEP,
+    STEPS_DESCRIPTION
+} from 'c/stepsDescriptors';
 
-const CREATE_COMMUNITY_USER_DECISION_STEP = {
-    id: 'COMMUNITY_USER_DECISION_STEP',
-    label: 'Create community user',
-    order: 2,
-}
-
-const COMMUNITY_USER_STEP = {
-    id: 'COMMUNITY_USER',
-    label: 'Community user',
-    order: 3,
-}
-
-const REVIEW_STEP = {
-    id: 'REVIEW',
-    label: 'Review',
-    order: 4,
-}
-
-const STEPS_DESCRIPTION = [LEAD_DETAILS_STEP, CREATE_COMMUNITY_USER_DECISION_STEP, COMMUNITY_USER_STEP, REVIEW_STEP];
-
-export default class EngagementLeadFlow extends FlowMixin(LightningElement) {    
+export default class EngagementLeadFlow extends FlowMixin(LightningElement) {
 
     constructor() {
         super(STEPS_DESCRIPTION);
-        this._currentStep = 1;        
+        this._currentStep = 1;
         this.registerStepsListeners();
         this.registerOnRevertFunction(this.restoreFlowData.bind(this));
         this.registerOnAfterRevertFunction(this.fireNavigationEventWithCurrentState.bind(this));
@@ -86,5 +68,5 @@ export default class EngagementLeadFlow extends FlowMixin(LightningElement) {
 
     fireNavigationEventWithCurrentState() {
         this.fireUpdateNavigationBarEvent(STEPS_DESCRIPTION, this.currentStepNumber, this.skippedSteps);
-    }
+    }    
 }

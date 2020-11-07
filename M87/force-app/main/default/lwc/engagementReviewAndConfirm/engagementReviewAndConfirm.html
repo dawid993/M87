@@ -1,5 +1,28 @@
 <template>
     <div>
+        <h2>Lead details</h2>
+        <lightning-layout>            
+            <lightning-layout-item size="4">
+                <lightning-layout>
+                    <lightning-layout-item>
+                        <lightning-formatted-text value="Title"></lightning-formatted-text>
+                        <lightning-formatted-text value={leadDetails.leadTitle}></lightning-formatted-text>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-layout-item>    
+            <lightning-layout-item size="4">
+                <lightning-layout>
+                    
+                </lightning-layout>
+            </lightning-layout-item> 
+            <lightning-layout-item size="4">
+                <lightning-layout>
+                    
+                </lightning-layout>
+            </lightning-layout-item> 
+        </lightning-layout>
+    </div>
+    <div>
         <c-manual-file-upload></c-manual-file-upload>
     </div>
     <div class="gM87-flows-navigation-section">

@@ -9,6 +9,7 @@ public with sharing class ServiceModules extends Modular {
         addModule(CaseServiceImp.class, CaseServiceModule.class);
         addModule(EngagementServiceImp.class, EngagementServiceModule.class);
         addModule(UserServiceImp.class, UserServiceModule.class);
+        addModule(EngagementLeadService.class, ConstructServiceModule.class);
     }
 
     public override Object createModule(Type moduleType){
@@ -68,6 +69,12 @@ public with sharing class ServiceModules extends Modular {
     private class UserServiceModule extends ConstructServiceModule {
         public Object construct(){                    
             return new UserServiceImp();
+        }
+    }
+
+    private class EngagementLeadServiceModule extends ConstructServiceModule {
+        public Object construct(){                    
+            return new EngagementLeadService();
         }
     }
 }

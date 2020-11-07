@@ -9,9 +9,11 @@
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <componentInstances>
-            <componentName>kanbanBoardWithFlow</componentName>
-        </componentInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>kanbanBoardWithFlow</componentName>
+            </componentInstance>
+        </itemInstances>
         <name>region3</name>
         <type>Region</type>
     </flexiPageRegions>

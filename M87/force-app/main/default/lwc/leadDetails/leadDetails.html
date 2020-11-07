@@ -7,19 +7,20 @@
                     <lightning-accordion-section name='personal-details' label='Personal Details'>
                         <lightning-input type="text" data-name="leadTitle" label="Title" value={leadInfo.leadTitle}>
                         </lightning-input>
-                        <lightning-input type="text" data-name="leadName" label="Name" value={leadInfo.leadName}>
+                        <lightning-input type="text" data-name="leadName" label="Name" value={leadInfo.leadName}
+                            required>
                         </lightning-input>
-                        <lightning-input type="email" data-name="email" label="Email" value={leadInfo.email}>
+                        <lightning-input type="email" data-name="email" label="Email" value={leadInfo.email} required>
                         </lightning-input>
                         <lightning-input type="phone" data-name="phone" label="Phone" value={leadInfo.phone}>
                         </lightning-input>
                     </lightning-accordion-section>
                     <lightning-accordion-section name='company-details' label='Company Details'>
                         <lightning-input type="text" data-name="companyName" label="Company Name"
-                            value={leadInfo.companyName}>
+                            value={leadInfo.companyName} required>
                         </lightning-input>
                         <lightning-combobox data-name="industry" label="Industry" value={leadInfo.industry}
-                            options={industryPicklistOptions}>
+                            options={industryPicklistOptions} required>
                         </lightning-combobox>
                         <lightning-input type="text" data-name="numberOfEmployees" label="Number of Employees"
                             value={leadInfo.numberOfEmployees}>
@@ -29,14 +30,14 @@
                         </lightning-input>
                     </lightning-accordion-section>
                     <lightning-accordion-section name='other-details' label='Other Details'>
-                        <lightning-input type="text" data-name="doNotCall" label="Do not call"
-                            value={leadInfo.doNotCall}>
+                        <lightning-input type="checkbox" data-name="doNotCall" label="Do not call"
+                            checked={leadInfo.doNotCall}>
                         </lightning-input>
                         <lightning-combobox data-name="status" label="Status" value={leadInfo.status}
-                            options={statusPicklistOptions}>
+                            options={statusPicklistOptions} required>
                         </lightning-combobox>
                         <lightning-combobox data-name="rating" label="Rating" value={leadInfo.rating}
-                            options={ratingPicklistOptions}></lightning-combobox>
+                            options={ratingPicklistOptions} required></lightning-combobox>
                     </lightning-accordion-section>
                 </lightning-accordion>
                 <div class="image-section">
