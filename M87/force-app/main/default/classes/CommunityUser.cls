@@ -1,12 +1,25 @@
 public with sharing class CommunityUser {
     private CommunityUser__c communityUser;
 
+    public static List<CommunityUser> convert(List<CommunityUser__c> comUsers){
+        List<CommunityUser> convertedUsers = new List<CommunityUser>();
+        for(CommunityUser__c current : comUsers){
+            convertedUsers.add(new CommunityUser(current));
+        }
+
+        return convertedUsers;
+    }
+
     public CommunityUser() {
         this.communityUser = new CommunityUser__c();
     }
 
     public CommunityUser(CommunityUser__c user){
         this.communityUser = user;
+    }
+
+    public CommunityUser__c getRecord(){
+        return this.communityUser;
     }
 
     public void setFirstName(String firstName){
@@ -39,5 +52,13 @@ public with sharing class CommunityUser {
 
     public String getUsername(){
         return communityUser.username__c;
+    }
+
+    public void setEngagementLead(EngagementLead lead){
+        communityUser.lead__c = lead.getRecordId();
+    }
+
+    public Id getEngagementLead(){
+        return communityUser.lead__c;
     }
 }

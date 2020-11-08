@@ -1,8 +1,6 @@
 public with sharing class EngagementLead {
     private Lead lead;
 
-    private CommunityUser__c communityUser;
-
     public EngagementLead(Lead lead){
         this.lead = lead;
     }
@@ -11,8 +9,12 @@ public with sharing class EngagementLead {
         this.lead = new Lead();        
     }
 
-    public Lead getLead(){
+    public Lead getRecord(){
         return lead;
+    }
+
+    public Id getRecordId(){
+        return lead.Id;
     }
 
     public void setName(String name){

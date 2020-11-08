@@ -5,10 +5,17 @@ public with sharing virtual class Modules {
 
     private SelectorModules selectorModules;
 
+    private RepositoryModules repositoryModules;
+
     public static Modules instance(){
         if(modulesHandle == null){
             SelectorModules selectorModules = new SelectorModules();
-            modulesHandle = new Modules(new ServiceModules(selectorModules),selectorModules);
+            RepositoryModules repositoryModules = new RepositoryModules();
+            modulesHandle = new Modules(
+                new ServiceModules(selectorModules,repositoryModules),
+                selectorModules,
+                repositoryModules
+            );
         }
 
         return modulesHandle;
@@ -22,9 +29,10 @@ public with sharing virtual class Modules {
     @testVisible
     private Modules(){}
 
-    private Modules(ServiceModules serviceModules,SelectorModules selectorModules){
+    private Modules(ServiceModules serviceModules,SelectorModules selectorModules,RepositoryModules repositoryModules){
         this.selectorModules = selectorModules;
-        this.serviceModules = serviceModules;        
+        this.serviceModules = serviceModules;   
+        this.repositoryModules = repositoryModules;     
     }
     
     public virtual UsernameOrEmailSearchService service_getUsernameOrEmailSearch(){
@@ -43,6 +51,10 @@ public with sharing virtual class Modules {
         return (UserServiceImp) serviceModules.createModule(UserServiceImp.class);
     }
 
+    public virtual EngagementLeadService service_getEngagementLeadService(){
+        return (EngagementLeadService) serviceModules.createModule(EngagementLeadService.class);
+    }
+
     /*
     * Selectors start here.
     */
@@ -53,6 +65,6 @@ public with sharing virtual class Modules {
 
     public virtual CaseSelectorImp selector_getCaseSelector(){
         return (CaseSelectorImp) selectorModules.createModule(CaseSelectorImp.class);
-    }
+    }   
    
 }
