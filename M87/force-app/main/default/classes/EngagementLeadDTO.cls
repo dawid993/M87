@@ -1,60 +1,60 @@
 public with sharing class EngagementLeadDTO {
 
     @AuraEnabled 
-    public LeadDetails leadDetails;
+    public LeadDetails leadDetails {get; set;}
 
     @AuraEnabled 
-    public CommunityUserDetails communityUserDetails;
+    public CommunityUserDetails communityUserDetails {get; set;}
 
     @AuraEnabled
-    public String fileAsBase64Blob;
+    public String fileAsBase64Blob {get; set;}
     
     public class LeadDetails{
         @AuraEnabled 
-        public String leadTitle;
+        public String leadTitle {get; set;}
 
         @AuraEnabled 
-        public String leadName;
+        public String leadName {get; set;}
 
         @AuraEnabled 
-        public String email;
+        public String email {get; set;}
 
         @AuraEnabled 
-        public String phone;
+        public String phone {get; set;}
 
         @AuraEnabled 
-        public String companyName;
+        public String companyName {get; set;}
 
         @AuraEnabled 
-        public String industry;
+        public String industry {get; set;}
 
         @AuraEnabled 
-        public Integer numberOfEmployees;
+        public Integer numberOfEmployees {get; set;}
 
         @AuraEnabled 
-        public Decimal annualRevenue;
+        public Decimal annualRevenue {get; set;}
 
         @AuraEnabled 
-        public Boolean doNotCall;
+        public Boolean doNotCall {get; set;}
 
         @AuraEnabled 
-        public String status;
+        public String status {get; set;}
 
         @AuraEnabled 
-        public String rating;
+        public String rating {get; set;}
     }
 
     public class CommunityUserDetails{
         @AuraEnabled 
-        public String firstName;
+        public String firstName {get; set;}
 
         @AuraEnabled 
-        public String lastName;
+        public String lastName {get; set;}
 
         @AuraEnabled 
-        public String email;
+        public String email {get; set;}
 
         @AuraEnabled 
-        public String userName;
+        public String userName {get; set;}
     }
 }

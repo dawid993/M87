@@ -54,4 +54,8 @@ public class LeadTestDataFactory {
     private static String createFakeBlob(){
         return 'YXNkYXNkYWRz';
     }
+
+    public static Boolean isAnyLeadInDatabase(){
+        return [SELECT count() FROM Lead] > 0;
+    }
 }

@@ -1,7 +1,7 @@
 public with sharing class EngagementLeadService {
 
-    private LeadRepository leadRepository;
-    private CommunityUserRepository commUserRepository;
+    private final LeadRepository leadRepository;
+    private final CommunityUserRepository commUserRepository;
 
     public EngagementLeadService(LeadRepository leadRepository, CommunityUserRepository commUserRepository){
         this.leadRepository = leadRepository;

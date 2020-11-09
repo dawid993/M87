@@ -2,7 +2,7 @@ import { api, LightningElement } from 'lwc';
 import FlowComponentMixin from 'c/flowComponentMixin';
 import ResourcesLoader from 'c/resourcesLoader';
 import globalStyles from '@salesforce/resourceUrl/gM87_css';
-import save  from '@salesforce/apex/EngagementLeadFlowControllre.save';
+import save from '@salesforce/apex/EngagementReviewAndConfirmController.saveLead';
 
 const MANUAL_FILE_UPLOAD_SELECTOR = 'c-manual-file-upload';
 
@@ -53,9 +53,28 @@ export default class EngagementReviewAndConfirm extends FlowComponentMixin(Light
     }
 
     saveApplication(event){        
-        const manualFileUpload = this.template.querySelector(MANUAL_FILE_UPLOAD_SELECTOR);       
+        let createObjFunction = this._createLeadDescription();
+        createObjFunction = createObjFunction((this._reviewData[LEAD_DETAILS_STEP.id]));
+        createObjFunction = createObjFunction(this._reviewData[COMMUNITY_USER_STEP.id]);
+        console.log(JSON.stringify(this._reviewData));
+        const manualFileUpload = this.template.querySelector(MANUAL_FILE_UPLOAD_SELECTOR);      
+        
+        console.log(manualFileUpload.isFileLoaded()); 
         manualFileUpload.getFileAsBase64()
-        .then(result =>  save({fileAsBase64Blob : result}))
-        .catch(err => console.log(err.name +' '+err.message));      
+        .then(result =>  save({
+            leadDTO : createObjFunction(result)
+        }))
+        .catch(err => console.log(err.name +' '+err.message));
+    }
+
+    _createLeadDescription(){
+        return leadDescription => communityUserDescription => fileBase64 => {
+            const requestObj = {};
+            requestObj['leadDetails'] = leadDescription;
+            requestObj['communityUserDetails'] = communityUserDescription;
+            requestObj['fileAsBase64Blob'] = fileBase64;
+
+            return requestObj;
+        }
     }
 }
