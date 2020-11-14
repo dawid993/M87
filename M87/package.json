@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@salesforce/sfdx-lwc-jest": "^0.9.1"
+    "@salesforce/sfdx-lwc-jest": "^0.10.2"
   }
 }

@@ -20,10 +20,8 @@ export default class EngagementReviewAndConfirm extends FlowComponentMixin(Light
     _communityUserDetail;
 
     @api
-    set reviewData(value){
-        console.log(LEAD_DETAILS_STEP)
-        this._reviewData = value;
-        console.log(JSON.stringify(this._reviewData));
+    set reviewData(value){        
+        this._reviewData = value;        
     }
 
     get reviewData(){
@@ -56,11 +54,11 @@ export default class EngagementReviewAndConfirm extends FlowComponentMixin(Light
         let createObjFunction = this._createLeadDescription();
         createObjFunction = createObjFunction((this._reviewData[LEAD_DETAILS_STEP.id]));
         createObjFunction = createObjFunction(this._reviewData[COMMUNITY_USER_STEP.id]);
-        console.log(JSON.stringify(this._reviewData));
-        const manualFileUpload = this.template.querySelector(MANUAL_FILE_UPLOAD_SELECTOR);      
         
-        console.log(manualFileUpload.isFileLoaded()); 
-        manualFileUpload.getFileAsBase64()
+        const manualFileUpload = this.template.querySelector(MANUAL_FILE_UPLOAD_SELECTOR);
+        let savePromise = manualFileUpload.isFileLoaded() ? manualFileUpload.getFileAsBase64() : Promise.resolve();
+
+        savePromise
         .then(result =>  save({
             leadDTO : createObjFunction(result)
         }))

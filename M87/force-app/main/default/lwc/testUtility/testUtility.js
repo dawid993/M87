@@ -73,6 +73,14 @@ function dispatchEvent(eventName, eventDetail, srcComponent) {
 
 const jestUtils = {
     flushPromises: () => new Promise(resolve => setImmediate(resolve)),
+
+    mockCheckValidityForElements: (elements = [], fn) => {
+        elements.forEach(element => element.checkValidity = fn);
+    },
+
+    mockReportValidity : (elements = [], fn) => {
+        elements.forEach(element => element.reportValidity = fn);
+    }
 };
 
 const htmlTestUtils = {

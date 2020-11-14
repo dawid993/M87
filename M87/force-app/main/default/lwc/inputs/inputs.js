@@ -37,10 +37,20 @@ function checkIfAllInputsHaveClassAssigned(inputs = [], className){
     return inputs.reduce((acc, current) =>  acc && current.classList.contains(className),true);
 }
 
+function selectElements(component,selector){
+    return component.shadowRoot.querySelectorAll(selector);
+}
+
+function selectElement(component,selector){
+    return component.shadowRoot.querySelector(selector);
+}
+
 export {
-    canFieldBeSaved,
     areLightningInputsValid,
-    showErrorMessagesForLightningInputs,
+    canFieldBeSaved,
+    checkIfAllInputsHaveClassAssigned,
     resetLightningInputsErrorsMessages,
-    checkIfAllInputsHaveClassAssigned
+    selectElement,
+    selectElements,    
+    showErrorMessagesForLightningInputs   
 };
