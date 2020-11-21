@@ -1,4 +1,4 @@
-public with sharing class EngagementServiceImp implements EngagementService {
+public with sharing class EngagementCaseService{
     private static final Set<String> allowedStatuses = new Set<String>{
         'To Do',
         'In Progress',
@@ -6,10 +6,10 @@ public with sharing class EngagementServiceImp implements EngagementService {
         'Done - failure'
     };    
 
-    private final EngagementCaseSelector caseSelector;
+    private final CaseRepository caseRepository;
 
-    public EngagementServiceImp(EngagementCaseSelector caseSelector){
-        this.caseSelector = caseSelector;
+    public EngagementCaseService(CaseRepository caseRepository){
+        this.caseRepository = caseRepository;
     }
 
     public List<Case> retrieveEngagementCases(ID ownerId){
@@ -17,7 +17,7 @@ public with sharing class EngagementServiceImp implements EngagementService {
             throw new IllegalArgumentException('Cannot retrieve cases for undefined owner.');
         }
        
-        return caseSelector.retrieveEngagementCases(ownerId);   
+        return caseRepository.retrieveEngagementCases(ownerId);   
     }
 
     public List<Case> retrieveEngagementCases(SearchEngagementCaseOptions searchOptions){
@@ -25,7 +25,7 @@ public with sharing class EngagementServiceImp implements EngagementService {
             throw new IllegalArgumentException('Invalid parameter.');
         }
 
-        return caseSelector.retrieveEngagementCases(searchOptions);        
+        return caseRepository.retrieveEngagementCases(searchOptions);        
     }
 
     public void updateEngagementCaseStatus(ID caseId,String status){
@@ -35,8 +35,8 @@ public with sharing class EngagementServiceImp implements EngagementService {
 
         if(!allowedStatuses.contains(status)){
             throw new IllegalArgumentException(status+' is invalid status for engagement case');
-        }
-        
-        update new Case(Id=caseId,Status = status);       
-    }
+        }     
+
+        caseRepository.save(new Case(Id=caseId,Status = status));       
+    }    
 }

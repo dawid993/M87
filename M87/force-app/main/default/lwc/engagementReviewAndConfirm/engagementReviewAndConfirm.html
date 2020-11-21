@@ -1,29 +1,80 @@
 <template>
-    <div>
-        <h2>Lead details</h2>
-        <lightning-layout>            
-            <lightning-layout-item size="4">
-                <lightning-layout>
-                    <lightning-layout-item>
+    <div class='main-section'>
+        <div class='review-sections'>
+            <div class='section'>
+                <h2>Lead details</h2>
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12">
                         <lightning-formatted-text value="Title"></lightning-formatted-text>
                         <lightning-formatted-text value={leadDetails.leadTitle}></lightning-formatted-text>
                     </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-formatted-text value="Name"></lightning-formatted-text>
+                        <lightning-formatted-text value={leadDetails.leadName}></lightning-formatted-text>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-formatted-text value="Email"></lightning-formatted-text>
+                        <lightning-formatted-text value={leadDetails.email}></lightning-formatted-text>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-formatted-text value="Phone"></lightning-formatted-text>
+                        <lightning-formatted-text value={leadDetails.phone}></lightning-formatted-text>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-formatted-text value="Company name"></lightning-formatted-text>
+                        <lightning-formatted-text value={leadDetails.companyName}></lightning-formatted-text>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-formatted-text value="Industry"></lightning-formatted-text>
+                        <lightning-formatted-text value={leadDetails.industry}></lightning-formatted-text>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-formatted-text value="Number of employees"></lightning-formatted-text>
+                        <lightning-formatted-text value={leadDetails.numberOfEmployees}></lightning-formatted-text>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-formatted-text value="Annual revenue"></lightning-formatted-text>
+                        <lightning-formatted-text value={leadDetails.annualRevenue}></lightning-formatted-text>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-formatted-text value="Status"></lightning-formatted-text>
+                        <lightning-formatted-text value={leadDetails.status}></lightning-formatted-text>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-formatted-text value="Rating"></lightning-formatted-text>
+                        <lightning-formatted-text value={leadDetails.rating}></lightning-formatted-text>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-formatted-text value="Do not Call"></lightning-formatted-text>
+                        <lightning-formatted-text value={leadDetails.doNotCall}></lightning-formatted-text>
+                    </lightning-layout-item>
                 </lightning-layout>
-            </lightning-layout-item>    
-            <lightning-layout-item size="4">
-                <lightning-layout>
-                    
+            </div>
+            <div class='section'>
+                <h2>Community user details</h2>
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12">
+                        <lightning-formatted-text value="Title"></lightning-formatted-text>
+                        <lightning-formatted-text value={communityUserDetails.firstName}></lightning-formatted-text>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-formatted-text value="Name"></lightning-formatted-text>
+                        <lightning-formatted-text value={communityUserDetails.lastName}></lightning-formatted-text>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-formatted-text value="Email"></lightning-formatted-text>
+                        <lightning-formatted-text value={communityUserDetails.userName}></lightning-formatted-text>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-formatted-text value="Phone"></lightning-formatted-text>
+                        <lightning-formatted-text value={communityUserDetails.email}></lightning-formatted-text>
+                    </lightning-layout-item>
                 </lightning-layout>
-            </lightning-layout-item> 
-            <lightning-layout-item size="4">
-                <lightning-layout>
-                    
-                </lightning-layout>
-            </lightning-layout-item> 
-        </lightning-layout>
-    </div>
-    <div>
-        <c-manual-file-upload></c-manual-file-upload>
+            </div>            
+        </div>
+        <div>
+            <c-manual-file-upload></c-manual-file-upload>
+        </div>
     </div>
     <div class="gM87-flows-navigation-section">
         <c-flow-navigation show-back={navigationContext.showBack} show-continue={navigationContext.showContinue}

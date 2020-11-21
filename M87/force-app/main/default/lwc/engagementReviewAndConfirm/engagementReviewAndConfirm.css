@@ -1,0 +1,37 @@
+.main-section{
+    background-color: white;
+    margin-bottom: 50px;
+}
+
+.review-sections { 
+    display: flex;
+    justify-content: space-around ;
+    background-color: white;
+    margin-bottom: 40px;
+}
+
+.section{
+    margin: 5px;
+    width: 40%;
+    border: 1px solid green;
+    border-radius: 5px;
+}
+
+.section h2{
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+lightning-layout-item {
+    margin: 5px;
+}
+
+lightning-formatted-text:first-child{
+    font-weight: bold;
+}
+
+lightning-layout-item lightning-formatted-text{
+    display: block;
+    font-size: 1.1em;    
+}

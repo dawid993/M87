@@ -1,1 +1,22 @@
-{"LEAD_DETAIL":{"leadTitle":"Test","leadName":"TestTest","email":"testsdad@sdasd.co.pl","phone":"12345678","companyName":"Test","industry":"Banking","numberOfEmployees":"12","annualRevenue":"12","doNotCall":false,"status":"Closed-Converted","rating":"Warm"},"COMMUNITY_USER_DECISION_STEP":true,"COMMUNITY_USER":{"firstName":"Test","lastName":"Test","userName":"testsdad@sdasd.co.pl","email":"testsdad@sdasd.co.pl"}}
+{
+    "LEAD_DETAIL": {
+      "leadTitle": "Test",
+      "leadName": "TestTest",
+      "email": "testsdad@sdasd.co.pl",
+      "phone": "12345678",
+      "companyName": "Test",
+      "industry": "Banking",
+      "numberOfEmployees": "12",
+      "annualRevenue": "12",
+      "doNotCall": false,
+      "status": "Closed-Converted",
+      "rating": "Warm"
+    },
+    "COMMUNITY_USER_DECISION_STEP": true,
+    "COMMUNITY_USER": {
+      "firstName": "Test",
+      "lastName": "Test",
+      "userName": "testsdad@sdasd.co.pl",
+      "email": "testsdad@sdasd.co.pl"
+    }
+  }

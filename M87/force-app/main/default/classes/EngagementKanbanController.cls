@@ -5,19 +5,21 @@ public with sharing class EngagementKanbanController {
         try{            
             SearchEngagementCaseOptions parsedSearchOptions = 
                 (SearchEngagementCaseOptions) JSON.deserialize(searchOptions, SearchEngagementCaseOptions.class);
-            EngagementServiceImp service = Modules.instance().service_getEngagementService();
-            return ApexActionResult.success(service.retrieveEngagementCases(parsedSearchOptions));
+            EngagementCaseService service = Modules.instance().service_getEngagementService();
+
+            return ApexActionResult.success(
+                CaseConverter.convertToCaseDTO(service.retrieveEngagementCases(parsedSearchOptions))
+            );
         }catch(Exception ex){
             System.debug(ex.getMessage()+' : '+ex.getStackTraceString());
             return ApexActionResult.fail(ex.getMessage()+' : '+ex.getStackTraceString());
-        }
-        
+        }        
     }
 
     @AuraEnabled
     public static ApexActionResult changeCaseStatus(String caseId,String status){
         try{
-            EngagementServiceImp service = Modules.instance().service_getEngagementService();
+            EngagementCaseService service = Modules.instance().service_getEngagementService();
             service.updateEngagementCaseStatus(caseId, status);            
         }catch(Exception ex){
             System.debug(ex.getMessage());

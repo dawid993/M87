@@ -1,10 +1,8 @@
 <template>
     <div>
         <template if:true={isLeadDetailsStep}>
-            <div class='lead-details'>
-                <c-lead-details navigation-context={currentStepOption} onevaluation={evaluateFlowStep}
-                    step-data={currentStepData}></c-lead-details>
-            </div>
+            <c-lead-details navigation-context={currentStepOption} onevaluation={evaluateFlowStep}
+                step-data={currentStepData}></c-lead-details>
         </template>
         <template if:true={isCommunityUserCreationDecision}>
             <c-create-community-user-decision navigation-context={currentStepOption} onevaluation={evaluateFlowStep}

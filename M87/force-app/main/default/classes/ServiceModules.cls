@@ -11,7 +11,7 @@ public with sharing class ServiceModules extends Modular {
 
         addModule(UsernameOrEmailSearchService.class, UserOrEmailSearchModule.class);
         addModule(CaseServiceImp.class, CaseServiceModule.class);
-        addModule(EngagementServiceImp.class, EngagementServiceModule.class);
+        addModule(EngagementCaseService.class, EngagementCaseServiceModule.class);
         addModule(UserServiceImp.class, UserServiceModule.class);
         addModule(EngagementLeadService.class, EngagementLeadServiceModule.class);
     }
@@ -72,11 +72,11 @@ public with sharing class ServiceModules extends Modular {
         }
     }
 
-    private class EngagementServiceModule extends ConstructServiceModule {
+    private class EngagementCaseServiceModule extends ConstructServiceModule {
         public Object construct(){
-            EngagementCaseSelector caseSelector = 
-                (EngagementCaseSelector) getSelectorModules().createModule(EngagementCaseSelector.class);            
-            return new EngagementServiceImp(caseSelector);
+            CaseRepository caseRepository = 
+                (CaseRepository) getRepositoryModules().createModule(CaseRepository.class);            
+            return new EngagementCaseService(caseRepository);
         }
     }
 

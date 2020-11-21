@@ -1,13 +1,14 @@
 public with sharing class RepositoryModules extends Modular {
     public RepositoryModules(){
         super();
-        addModule(LeadRepository.class, LeadRepositoryModule.class);
-        addModule(CommunityUserRepository.class, CommunityUserRepositoryModule.class);        
+        addModule(CaseRepository.class, CaseRepositoryModule.class);       
+        addModule(CommunityUserRepository.class, CommunityUserRepositoryModule.class); 
+        addModule(LeadRepository.class, LeadRepositoryModule.class);        
     }
 
-    private class LeadRepositoryModule implements ConstructModule {
+    private class CaseRepositoryModule implements ConstructModule {
         public Object construct(){
-            return new LeadRepository();
+            return new CaseRepository();
         }
     }
 
@@ -16,4 +17,10 @@ public with sharing class RepositoryModules extends Modular {
             return new CommunityUserRepository();
         }
     }
+
+    private class LeadRepositoryModule implements ConstructModule {
+        public Object construct(){
+            return new LeadRepository();
+        }
+    }    
 }

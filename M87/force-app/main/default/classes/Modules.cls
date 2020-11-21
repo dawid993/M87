@@ -43,8 +43,8 @@ public with sharing virtual class Modules {
         return (CaseServiceImp) serviceModules.createModule(CaseServiceImp.class);
     }
 
-    public virtual EngagementServiceImp service_getEngagementService(){
-        return (EngagementServiceImp) serviceModules.createModule(EngagementServiceImp.class);
+    public virtual EngagementCaseService service_getEngagementService(){
+        return (EngagementCaseService) serviceModules.createModule(EngagementCaseService.class);
     }
 
     public virtual UserServiceImp service_getUserService(){
@@ -53,18 +53,5 @@ public with sharing virtual class Modules {
 
     public virtual EngagementLeadService service_getEngagementLeadService(){
         return (EngagementLeadService) serviceModules.createModule(EngagementLeadService.class);
-    }
-
-    /*
-    * Selectors start here.
-    */
-
-    public virtual UserSelectorImp selector_getUserSelector(){
-        return (UserSelectorImp) selectorModules.createModule(UserSelectorImp.class);
-    }
-
-    public virtual CaseSelectorImp selector_getCaseSelector(){
-        return (CaseSelectorImp) selectorModules.createModule(CaseSelectorImp.class);
     }   
-   
 }

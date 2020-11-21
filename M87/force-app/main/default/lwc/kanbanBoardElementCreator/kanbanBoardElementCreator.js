@@ -146,7 +146,7 @@ export default class KanbanBoardElementCreator{
     _createFooterSection(caseTask) {
         const footer = document.createElement('div');
         footer.classList.add('footer-container');
-        footer.appendChild(this._createFooterElement('Owner', caseTask.Owner.Name));
+        footer.appendChild(this._createFooterElement('Owner', caseTask.ownerName));
         footer.appendChild(this._createFooterElement('Priority', caseTask.Priority));
 
         return footer;

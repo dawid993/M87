@@ -41,9 +41,10 @@ export default class EngagementReviewAndConfirm extends FlowComponentMixin(Light
         ResourcesLoader.loadStyles(this, [globalStyles]);
     }
 
-    connectedCallback(){
-        this._leadDetails = this.reviewData[LEAD_DETAILS_STEP.id];
-        this._communityUserDetail = this.reviewData[COMMUNITY_USER_STEP.id];
+    connectedCallback(){       
+        this.reviewData = this.reviewData ? this.reviewData : {};
+        this._leadDetails = this.reviewData[LEAD_DETAILS_STEP.id] ? this.reviewData[LEAD_DETAILS_STEP.id] : {};
+        this._communityUserDetail = this.reviewData[COMMUNITY_USER_STEP.id] ? this.reviewData[COMMUNITY_USER_STEP.id] : {};
     }
 
     backToPreviousStep(event){
