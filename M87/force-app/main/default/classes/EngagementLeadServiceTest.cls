@@ -5,15 +5,15 @@ public class EngagementLeadServiceTest {
     public static void shouldCreateLeadWith_Details(){
         System.runAs(UserTestDataFactory.buildUserTestRun()){
             EngagementLeadService engagementLeadService = Modules.instance().service_getEngagementLeadService();
-            EngagementLead lead = 
+            Lead lead = 
                 engagementLeadService.createLead(LeadTestDataFactory.createEngagementLeadDTO_withLeadDetails());
 
-            System.assertNotEquals(null, lead.getRecordId());
-            EngagementLead savedLead = engagementLeadService.getEngagementLead(lead.getRecordId());
+            System.assertNotEquals(null, lead.Id);
+            Lead savedLead = engagementLeadService.getEngagementLead(lead.Id);
             System.assertNotEquals(null, savedLead);            
-            System.assertEquals(lead.getEmail().toLowerCase(), savedLead.getEmail());
-            System.assertEquals(lead.getStatus(), savedLead.getStatus());
-            System.assertEquals(lead.getIndustry(), savedLead.getIndustry());
+            System.assertEquals(lead.Email.toLowerCase(), savedLead.Email.toLowerCase());
+            System.assertEquals(lead.Status, savedLead.Status);
+            System.assertEquals(lead.Industry, savedLead.Industry);
         }
     }
 
@@ -21,15 +21,15 @@ public class EngagementLeadServiceTest {
     public static void shouldCreateLeadWith_Details_CommunityUser(){
         System.runAs(UserTestDataFactory.buildUserTestRun()){
             EngagementLeadService engagementLeadService = Modules.instance().service_getEngagementLeadService();
-            EngagementLead lead = 
+            Lead lead = 
                 engagementLeadService.createLead(LeadTestDataFactory.createEngagementLeadDTO_leadDetails_commUser());
 
-            System.assertNotEquals(null, lead.getRecordId());
+            System.assertNotEquals(null, lead.Id);
 
-            EngagementLead savedLead = engagementLeadService.getEngagementLead(lead.getRecordId());
+            Lead savedLead = engagementLeadService.getEngagementLead(lead.Id);
             System.assertNotEquals(null, savedLead);   
             
-            List<CommunityUser> commUsers = engagementLeadService.getCommunityUsersForEngagementLead(savedLead);
+            List<CommunityUser__c> commUsers = engagementLeadService.getCommunityUsersForEngagementLead(savedLead);
             System.assertNotEquals(0, commUsers.size());            
         }
     }
@@ -38,17 +38,17 @@ public class EngagementLeadServiceTest {
     public static void shouldCreateLeadWith_Details_CommunityUser_Attachment(){
         System.runAs(UserTestDataFactory.buildUserTestRun()){
             EngagementLeadService engagementLeadService = Modules.instance().service_getEngagementLeadService();
-            EngagementLead lead = 
+            Lead lead = 
                 engagementLeadService.createLead(LeadTestDataFactory.createEngagementLeadDTO_leadDetails_commUser_file());
 
-            System.assertNotEquals(null, lead.getRecordId());
+            System.assertNotEquals(null, lead.Id);
 
-            EngagementLead savedLead = engagementLeadService.getEngagementLead(lead.getRecordId());
+            Lead savedLead = engagementLeadService.getEngagementLead(lead.Id);
             System.assertNotEquals(null, savedLead);   
             
-            List<CommunityUser> commUsers = engagementLeadService.getCommunityUsersForEngagementLead(savedLead);
+            List<CommunityUser__c> commUsers = engagementLeadService.getCommunityUsersForEngagementLead(savedLead);
             System.assertNotEquals(0, commUsers.size());  
-            System.assertNotEquals(0, getAttachments(savedLead.getRecordId()).size());          
+            System.assertNotEquals(0, getAttachments(savedLead.Id).size());          
         }
     }
 

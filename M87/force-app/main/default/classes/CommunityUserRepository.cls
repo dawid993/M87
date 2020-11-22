@@ -16,23 +16,22 @@ public with sharing class CommunityUserRepository extends Repository{
         return 'CommunityUser__c';
     }
   
-    public void saveCommunityUser(CommunityUser comunityUser){
-        System.debug(comunityUser);
-        upsert comunityUser.getRecord();
+    public void saveCommunityUser(CommunityUser__c comunityUser){       
+        upsert comunityUser;
     }
 
-    public CommunityUser getCommunityUserById(Id comUserId){
+    public CommunityUser__c getCommunityUserById(Id comUserId){
         String query = createBaseQuery();
         query += 'WHERE ID = :comUserId LIMIT 1';
 
-        return new CommunityUser(Database.query(query));
+        return Database.query(query);
     }
 
-    public List<CommunityUser> getCommunityUsersForEngagementLead(EngagementLead lead){
+    public List<CommunityUser__c> getCommunityUsersForEngagementLead(Lead lead){
         String query = createBaseQuery();
-        final Id leadId = lead.getRecordId();
+        final Id leadId = lead.Id;
         query += 'WHERE Lead__c = :leadId LIMIT 1';
 
-        return CommunityUser.convert(Database.query(query));
+        return Database.query(query);
     }
 }

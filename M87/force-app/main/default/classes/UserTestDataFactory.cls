@@ -31,6 +31,15 @@ public with sharing class UserTestDataFactory {
         .setProfileId(retrieveSystemAdministratorProfileId())
         .build();
     }
+
+    public static User getTestRunUser(){
+        List<User> testRunUsers = [SELECT Id FROM User WHERE Username = :getTestRunUsername()];
+        if(testRunUsers.isEmpty()){
+            return buildUserTestRun();
+        }
+
+        return testRunUsers[0];
+    }
     
     public static User buildSystemAdminUserWithUsername(final String username){
         return applyDefault()
@@ -53,4 +62,8 @@ public with sharing class UserTestDataFactory {
         .setProfileId(retrieveSystemAdministratorProfileId())
         .build();
     }
+
+    public static String getTestRunUsername(){
+        return TEST_RUN_USERNAME;
+    }    
 }

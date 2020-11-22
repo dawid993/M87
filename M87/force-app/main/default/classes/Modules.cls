@@ -37,13 +37,9 @@ public with sharing virtual class Modules {
     
     public virtual UsernameOrEmailSearchService service_getUsernameOrEmailSearch(){
         return (UsernameOrEmailSearchService) serviceModules.createModule(UsernameOrEmailSearchService.class);
-    }
+    }   
 
-    public virtual CaseServiceImp service_getCaseService(){
-        return (CaseServiceImp) serviceModules.createModule(CaseServiceImp.class);
-    }
-
-    public virtual EngagementCaseService service_getEngagementService(){
+    public virtual EngagementCaseService service_getEngagementCaseService(){
         return (EngagementCaseService) serviceModules.createModule(EngagementCaseService.class);
     }
 

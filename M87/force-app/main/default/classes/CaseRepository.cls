@@ -25,16 +25,23 @@ public with sharing class CaseRepository extends Repository {
         return fieldNames;
     }
     
-    public List<Case> retrieveEngagementCases(ID ownerId){
-        return Database.query(createBaseQuery() + ' AND OwnerId = :ownerId');
+    public List<Case> retrieveEngagementCases(final ID ownerId){
+        return Database.query(createBaseQuery() + ' WHERE ' + getRecordTypeCondition() +
+        ' AND OwnerId = :ownerId');
     }
 
-    public List<Case> retrieveEngagementCases(SearchEngagementCaseOptions searchOptions){  
+    private String getRecordTypeCondition(){
+        return String.format('RecordTypeId = {0}', new List<Object> {
+            '\''+RecordTypeRepository.CASE_ENGAGEMENT_RT_ID+'\''
+        });
+    }
+
+    public List<Case> retrieveEngagementCases(final SearchEngagementCaseOptions searchOptions){  
         return String.isBlank(searchOptions.phrase) ? 
             retriveEngagementCasesWithoutPhrase(searchOptions) : retriveEngagementCasesWithPhrase(searchOptions); 
     }    
 
-    private List<Case> retriveEngagementCasesWithoutPhrase(SearchEngagementCaseOptions searchOptions){
+    private List<Case> retriveEngagementCasesWithoutPhrase(final SearchEngagementCaseOptions searchOptions){
         final List<String> statuses = searchOptions.selectedStatuses;
         final List<String> priorities = searchOptions.selectedPriorities;
         final List<String> owners = searchOptions.selectedOwners;
@@ -49,18 +56,18 @@ public with sharing class CaseRepository extends Repository {
         ){
             conditionString+=' AND OwnerId IN :owners';
         }
-        System.debug(createBaseQuery()+' '+conditionString);
+        
         return Database.query(createBaseQuery()+' '+conditionString);  
     }
 
-    private List<Case> retriveEngagementCasesWithPhrase(SearchEngagementCaseOptions searchOptions){
+    private List<Case> retriveEngagementCasesWithPhrase(final SearchEngagementCaseOptions searchOptions){
         final String engagementRecordType = RecordTypeRepository.CASE_ENGAGEMENT_RT_ID;
         final String phrase = searchOptions.phrase;
         final List<String> statuses = searchOptions.selectedStatuses;
         final List<String> priorities = searchOptions.selectedPriorities;
         final List<String> owners = searchOptions.selectedOwners;
 
-        String searchQuery = 'FIND :phrase IN ALL FIELDS RETURNING Case(ID,Status,Description '+
+        final String searchQuery = 'FIND :phrase IN ALL FIELDS RETURNING Case(ID,Status,Description '+
         ',CreatedDate,Owner.Name,Subject,Priority WHERE RecordTypeId = :engagementRecordType '+
         'AND Status IN :statuses AND Priority IN :priorities '
         + (searchOptions.selectedOwners.size() > 1 || 
@@ -71,7 +78,7 @@ public with sharing class CaseRepository extends Repository {
         return (Case[]) searchResults[0];
     }
 
-    public void save(Case caseRecord){
+    public void save(final Case caseRecord){
         upsert caseRecord;
     }
 

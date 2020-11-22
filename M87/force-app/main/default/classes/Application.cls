@@ -9,8 +9,7 @@ public with sharing class Application {
 	// Configure and create the ServiceFactory for this Application
 	public static final fflib_Application.ServiceFactory Service = 
 		new fflib_Application.ServiceFactory( 
-			new Map<Type, Type> {
-				CaseService.class => CaseServiceImp.class,				
+			new Map<Type, Type> {						
 				UserService.class => UserServiceImp.class,
 				AddressSearchService.class => AddressSearchServiceImp.class,
 				AddressSearchParametersStorage.class => AddressSearchParametersStorageImp.class,
@@ -24,8 +23,7 @@ public with sharing class Application {
 	// Configure and create the SelectorFactory for this Application
 	public static final fflib_Application.SelectorFactory Selector = 
 		new fflib_Application.SelectorFactory(
-			new Map<SObjectType, Type> {
-				Case.sObjectType => CaseSelectorImp.class,
+			new Map<SObjectType, Type> {		
 				User.sObjectType => UserSelectorImp.class
             }
         );

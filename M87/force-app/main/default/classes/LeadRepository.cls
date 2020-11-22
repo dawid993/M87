@@ -14,16 +14,15 @@ public with sharing class LeadRepository extends Repository {
         return 'Lead';
     }
 
-    public void saveEngagementLead(EngagementLead lead){
-        Lead sfdcLead = lead.getRecord();
-        upsert sfdcLead;
+    public void saveEngagementLead(Lead lead){        
+        upsert lead;
     }
 
-    public EngagementLead getEngagementLeadById(Id leadId){
+    public Lead getEngagementLeadById(Id leadId){
         String query = createBaseQuery();
         query += 'WHERE ID = :leadId LIMIT 1';
 
-        return new EngagementLead(Database.query(query));
+        return Database.query(query);
     }   
 
 }

@@ -1,9 +1,9 @@
 public with sharing class EngagementCaseService{
     private static final Set<String> allowedStatuses = new Set<String>{
-        'To Do',
-        'In Progress',
-        'Done - success',
-        'Done - failure'
+        CaseUtils.STATUS_TO_DO,
+        CaseUtils.STATUS_IN_PROGRES,
+        CaseUtils.STATUS_DONE_SUCCESS,
+        CaseUtils.STATUS_DONE_FAILURE      
     };    
 
     private final CaseRepository caseRepository;
@@ -12,7 +12,7 @@ public with sharing class EngagementCaseService{
         this.caseRepository = caseRepository;
     }
 
-    public List<Case> retrieveEngagementCases(ID ownerId){
+    public List<Case> retrieveEngagementCasesByOwnerId(final ID ownerId){
         if(String.isBlank(ownerId)){
             throw new IllegalArgumentException('Cannot retrieve cases for undefined owner.');
         }
@@ -20,15 +20,24 @@ public with sharing class EngagementCaseService{
         return caseRepository.retrieveEngagementCases(ownerId);   
     }
 
-    public List<Case> retrieveEngagementCases(SearchEngagementCaseOptions searchOptions){
+    public List<Case> retrieveEngagementCases(final SearchEngagementCaseOptions searchOptions){
         if(searchOptions == null){
-            throw new IllegalArgumentException('Invalid parameter.');
+            throw new IllegalArgumentException('Search option cannot be blank.');
+        }
+
+        if(areSearchOptionInvalid(searchOptions)){
+            throw new IllegalArgumentException('Search options parameters are invalid. Cannot perform search!');
         }
 
         return caseRepository.retrieveEngagementCases(searchOptions);        
     }
 
-    public void updateEngagementCaseStatus(ID caseId,String status){
+    private Boolean areSearchOptionInvalid(final SearchEngagementCaseOptions options){
+        return options.selectedOwners.isEmpty() || options.selectedPriorities.isEmpty() || 
+            options.selectedStatuses.isEmpty();
+    }
+
+    public void updateEngagementCaseStatus(final ID caseId,final String status){
         if(String.isBlank(caseId) || String.isBlank(status)){
             throw new IllegalArgumentException('At least one of input param is empty.');
         }
