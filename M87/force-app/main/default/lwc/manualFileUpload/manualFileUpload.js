@@ -24,7 +24,7 @@ export default class ManualFileUpload extends LightningElement {
     isFileLoaded(){
         const fileElement = this.template.querySelector(FILE_UPLOAD_ELEMENT_SELECTOR);
         return fileElement.files.length > 0; 
-    }
+    } 
 
     _loadFileContent() {
         const fileElement = this.template.querySelector(FILE_UPLOAD_ELEMENT_SELECTOR);

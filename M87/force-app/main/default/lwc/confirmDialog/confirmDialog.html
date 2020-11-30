@@ -1,0 +1,11 @@
+<template>
+    <div class="dialog-container">
+        <div class="dialog-text">
+            <lightning-formatted-text value={confirmText}></lightning-formatted-text>
+        </div>
+        <div class="action-buttons">
+            <lightning-button data-id='confirm-button' label="Confirm" onclick={fireConfirmEvent}></lightning-button>
+            <lightning-button data-id='cancel-button' label="Cancel" onclick={fireCancelEvent}></lightning-button>
+        </div>
+    </div>
+</template>

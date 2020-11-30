@@ -70,7 +70,7 @@
                         <lightning-formatted-text value={communityUserDetails.email}></lightning-formatted-text>
                     </lightning-layout-item>
                 </lightning-layout>
-            </div>            
+            </div>
         </div>
         <div>
             <c-manual-file-upload></c-manual-file-upload>
@@ -78,7 +78,18 @@
     </div>
     <div class="gM87-flows-navigation-section">
         <c-flow-navigation show-back={navigationContext.showBack} show-continue={navigationContext.showContinue}
-            show-finish={navigationContext.showFinish} onbackflow={backToPreviousStep} oncontinueflow={saveApplication}>
+            show-finish={navigationContext.showFinish} onbackflow={backToPreviousStep}
+            oncontinueflow={makeConfirmDialogVisible}>
         </c-flow-navigation>
     </div>
+    <template if:true={showConfirmDialog}>
+        <div class="gM87-popup-background">
+            <div class="gM87-popup-container">
+                <c-dialog-bar title="Confirm?"></c-dialog-bar>
+                <c-confirm-dialog confirm-text="Would you like to confirm this application?" onconfirm={saveApplication}
+                    oncancel={makeConfirmDialogInvisible}>
+                </c-confirm-dialog>
+            </div>
+        </div>
+    </template>
 </template>

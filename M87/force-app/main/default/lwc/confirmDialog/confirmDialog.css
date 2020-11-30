@@ -1,0 +1,22 @@
+.dialog-container {
+  background-color: white;
+  min-width: 300px;
+  min-height: 200px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+}
+
+.dialog-text {
+  margin-top: 10px;
+}
+
+.action-buttons {
+  position: absolute;
+  bottom: 10px;
+}
+
+.action-buttons lightning-button {
+  margin: 2px;
+}

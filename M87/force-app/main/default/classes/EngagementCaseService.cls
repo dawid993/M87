@@ -1,5 +1,5 @@
 public with sharing class EngagementCaseService{
-    private static final Set<String> allowedStatuses = new Set<String>{
+    private static final Set<String> ALLOWED_STATUSES = new Set<String>{
         CaseUtils.STATUS_TO_DO,
         CaseUtils.STATUS_IN_PROGRES,
         CaseUtils.STATUS_DONE_SUCCESS,
@@ -42,7 +42,7 @@ public with sharing class EngagementCaseService{
             throw new IllegalArgumentException('At least one of input param is empty.');
         }
 
-        if(!allowedStatuses.contains(status)){
+        if(!ALLOWED_STATUSES.contains(status)){
             throw new IllegalArgumentException(status+' is invalid status for engagement case');
         }     
 

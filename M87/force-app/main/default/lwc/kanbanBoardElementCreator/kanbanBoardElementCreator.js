@@ -78,7 +78,7 @@ export default class KanbanBoardElementCreator{
 
     _createDraggableDiv(caseTask,dragFunction) {        
         const divContainer = document.createElement('div');
-        divContainer.setAttribute('data-task-id', caseTask.Id);
+        divContainer.setAttribute('data-task-id', caseTask.id);
         divContainer.setAttribute('data-task-status', caseTask.Status);
         divContainer.setAttribute('class', 'task-element');
         divContainer.setAttribute('draggable', true);
@@ -194,6 +194,7 @@ export default class KanbanBoardElementCreator{
     _createCaseViewOption(taskId) {
         const caseViewOption = document.createElement('li');
         caseViewOption.textContent = 'View Case';
+        caseViewOption.setAttribute('data-task-id', taskId);
         caseViewOption.onclick = this._fireViewCaseEvent(taskId);
         return caseViewOption;
     }

@@ -2,7 +2,7 @@ import { createElement } from 'lwc'
 import engagementKanbanBoard from 'c/engagementKanbanBoard';
 import retrieveEngagementCases from '@salesforce/apex/EngagementKanbanController.retrieveEngagementCases';
 import changeCaseStatus from '@salesforce/apex/EngagementKanbanController.changeCaseStatus';
-import {htmlTestUtils, jestUtils, eventTestUtils } from 'c/testUtility';
+import { htmlTestUtils, jestUtils, eventTestUtils } from 'c/testUtility';
 
 jest.mock(
     '@salesforce/apex/EngagementKanbanController.changeCaseStatus',
@@ -60,7 +60,7 @@ describe('c-engagement-kanban-board tests', () => {
             expect(draggableElement.querySelector('.task-header-container')).toBeTruthy();
 
             const descriptionElement = draggableElement.querySelector('.description');
-            expect(descriptionElement).toBeTruthy();  
+            expect(descriptionElement).toBeTruthy();
             expect(draggableElement.querySelector('.footer-container')).toBeTruthy();
         });
     });
@@ -132,7 +132,7 @@ describe('c-engagement-kanban-board tests', () => {
         engagementKanbanBoardElement.addEventListener(invokeFlowEventName, (event) => {
             invokeFlowEvent = true;
         });
-       
+
         engagementKanbanBoardElement.applySearchOptions({});
 
         return jestUtils.flushPromises().then(() => {

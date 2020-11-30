@@ -1,28 +1,29 @@
 <aura:component implements="flexipage:availableForAllPageTypes">
-    <ltng:require styles="{!$Resource.gM87_css_popups}"/>
+    <ltng:require styles="{!$Resource.gM87_css_popups}" />
 
-    <aura:attribute name="caseId" type="ID" default="false" access="private"/>
-    <aura:attribute name="showFlowContainer" type="Boolean" default="false" access="private"/>
-    <aura:attribute name="showViewTaskContainer" type="Boolean" default="false" access="private"/>
+    <aura:attribute name="caseId" type="ID" default="false" access="private" />
+    <aura:attribute name="showFlowContainer" type="Boolean" default="false" access="private" />
+    <aura:attribute name="showViewTaskContainer" type="Boolean" default="false" access="private" />
 
     <aura:if isTrue="{!v.showFlowContainer}">
-        <div class="gM87-popup-background" style="flex-direction: column;">            
+        <div class="gM87-popup-background" style="flex-direction: column;">
             <div class="gM87-popup-container flow-container">
                 <c:dialogBar title="New Lead" ondialogclose="{!c.closeFlowDialog}"></c:dialogBar>
-                <c:engagementFlowContainer aura:id="engagementFlowsContainer"/>
+                <c:engagementFlowContainer aura:id="engagementFlowsContainer"
+                    onapplication_done_public="{!c.closeFlowDialog}" />
             </div>
         </div>
     </aura:if>
     <aura:if isTrue="{!v.showViewTaskContainer}">
-        <div class="gM87-popup-background" style="flex-direction: column;">            
+        <div class="gM87-popup-background" style="flex-direction: column;">
             <div class="gM87-popup-container flow-container">
                 <c:dialogBar title="Case details" ondialogclose="{!c.closeViewTaskDialog}"></c:dialogBar>
-                <c:caseView aura:id="engagementFlowsContainer" caseId="{!v.caseId}"/>
+                <c:caseView aura:id="engagementFlowsContainer" caseId="{!v.caseId}" />
             </div>
         </div>
     </aura:if>
-    
+
     <div>
-        <c:engagementKanban oninvokeflow_pub_comp="{!c.invokeFlow}" onviewtask_pub_comp="{!c.viewTask}"/>
-    </div>    
-</aura:component>	
+        <c:engagementKanban oninvokeflow_pub_comp="{!c.invokeFlow}" onviewtask_pub_comp="{!c.viewTask}" />
+    </div>
+</aura:component>
