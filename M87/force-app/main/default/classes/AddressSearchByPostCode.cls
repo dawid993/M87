@@ -1,5 +1,11 @@
 public with sharing class AddressSearchByPostCode implements AddressSearchStrategy{
-    public String generateConditionStatement(AddressSearchParametersStorage parametersStorage){
-        return 'WHERE PostCode__c = \''+ parametersStorage.getPostCode()+'\'';
+    private final AddressSearchParametersStorageImp parameters;
+
+    public AddressSearchByPostCode(final AddressSearchParametersStorageImp parameters){
+        this.parameters = parameters;
+    }
+    
+    public String generateConditionStatement(){
+        return 'WHERE PostCode__c = \''+ String.escapeSingleQuotes(parameters.getPostCode())+'\'';
     }
 }

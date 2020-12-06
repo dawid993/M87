@@ -66,4 +66,8 @@ public with sharing virtual class Modules {
     public virtual EngagementFacade facade_getEngagementFacade(){
         return (EngagementFacade) facadeModules.createModule(EngagementFacade.class);
     } 
+
+    public virtual EngagementFacade facade_getAddressSearchFacade(){
+        return (EngagementFacade) facadeModules.createModule(AddressSearchFacade.class);
+    }
 }

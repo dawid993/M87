@@ -5,7 +5,9 @@ public with sharing class FacadeModules extends Modular {
     public FacadeModules(final ServiceModules serviceModules) {
         super();
         this.serviceModules = serviceModules;
+
         addModule(EngagementFacade.class, EngagementFacadeModule.class);
+        addModule(AddressSearchFacade.class, AddressSearchFacadeModule.class);
     }
 
     public override Object createModule(Type moduleType){
@@ -36,12 +38,18 @@ public with sharing class FacadeModules extends Modular {
         }
     }    
 
-    private class EngagementFacadeModule extends ConstructFacadeModule{
+    private class EngagementFacadeModule extends ConstructFacadeModule {
         public Object construct(){           
             return new EngagementFacade(
                 (EngagementCaseService) getServiceModules().createModule(EngagementCaseService.class),
                 (EngagementLeadService) getServiceModules().createModule(EngagementLeadService.class)
             );
+        }
+    }
+
+    private class AddressSearchFacadeModule extends ConstructFacadeModule {
+        public Object construct(){           
+            return new AddressSearchFacade();
         }
     }
 }

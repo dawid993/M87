@@ -1,7 +1,13 @@
-public with sharing class AddressSearchByPostCodeAndCityAndStreet implements AddressSearchStrategy{        
-    public String generateConditionStatement(AddressSearchParametersStorage parametersStorage){
-        return 'WHERE PostCode__c = \''+ parametersStorage.getPostCode() +'\''
-                + ' AND City__c = \''+ parametersStorage.getCity() 
-                + '\' AND Street__c = \''+ parametersStorage.getStreet()+'\'';
+public with sharing class AddressSearchByPostCodeAndCityAndStreet implements AddressSearchStrategy{  
+    private final AddressSearchParametersStorageImp parameters;
+
+    public AddressSearchByPostCodeAndCityAndStreet(final AddressSearchParametersStorageImp parameters){
+        this.parameters = parameters;
+    }
+    
+    public String generateConditionStatement(){
+        return 'WHERE PostCode__c = \''+ String.escapeSingleQuotes(parameters.getPostCode()) +'\''
+            + ' AND City__c = \''+ String.escapeSingleQuotes(parameters.getCity()) + '\''
+            + ' AND Street__c = \''+ parameters.getStreet()+'\'';
     }
 }

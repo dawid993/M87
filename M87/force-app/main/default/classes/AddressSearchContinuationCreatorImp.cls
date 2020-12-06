@@ -1,14 +1,8 @@
-public with sharing class AddressSearchContinuationCreatorImp implements AddressSearchContinuationCreator{
-    public Continuation createContinuation(
-        AddressSearchParametersStorage parameterStorage,
-        AddressSearchStrategy strategy
-    ){
-        
-        ContinuationSupplier supplier =
-            (ContinuationSupplier) Application.Service.newInstance(ContinuationSupplier.class);
+public with sharing class AddressSearchContinuationCreatorImp {
+    public Continuation createContinuation(AddressSearchStrategy strategy){
         
         try{
-            return supplier.setEndpoint(this.getEndpoint()+generateQuery(parameterStorage, strategy))           
+            return new ContinuationSupplierImp().setEndpoint(this.getEndpoint()+generateQuery(strategy))           
                 .setMethod('GET').setTimeout(60)
                 .authorize(new JWTAuthorization())
                 .createContinuation();
@@ -21,9 +15,9 @@ public with sharing class AddressSearchContinuationCreatorImp implements Address
         return 'https://lightningdevdb-dev-ed.my.salesforce.com/services/data/v47.0/query/?q=';        
     }
 
-    private String generateQuery(AddressSearchParametersStorage parameterStorage,AddressSearchStrategy strategy){
+    private String generateQuery(AddressSearchStrategy strategy){
         String query = 'select id,name,City__c,House_number__c,PostCode__c,Province__c,Street__c FROM Address__c';
-        String condition = strategy.generateConditionStatement(parameterStorage);  
+        String condition = strategy.generateConditionStatement();  
         return EncodingUtil.urlEncode(query+' '+condition, 'UTF-8');        
     }
 

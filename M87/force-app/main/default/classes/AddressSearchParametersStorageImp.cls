@@ -1,25 +1,25 @@
-public with sharing class AddressSearchParametersStorageImp  implements AddressSearchParametersStorage{
+public with sharing class AddressSearchParametersStorageImp {
     private String postCode;
     private String city;
     private String street;
     private String houseNumber;
 
-    public AddressSearchParametersStorage setPostCode(String postCode){
+    public AddressSearchParametersStorageImp setPostCode(String postCode){
         this.postCode = postCode;
         return this;
     }
 
-    public AddressSearchParametersStorage setCity(String city){
+    public AddressSearchParametersStorageImp setCity(String city){
         this.city = city;
         return this;
     }
 
-    public AddressSearchParametersStorage setStreet(String street){
+    public AddressSearchParametersStorageImp setStreet(String street){
         this.street = street;
         return this;
     }
 
-    public AddressSearchParametersStorage setHouseNumber(String houseNumber){
+    public AddressSearchParametersStorageImp setHouseNumber(String houseNumber){
         this.houseNumber = houseNumber;
         return this;
     }

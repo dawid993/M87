@@ -11,8 +11,7 @@ public with sharing class Application {
 		new fflib_Application.ServiceFactory( 
 			new Map<Type, Type> {	
 				AddressSearchService.class => AddressSearchServiceImp.class,
-				AddressSearchParametersStorage.class => AddressSearchParametersStorageImp.class,
-				AddressSearchStrategyFactory.class => AddressSearchStrategyFactoryImp.class,
+				AddressSearchParametersStorage.class => AddressSearchParametersStorageImp.class,				
 				ContinuationSupplier.class => ContinuationSupplierImp.class,
 				AddressSearchContinuationCreator.class => AddressSearchContinuationCreatorImp.class,
 				AddressParser.class => AddressParserImp.class
