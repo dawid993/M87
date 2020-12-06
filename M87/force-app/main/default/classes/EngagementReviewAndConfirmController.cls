@@ -2,11 +2,10 @@ public with sharing class EngagementReviewAndConfirmController {
 
     @AuraEnabled   
     public static ApexActionResult saveLead(EngagementLeadDTO leadDTO){
-        ApexActionResult result;  
-        System.debug(leadDTO);
+        ApexActionResult result;       
         try{
-            final EngagementLeadService leadService = Modules.instance().service_getEngagementLeadService();
-            leadService.createLead(leadDto);
+            final EngagementFacade service = M87_APIs.getEngagementAPI();
+            service.createLead(leadDto);
             result = ApexActionResult.success();
         }catch(Exception ex){
             result = ApexActionResult.fail(ApexUtils.APEX_ACTION_EXCEPTION_INFO);

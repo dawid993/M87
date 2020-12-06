@@ -9,8 +9,7 @@ public with sharing class Application {
 	// Configure and create the ServiceFactory for this Application
 	public static final fflib_Application.ServiceFactory Service = 
 		new fflib_Application.ServiceFactory( 
-			new Map<Type, Type> {						
-				UserService.class => UserServiceImp.class,
+			new Map<Type, Type> {	
 				AddressSearchService.class => AddressSearchServiceImp.class,
 				AddressSearchParametersStorage.class => AddressSearchParametersStorageImp.class,
 				AddressSearchStrategyFactory.class => AddressSearchStrategyFactoryImp.class,

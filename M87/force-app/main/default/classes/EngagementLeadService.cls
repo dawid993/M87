@@ -8,7 +8,7 @@ public with sharing class EngagementLeadService {
         this.commUserRepository = commUserRepository;
     }
 
-    public Lead createLead(EngagementLeadDTO leadDto){
+    public Lead createLead(final EngagementLeadDTO leadDto){
         if(leadDto == null || leadDto.leadDetails == null){
             throw new IllegalArgumentException('Invalid dto object has been passed.');
         }
@@ -32,11 +32,11 @@ public with sharing class EngagementLeadService {
         return lead;
     }
 
-    public Lead getEngagementLead(Id leadId){
+    public Lead getEngagementLead(final Id leadId){
         return leadRepository.getEngagementLeadById(leadId);
     }
 
-    public List<CommunityUser__c> getCommunityUsersForEngagementLead(Lead lead){
+    public List<CommunityUser__c> getCommunityUsersForEngagementLead(final Lead lead){
         return commUserRepository.getCommunityUsersForEngagementLead(lead);
     }
 

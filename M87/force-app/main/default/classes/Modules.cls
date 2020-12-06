@@ -7,14 +7,20 @@ public with sharing virtual class Modules {
 
     private RepositoryModules repositoryModules;
 
+    private FacadeModules facadeModules;
+
     public static Modules instance(){
         if(modulesHandle == null){
-            SelectorModules selectorModules = new SelectorModules();
-            RepositoryModules repositoryModules = new RepositoryModules();
+            final SelectorModules selectorModules = new SelectorModules();
+            final RepositoryModules repositoryModules = new RepositoryModules();
+            final ServiceModules serviceModules = new ServiceModules(selectorModules,repositoryModules);
+            final FacadeModules facadeModules = new FacadeModules(serviceModules);
+            
             modulesHandle = new Modules(
                 new ServiceModules(selectorModules,repositoryModules),
                 selectorModules,
-                repositoryModules
+                repositoryModules,
+                facadeModules
             );
         }
 
@@ -29,10 +35,16 @@ public with sharing virtual class Modules {
     @testVisible
     private Modules(){}
 
-    private Modules(ServiceModules serviceModules,SelectorModules selectorModules,RepositoryModules repositoryModules){
+    private Modules(
+        ServiceModules serviceModules,
+        SelectorModules selectorModules,
+        RepositoryModules repositoryModules,
+        FacadeModules facadeModules
+    ){
         this.selectorModules = selectorModules;
         this.serviceModules = serviceModules;   
-        this.repositoryModules = repositoryModules;     
+        this.repositoryModules = repositoryModules;  
+        this.facadeModules = facadeModules;   
     }
     
     public virtual UsernameOrEmailSearchService service_getUsernameOrEmailSearch(){
@@ -43,11 +55,15 @@ public with sharing virtual class Modules {
         return (EngagementCaseService) serviceModules.createModule(EngagementCaseService.class);
     }
 
-    public virtual UserServiceImp service_getUserService(){
-        return (UserServiceImp) serviceModules.createModule(UserServiceImp.class);
+    public virtual UserService service_getUserService(){
+        return (UserService) serviceModules.createModule(UserService.class);
     }
 
     public virtual EngagementLeadService service_getEngagementLeadService(){
         return (EngagementLeadService) serviceModules.createModule(EngagementLeadService.class);
-    }   
+    } 
+    
+    public virtual EngagementFacade facade_getEngagementFacade(){
+        return (EngagementFacade) facadeModules.createModule(EngagementFacade.class);
+    } 
 }

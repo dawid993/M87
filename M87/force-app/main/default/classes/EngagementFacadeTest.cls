@@ -1,5 +1,5 @@
-@IsTest
-public with sharing class EngagementCaseServiceTest {
+@isTest
+public with sharing class EngagementFacadeTest {
     private static final String SUBJECT_1 = 'shfbbduyyu213gudas';
     private static final String SUBJECT_2 = 'czxasdasdttgxsdasd';
     private static final String SUBJECT_3 = 'hfghsbxbsdg3425gsd';
@@ -48,23 +48,22 @@ public with sharing class EngagementCaseServiceTest {
                 )                
             };            
         }
-    }       
+    }   
     
-
     @IsTest
     public static void shouldRetrieveEngagementCase(){
         System.runAs(UserTestDataFactory.getTestRunUser()){
             final User runningUser = UserTestDataFactory.getTestRunUser();
-            final EngagementCaseService service = Modules.instance().service_getEngagementCaseService();
+            final EngagementFacade service = Modules.instance().facade_getEngagementFacade();
             final List<Case> engagementCases = service.retrieveEngagementCasesByOwnerId(runningUser.Id);
-            System.assertEquals(6, engagementCases.size());
+            System.assertEquals(6, engagementCases.size(),'List should have 6 elements.');
         }
     }
 
     @IsTest
     public static void shouldRetrieveLowPriorityEngagementCase(){
         System.runAs(UserTestDataFactory.getTestRunUser()){
-            final EngagementCaseService service = Modules.instance().service_getEngagementCaseService();
+            final EngagementFacade service = Modules.instance().facade_getEngagementFacade();
             final List<Case> engagementCases = service.retrieveEngagementCases(
                 new SearchEngagementCaseOptionsBuilder()
                 .addPriorities(new List<String>{
@@ -80,14 +79,14 @@ public with sharing class EngagementCaseServiceTest {
                 .build()
             );
 
-            System.assertEquals(2, engagementCases.size());
+            System.assertEquals(2, engagementCases.size(), 'List should have 2 elements.');
         }
     }
 
-    @IsTest
-    public static void shouldRetrieve_mediumPriority_toDoStatus_EngagementCase(){
+    @isTest
+    public static void shouldRetrievemediumPrioritytoDoStatusEngagementCase(){
         System.runAs(UserTestDataFactory.getTestRunUser()){
-            final EngagementCaseService service = Modules.instance().service_getEngagementCaseService();
+            final EngagementFacade service = Modules.instance().facade_getEngagementFacade();
             final List<Case> engagementCases = service.retrieveEngagementCases(
                 new SearchEngagementCaseOptionsBuilder()
                 .addPriorities(new List<String>{
@@ -102,14 +101,14 @@ public with sharing class EngagementCaseServiceTest {
                 .build()
             );
 
-            System.assertEquals(2, engagementCases.size());
+            System.assertEquals(2, engagementCases.size(),'List should have 2 elements.');
         }
     }
 
     @IsTest
     public static void shouldRetrieveHighPriorityEngagementCase(){
         System.runAs(UserTestDataFactory.getTestRunUser()){
-            final EngagementCaseService service = Modules.instance().service_getEngagementCaseService();
+            final EngagementFacade service = Modules.instance().facade_getEngagementFacade();
             final List<Case> engagementCases = service.retrieveEngagementCases(
                 new SearchEngagementCaseOptionsBuilder()
                 .addPriorities(new List<String>{
@@ -127,7 +126,7 @@ public with sharing class EngagementCaseServiceTest {
                 .build()
             );
 
-            System.assertEquals(1, engagementCases.size());
+            System.assertEquals(1, engagementCases.size(),'List should have 1 element.');
         }
     }
 
@@ -136,7 +135,7 @@ public with sharing class EngagementCaseServiceTest {
         System.runAs(UserTestDataFactory.getTestRunUser()){
             final Case highPrioCase = retrieveCaseBySubject(SUBJECT_4);
             Test.setFixedSearchResults(new List<Id>{ highPrioCase.Id });
-            final EngagementCaseService service = Modules.instance().service_getEngagementCaseService();
+            final EngagementFacade service = Modules.instance().facade_getEngagementFacade();
             
             final List<Case> engagementCases = service.retrieveEngagementCases(
                 new SearchEngagementCaseOptionsBuilder()
@@ -156,7 +155,7 @@ public with sharing class EngagementCaseServiceTest {
                 .build()
             );
 
-            System.assertEquals(1, engagementCases.size());
+            System.assertEquals(1, engagementCases.size(),'List should have 1 element');
         }
     }
 
@@ -165,7 +164,7 @@ public with sharing class EngagementCaseServiceTest {
         System.runAs(UserTestDataFactory.getTestRunUser()){
             final Case highPrioCase = retrieveCaseBySubject(SUBJECT_4);
             Test.setFixedSearchResults(new List<Id>{ highPrioCase.Id });
-            final EngagementCaseService service = Modules.instance().service_getEngagementCaseService();
+            final EngagementFacade service = Modules.instance().facade_getEngagementFacade();
             
             final List<Case> engagementCases = service.retrieveEngagementCases(
                 new SearchEngagementCaseOptionsBuilder()
@@ -182,7 +181,7 @@ public with sharing class EngagementCaseServiceTest {
                 .build()
             );
 
-            System.assertEquals(0, engagementCases.size());
+            System.assertEquals(0, engagementCases.size(),'List should be empty.');
         }
     }
 
@@ -193,7 +192,7 @@ public with sharing class EngagementCaseServiceTest {
     @IsTest
     public static void shouldThrowExceptionBecauseSearchParametersAreBlank(){
         System.runAs(UserTestDataFactory.getTestRunUser()){
-            final EngagementCaseService service = Modules.instance().service_getEngagementCaseService();
+            final EngagementFacade service = Modules.instance().facade_getEngagementFacade();
             Boolean exceptionThrown = false;
 
             try{
@@ -202,14 +201,14 @@ public with sharing class EngagementCaseServiceTest {
                 exceptionThrown = true;
             }
 
-            System.assertEquals(true, exceptionThrown);
+            System.assertEquals(true, exceptionThrown,'Exception should be thrown.');
         }
     }
 
     @IsTest
     public static void shouldThrowExceptionBecauseSearchParametersAreInvalid(){
         System.runAs(UserTestDataFactory.getTestRunUser()){
-            final EngagementCaseService service = Modules.instance().service_getEngagementCaseService();
+            final EngagementFacade service = Modules.instance().facade_getEngagementFacade();
             Boolean exceptionThrown = false;
 
             try{
@@ -218,22 +217,22 @@ public with sharing class EngagementCaseServiceTest {
                 exceptionThrown = true;
             }
 
-            System.assertEquals(true, exceptionThrown);
+            System.assertEquals(true, exceptionThrown,'Exception should be thrown.');
         }
     }
 
     @IsTest
     public static void shouldUpdateCaseStatus(){
         System.runAs(UserTestDataFactory.getTestRunUser()){
-            final EngagementCaseService service = Modules.instance().service_getEngagementCaseService();
+            final EngagementFacade service = Modules.instance().facade_getEngagementFacade();
             final Case testCase = retrieveCaseBySubject(SUBJECT_4);
             final String prevStatus = testCase.Status;
 
             service.updateEngagementCaseStatus(testCase.Id, CaseUtils.STATUS_TO_DO);
 
             final Case updatedCase = retrieveCaseById(testCase.Id);
-            System.assertEquals(CaseUtils.STATUS_TO_DO, updatedCase.Status);
-            System.assertNotEquals(prevStatus, updatedCase.Status);
+            System.assertEquals(CaseUtils.STATUS_TO_DO, updatedCase.Status,'Status should be \'To Do\'');
+            System.assertNotEquals(prevStatus, updatedCase.Status,'Previous status should be different than current one.');
         }
     }
 
@@ -241,10 +240,10 @@ public with sharing class EngagementCaseServiceTest {
         return [SELECT Id,Status FROM Case WHERE Id = :caseId LIMIT 1];
     }
 
-    @IsTest
+    @isTest
     public static void shouldThrowExceptionWhenUpdateBecauseInvalidCaseStatus(){
         System.runAs(UserTestDataFactory.getTestRunUser()){
-            final EngagementCaseService service = Modules.instance().service_getEngagementCaseService();
+            final EngagementFacade service = Modules.instance().facade_getEngagementFacade();
             final Case testCase = retrieveCaseBySubject(SUBJECT_4);
             final String prevStatus = testCase.Status;
             Boolean exceptionThrown = false;
@@ -255,7 +254,94 @@ public with sharing class EngagementCaseServiceTest {
                 exceptionThrown = true;
             }           
 
-            System.assertEquals(true,exceptionThrown);           
+            System.assertEquals(true,exceptionThrown,'Exception should be thrown.');           
         }
+    }
+
+    @isTest
+    public static void shouldCreateLeadWithDetails(){
+        System.runAs(UserTestDataFactory.getTestRunUser()){
+            final EngagementFacade service = Modules.instance().facade_getEngagementFacade();
+            Lead lead = 
+            service.createLead(LeadTestDataFactory.createEngagementLeadDTO_withLeadDetails());
+
+            System.assertNotEquals(null, lead.Id, 'Lead id should not be null.');
+            Lead savedLead = service.getEngagementLead(lead.Id);
+            System.assertNotEquals(null, savedLead,'Record should not be null.');            
+            System.assertEquals(lead.Email.toLowerCase(), savedLead.Email.toLowerCase(),'Emails should equal.');
+            System.assertEquals(lead.Status, savedLead.Status,'Statuses should be equal.');
+            System.assertEquals(lead.Industry, savedLead.Industry, 'Industries should be equal.');
+        }
+    }
+
+    @isTest
+    public static void shouldCreateLeadWithDetailsCommunityUser(){
+        System.runAs(UserTestDataFactory.getTestRunUser()){
+            final EngagementFacade service = Modules.instance().facade_getEngagementFacade();
+            Lead lead = 
+            service.createLead(LeadTestDataFactory.createEngagementLeadDTO_leadDetails_commUser());
+
+            System.assertNotEquals(null, lead.Id, 'Lead id should not be null.');
+
+            Lead savedLead = service.getEngagementLead(lead.Id);
+            System.assertNotEquals(null, savedLead, 'Lead should not be null.');   
+            
+            List<CommunityUser__c> commUsers = service.getCommunityUsersForEngagementLead(savedLead);
+            System.assertNotEquals(0, commUsers.size(), 'List should not be empty.');            
+        }
+    }
+
+    @isTest
+    public static void shouldCreateLeadWithDetailsCommunityUserAttachment(){
+        System.runAs(UserTestDataFactory.getTestRunUser()){
+            final EngagementFacade service = Modules.instance().facade_getEngagementFacade();
+            Lead lead = 
+                service.createLead(LeadTestDataFactory.createEngagementLeadDTO_leadDetails_commUser_file());
+
+            System.assertNotEquals(null, lead.Id, 'Lead id should not be null.');
+
+            Lead savedLead = service.getEngagementLead(lead.Id);
+            System.assertNotEquals(null, savedLead, 'Lead should not be null.');   
+            
+            List<CommunityUser__c> commUsers = service.getCommunityUsersForEngagementLead(savedLead);
+            System.assertNotEquals(0, commUsers.size(), 'List should not be empty.');  
+            System.assertNotEquals(0, getAttachments(savedLead.Id).size(), 'List should not be empty.');          
+        }
+    }
+
+    @isTest
+    public static void shouldThrowExceptionWhenDTOEmpty(){
+        System.runAs(UserTestDataFactory.getTestRunUser()){
+            Boolean dtoEmptyExceptionThrown = false;
+            final EngagementFacade service = Modules.instance().facade_getEngagementFacade();
+
+            try{
+                service.createLead(null);
+            }catch(IllegalArgumentException ex){
+                dtoEmptyExceptionThrown = true;
+            }
+
+            System.assertEquals(true, dtoEmptyExceptionThrown, 'Exception should be thrown.');
+        }               
+    }
+
+    @isTest
+    public static void shouldThrowExceptionWhenLeadDetailsEmpty(){
+        System.runAs(UserTestDataFactory.getTestRunUser()){
+            Boolean leadDetailsEmptyExceptionThrown = false;
+            final EngagementFacade service = Modules.instance().facade_getEngagementFacade();
+
+            try{
+                service.createLead(new EngagementLeadDTO());
+            }catch(IllegalArgumentException ex){
+                leadDetailsEmptyExceptionThrown = true;
+            }
+
+            System.assertEquals(true, leadDetailsEmptyExceptionThrown, 'Exception should be thrown.');
+        }               
+    }
+
+    private static List<Attachment> getAttachments(Id parentId){
+        return [SELECT Id FROM Attachment WHERE ParentId = :parentId];
     }
 }

@@ -1,8 +1,8 @@
 public with sharing class ServiceModules extends Modular {
     
-    private SelectorModules selectorModules;
+    private final SelectorModules selectorModules;
 
-    private RepositoryModules repositoryModules;
+    private final RepositoryModules repositoryModules;
 
     public ServiceModules(SelectorModules selectorModules,RepositoryModules repositoryModules){
         super();
@@ -11,7 +11,7 @@ public with sharing class ServiceModules extends Modular {
 
         addModule(UsernameOrEmailSearchService.class, UserOrEmailSearchModule.class);     
         addModule(EngagementCaseService.class, EngagementCaseServiceModule.class);
-        addModule(UserServiceImp.class, UserServiceModule.class);
+        addModule(UserService.class, UserServiceModule.class);
         addModule(EngagementLeadService.class, EngagementLeadServiceModule.class);
     }
 
@@ -58,23 +58,26 @@ public with sharing class ServiceModules extends Modular {
     */
 
     private class UserOrEmailSearchModule extends ConstructServiceModule {
-        public Object construct(){
-            UserSelectorImp userSelector = (UserSelectorImp) getSelectorModules().createModule(UserSelectorImp.class);
-            return new UsernameOrEmailSearchService(userSelector);
+        public Object construct(){            
+            return new UsernameOrEmailSearchService(
+                (UserSelectorImp) getSelectorModules().createModule(UserSelectorImp.class)
+            );
         }
     }   
 
     private class EngagementCaseServiceModule extends ConstructServiceModule {
-        public Object construct(){
-            CaseRepository caseRepository = 
-                (CaseRepository) getRepositoryModules().createModule(CaseRepository.class);            
-            return new EngagementCaseService(caseRepository);
+        public Object construct(){ 
+            return new EngagementCaseService(
+                (CaseRepository) getRepositoryModules().createModule(CaseRepository.class)
+            );
         }
     }
 
     private class UserServiceModule extends ConstructServiceModule {
         public Object construct(){                    
-            return new UserServiceImp();
+            return new UserService(
+                (UserRepository) getRepositoryModules().createModule(UserRepository.class)
+            );
         }
     }
 
