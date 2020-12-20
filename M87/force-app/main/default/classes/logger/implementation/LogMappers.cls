@@ -30,7 +30,8 @@ public with sharing class LogMappers {
             eventLog.Info__c = currentLog.info;
             eventLog.Details__c = currentLog.details;
             eventLog.SourceClass__c = currentLog.sourceClass?.getName();
-            eventLog.SourceMethod__c = currentLog.methodName;          
+            eventLog.SourceMethod__c = currentLog.methodName;    
+            eventLog.RecordId__c = currentLog.recordId;      
             
             return eventLog;
         }

@@ -1,0 +1,28 @@
+1. Interface method test - all possible methods, check if inserted data are covered correctly.
+2. Because we cannot insert big objects in test we need to mock save with test sobject(used only in tests so isTest
+    good to make sure no real record are inserted).
+3. Clear log test.
+    - clear test
+    - publish new after clear
+4. Validator test.
+    Check factories methods, we need to cover all methods.
+    All Or none tests 
+    Silent fail tests
+
+5. Severity auto fill
+6. TransactionId auto fill
+7. Quandidity auto fill
+8. Source class fill 
+    Logger has class defined vs null in log
+    Logger has null vs log definied
+    Logger null vs log null
+
+9. Real class usage test
+    We have couple of class which use logs. Check source class
+    We have couple of class, some use class log some no. Check source class
+
+10. Empty string message - exception should be raised.
+11. Methods null param safetyness 
+
+12. Add log builder + new methods with immidiate publish.
+    

@@ -16,6 +16,5 @@ public class TestUtils {
         public String generateEmail(){
             return TestUtils.generateRandomString(10) + postfix;
         }
-
-    }
+    }    
 }

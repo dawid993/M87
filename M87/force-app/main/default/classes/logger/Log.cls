@@ -10,7 +10,7 @@ public with sharing class Log {
     public Log(final String info) {
         this.info = info;        
     }
-
+    
     public Log(
         final String info,
         final Id recordId,
