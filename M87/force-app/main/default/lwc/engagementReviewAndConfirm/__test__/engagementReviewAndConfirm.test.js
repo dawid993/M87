@@ -60,7 +60,6 @@ describe('c-engagement-review-and-confirm', () => {
             confirmDialog.dispatchEvent(new CustomEvent(CONFIRM_EVENT_NAME));
             return jestUtils.flushPromises();
         }).then(() => {
-            console.log('expect');
             expect(save.mock.calls.length).toBe(1);
             expect(save.mock.calls[0][0]).toEqual(createSaveActionParameter(formData));
         });
@@ -81,7 +80,6 @@ describe('c-engagement-review-and-confirm', () => {
             confirmDialog.dispatchEvent(new CustomEvent(CONFIRM_EVENT_NAME));
             return jestUtils.flushPromises();
         }).then(() => {
-            console.log('expect');
             expect(save.mock.calls.length).toBe(1);
             expect(save.mock.calls[0][0]).toEqual(createSaveActionParameter(formData,fileBase64Mock));
         });;

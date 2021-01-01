@@ -5,6 +5,15 @@
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>notesHeader</name>
+                    <value>My Notes</value>
+                </componentInstanceProperties>
+                <componentName>myNotes</componentName>
+            </componentInstance>
+        </itemInstances>
         <name>region2</name>
         <type>Region</type>
     </flexiPageRegions>

@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
     <labels>
+        <fullName>DueDate</fullName>
+        <categories>MyNotes</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>DueDate</shortDescription>
+        <value>Due date</value>
+    </labels>
+    <labels>
         <fullName>FlowNavigationBack</fullName>
         <categories>Flows Navigation</categories>
         <language>en_US</language>
@@ -17,12 +25,60 @@
         <value>Continue</value>
     </labels>
     <labels>
+        <fullName>NewNote</fullName>
+        <categories>MyNotes</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>NewNote</shortDescription>
+        <value>Add new note</value>
+    </labels>
+    <labels>
+        <fullName>Note</fullName>
+        <categories>MyNotes</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Note</shortDescription>
+        <value>Note</value>
+    </labels>
+    <labels>
+        <fullName>NoteSaveSuccess</fullName>
+        <categories>MyNotes</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>NoteSaveSuccess</shortDescription>
+        <value>Your note has been saved successfully.</value>
+    </labels>
+    <labels>
+        <fullName>NoteTitle</fullName>
+        <categories>MyNotes</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>NoteTitle</shortDescription>
+        <value>Title</value>
+    </labels>
+    <labels>
+        <fullName>SaveNote</fullName>
+        <categories>MyNotes</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>SaveNote</shortDescription>
+        <value>Save</value>
+    </labels>
+    <labels>
         <fullName>SearchAddress</fullName>
         <categories>Address</categories>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>SearchAddress</shortDescription>
         <value>Search address</value>
+    </labels>
+    <labels>
+        <fullName>YourNotes</fullName>
+        <categories>MyNotes</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>YourNotes</shortDescription>
+        <value>Your notes</value>
     </labels>
     <labels>
         <fullName>fflib_QueryFactory_crossobject_fieldsets_not_allowed_error</fullName>

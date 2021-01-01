@@ -59,7 +59,6 @@ export default class ManualFileUpload extends LightningElement {
         return [
             (currentFileBlob) => currentFileBlob.size <= MAX_SIZE,
             (currentFileBlob) => ALLOWED_TYPES.find(type => type === currentFileBlob.type)
-        ]
-            .reduce((isValid, currentCondition) => isValid && currentCondition(fileBlob), true);
+        ].reduce((isValid, currentCondition) => isValid && currentCondition(fileBlob), true);
     }
 }

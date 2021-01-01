@@ -1,24 +1,66 @@
 public with sharing class LogEventTriggerHandlerImp implements LogEventTriggerHandler {
-    public void afterInsert(final List<Log__e> logs, final Map<Id,Log__e> logsById){        
-        List<EventLog__b> bigLogs = new List<EventLog__b>();
-        for(Log__e currentLog : logs){
-            EventLog__b eventLog = new EventLog__b();
-            eventLog.Details__c = currentLog.Details__c;
-            eventLog.ExceptionTypeName__c = currentLog.ExceptionTypeName__c;
-            eventLog.Info__c = currentLog.Info__c;
-            eventLog.IsException__c = currentLog.IsException__c ? 1 : 0;
-            eventLog.LineNumber__c = currentLog.LineNumber__c;
-            eventLog.Quiddity__c = currentLog.Quiddity__c;
-            eventLog.RecordId__c = currentLog.RecordId__c;
-            eventLog.Severity__c = currentLog.Severity__c;
-            eventLog.SourceClass__c = currentLog.SourceClass__c;
-            eventLog.SourceMethod__c = currentLog.SourceMethod__c;
-            eventLog.TransactionId__c = currentLog.TransactionId__c;
-            eventLog.UserId__c = currentLog.UserId__c;
+    private static final Integer MAX_RETRY_ATTEMPTS = 6;
 
-            bigLogs.add(eventLog);
+    private final LogProblemAdministratorNotifier notifier;    
+    private final LogStorageEntry storageEntry;
+
+    public LogEventTriggerHandlerImp(
+        final LogProblemAdministratorNotifier notifier,
+        final LogStorageEntry storageEntry
+    ){
+        this.notifier = notifier;      
+        this.storageEntry = storageEntry;
+    }
+
+    public void afterInsert(final List<Log__e> logs){   
+        if(logs == null){
+            throw new IllegalArgumentException('Logs are not initialized.');
+        }   
+
+        final List<Log__e> notNullLogs = filterNotNull(logs);
+
+        try{            
+            if(!notNullLogs.isEmpty()){
+                List<Database.SaveResult> saveResults = storageEntry.persist(notNullLogs);
+                notifyAdministratorsIfAnyFailure(logs, saveResults);
+            }           
+        }catch(Exception ex){
+            handleException(ex);
+        }       
+    } 
+    
+    private List<Log__e> filterNotNull(final List<Log__e> logs){
+        final List<Log__e> notNullLogs = new List<Log__e>();
+        for(Log__e log : logs){
+            if(log != null){
+                notNullLogs.add(log);
+            }
         }
 
-        Database.insertImmediate(bigLogs);
-    }    
+        return notNullLogs;
+    }  
+
+    private void notifyAdministratorsIfAnyFailure(final List<Log__e> logs, List<Database.SaveResult> saveResults){
+        final List<Database.SaveResult> failedSaveResults = new List<Database.SaveResult>();
+        for(Database.SaveResult result : saveResults){
+            if(!result.isSuccess()){
+                failedSaveResults.add(result);
+            }
+        }
+
+        if(!failedSaveResults.isEmpty()){
+            notifier.notifyAdministrators(logs, failedSaveResults);
+        }
+    }
+
+    private void handleException(final Exception ex){
+        ApexUtils.logException(LoggingLevel.DEBUG, ex);
+
+        if(EventBus.TriggerContext.currentContext().retries < MAX_RETRY_ATTEMPTS){
+            throw new EventBus.RetryableException(ex.getMessage()+' '+ex.getCause()+' '+ex.getStackTraceString());
+        }else{
+            notifier.notifyAdministrators(ex);
+        }
+    }  
+   
 }

@@ -113,7 +113,6 @@ export default class CommunityUserCreation extends FlowComponentMixin(LightningE
     }
 
     _showErrorToast(message) {
-        console.log(message)
         this.dispatchEvent(createErrorToast(message));
     }
 }

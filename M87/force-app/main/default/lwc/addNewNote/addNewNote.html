@@ -1,0 +1,16 @@
+<template>
+    <div class="note-container">
+        <lightning-card title={labels.NewNote}>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_7-of-12">
+                    <lightning-input type="text" data-id="note-title" label={labels.NoteTitle} required></lightning-input>
+                    <lightning-input type="datetime" data-id="note-date" label={labels.NoteTitle}></lightning-input>
+                    <lightning-textarea data-id="note-content" label={labels.Note} required></lightning-textarea>
+                </div>
+                <div class="slds-col slds-size_7-of-12 slds-align_absolute-center">
+                    <lightning-button label={labels.SaveNote} onclick={saveNote}></lightning-button>
+                </div>
+            </div>
+        </lightning-card>
+    </div>
+</template>

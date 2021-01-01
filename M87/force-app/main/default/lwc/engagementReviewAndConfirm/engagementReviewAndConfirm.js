@@ -60,7 +60,7 @@ export default class EngagementReviewAndConfirm extends FlowComponentMixin(Light
 
     }
 
-    backToPreviousStep(event) {
+    backToPreviousStep() {
         this.dispatchRevertEvent();
     }
 
@@ -73,16 +73,18 @@ export default class EngagementReviewAndConfirm extends FlowComponentMixin(Light
     }
 
     saveApplication() {
-        let createObjFunction = this._createLeadDescription();
-        createObjFunction = createObjFunction(this._reviewData[LEAD_DETAILS_STEP.id]);
-        createObjFunction = createObjFunction(this._reviewData[COMMUNITY_USER_STEP.id]);
+        let createLeadPartial = this._createLeadDescription(
+            this._reviewData[LEAD_DETAILS_STEP.id],
+            this._reviewData[COMMUNITY_USER_STEP.id]
+        );        
 
         const manualFileUpload = this.template.querySelector(MANUAL_FILE_UPLOAD_SELECTOR);
-        let savePromise = manualFileUpload.isFileLoaded() ? manualFileUpload.getFileAsBase64() : Promise.resolve();
+        let manualFileUploadPromise = manualFileUpload.isFileLoaded() ? 
+            manualFileUpload.getFileAsBase64() : Promise.resolve();
 
-        savePromise
+        manualFileUploadPromise
             .then(result => save({
-                leadDTO: createObjFunction(result)
+                leadDTO: createLeadPartial(result)
             }))
             .then(result => {
                 if (result.success) {
@@ -103,14 +105,14 @@ export default class EngagementReviewAndConfirm extends FlowComponentMixin(Light
         );
     }
 
-    _createLeadDescription() {
-        return leadDescription => communityUserDescription => fileBase64 => {
+    _createLeadDescription(leadDescription, communityUserDescription) {
+        return fileBase64 => {
             const requestObj = {};
             requestObj['leadDetails'] = leadDescription;
             requestObj['communityUserDetails'] = communityUserDescription;
             requestObj['fileAsBase64Blob'] = fileBase64;
 
             return requestObj;
-        }
+        }        
     }
 }

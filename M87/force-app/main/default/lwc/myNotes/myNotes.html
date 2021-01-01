@@ -1,0 +1,12 @@
+<template>
+    <lightning-card title={notesHeader}>
+        <lightning-tabset>
+            <lightning-tab data-tab-id="note-table" label={labels.YourNotes}>
+                <c-my-notes-table></c-my-notes-table>
+            </lightning-tab>
+            <lightning-tab data-tab-id="new-note" label={labels.NewNote}>
+                <c-add-new-note></c-add-new-note>
+            </lightning-tab>
+        </lightning-tabset>
+    </lightning-card>
+</template>

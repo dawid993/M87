@@ -72,7 +72,6 @@ export default class LeadDetails extends FlowComponentMixin(LightningElement) {
 
     @api
     set stepData(value) {
-        console.log(JSON.stringify(value));
         if (value) {
             this.leadInfo = Object.assign({}, value);
         }

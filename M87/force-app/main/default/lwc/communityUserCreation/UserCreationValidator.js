@@ -1,6 +1,5 @@
 import searchForUsernameOrEmail from '@salesforce/apex/CommunityUserCreationController.searchForUsernameOrEmail';
 
-
 export default class UserCreationValidator {
 
     validate(formInputs) {

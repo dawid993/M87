@@ -30,6 +30,5 @@ export default class CaseView extends LightningElement {
     performOnSuccessActions(event){        
         this._changeMode();
         publish(this.messageContext, reloadEngagementCases, {});
-        console.log(1);
     }
 }
