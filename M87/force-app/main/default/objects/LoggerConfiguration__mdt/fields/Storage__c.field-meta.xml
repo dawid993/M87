@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Storage__c</fullName>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <label>Storage</label>
+    <required>true</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>CUSTOM_OBJECT</fullName>
+                <default>true</default>
+                <label>CUSTOM_OBJECT</label>
+            </value>
+            <value>
+                <fullName>BIG_OBJECT</fullName>
+                <default>false</default>
+                <label>BIG_OBJECT</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

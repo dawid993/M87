@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Index xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>UserIdAndReplayIdIndex</fullName>
+    <fields>
+        <name>UserId__c</name>
+        <sortDirection>ASC</sortDirection>
+    </fields>
+    <fields>
+        <name>EventId__c</name>
+        <sortDirection>ASC</sortDirection>
+    </fields>
+    <label>UserId And ReplayId Index</label>
+</Index>
