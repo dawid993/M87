@@ -640,4 +640,21 @@ public with sharing class LoggerTest {
             runAssertsForLog(logs[0], correctLog);
         }         
     }
+
+    @isTest
+    private static void shouldSendEmailToErrorNotifyGroup(){
+        System.runAs(UserTestDataFactory.getTestRunUser()){
+            final String logMessage = 'Test message';
+            final Logger logger = LoggerFactory.getLogger();
+            logger.log(logMessage); 
+
+            Test.startTest();
+            logger.publish();        
+            System.assertEquals(1, Limits.getPublishImmediateDML(), 'Should publish one event.'); 
+            Test.stopTest();
+
+            final List<EventLog__c> logs = EventLogSelector.selectByInfo(logMessage);
+            System.assertEquals(0, logs.size(), 'Should be no logs.');            
+        }
+    }
 }

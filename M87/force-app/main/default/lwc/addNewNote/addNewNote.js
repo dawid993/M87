@@ -5,7 +5,9 @@ import NewNote from '@salesforce/label/c.NewNote';
 import Note from '@salesforce/label/c.Note';
 import NoteTitle from '@salesforce/label/c.NoteTitle';
 import SaveNote from '@salesforce/label/c.SaveNote';
-import NoteSaveSuccess from "@salesforce/label/c.NoteSaveSuccess";
+import NoteSaveSuccess from '@salesforce/label/c.NoteSaveSuccess';
+
+import saveSingleNote from '@salesforce/apex/MyNotesController.saveSingleNote';
 
 import {
     TITLE_ID,
@@ -13,29 +15,13 @@ import {
     CONTENT_ID
 } from './elementIds';
 
-const titleValidation = template => () => {
-    const titleElement = template.querySelector(TITLE_ID);
-    if (titleElement) {
-        titleElement.showHelpMessageIfInvalid();
-    }
-    return titleElement ? titleElement.checkValidity() : false;
-}
+import {
+    titleValidation,
+    dueDateValidation,
+    noteContentValidation
+} from './validators';
 
-const dueDateValidation = template => () => {
-    const dueDateElement = template.querySelector(DUE_DATE_ID);
-    if (dueDateElement) {
-        dueDateElement.showHelpMessageIfInvalid();
-    }
-    return true;
-}
-
-const noteContentValidation = template => () => {
-    const noteContentElement = template.querySelector(CONTENT_ID);
-    if (noteContentElement) {
-        noteContentElement.showHelpMessageIfInvalid();
-    }
-    return noteContentElement ? noteContentElement.checkValidity() : false;
-}
+const defaultFailedMessage = 'Cannot save. Please try again.';
 
 export default class AddNewNote extends LightningElement {
     get labels() {
@@ -48,35 +34,54 @@ export default class AddNewNote extends LightningElement {
     }
 
     saveNote() {
-        const toast = this._validate() ? this._successToast() : this._failureToast();       
-        this.dispatchEvent(toast);        
+        if (this._areNoteFieldsValid()) {
+            const note = this._buildNote();
+            saveSingleNote({ newNote: note })
+                .then(result => {
+                    result.success ? this._fireSuccessToast() : this._fireFailureToast()
+                })
+                .catch(this._fireFailureToast)
+        } else {
+            this._fireFailureToast();
+        }
     }
 
-    _successToast() {
-        return new ShowToastEvent({
+    _buildNote() {
+        return {
+            title: this.template.querySelector(TITLE_ID).value,
+            dueDate: this.template.querySelector(DUE_DATE_ID).value,
+            content: this.template.querySelector(CONTENT_ID).value,
+        }
+    }
+
+    _fireSuccessToast() {
+        this.dispatchEvent(new ShowToastEvent({
             title: 'Saved!',
             message: NoteSaveSuccess,
             variant: 'Success',
-        });
+        }));
     }
 
-    _failureToast() {
-        return new ShowToastEvent({
+    _fireFailureToast(message = defaultFailedMessage) {
+        this.dispatchEvent(new ShowToastEvent({
             title: 'Error!',
-            message: 'Cannot save',
+            message: message,
             variant: 'Error',
-        });
+        }));
     }
 
-    _validate() {
+    _areNoteFieldsValid() {
         const validationRules = [
-            titleValidation(this.template),
-            dueDateValidation(this.template),
-            noteContentValidation(this.template)
+            titleValidation(this.template, TITLE_ID),
+            dueDateValidation(this.template, DUE_DATE_ID),
+            noteContentValidation(this.template, CONTENT_ID)
         ];
 
-        return validationRules.reduce((previous, currentValidation) => {
-            return currentValidation() && previous;
-        }, true);
+        return validationRules.reduce(
+            (previous, currentValidation) => {
+                return currentValidation() && previous;
+            },
+            true
+        );
     }
 }

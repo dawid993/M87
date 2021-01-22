@@ -1,15 +1,17 @@
-public with sharing class LogEventTriggerHandlerImp implements LogEventTriggerHandler {
-    private static final Integer MAX_RETRY_ATTEMPTS = 6;
+public with sharing class LogEventTriggerHandlerImp implements LogEventTriggerHandler {    
 
     private final LogProblemAdministratorNotifier notifier;    
     private final LogStorageEntry storageEntry;
+    private final Integer allowedRetryAttempts;
 
     public LogEventTriggerHandlerImp(
         final LogProblemAdministratorNotifier notifier,
-        final LogStorageEntry storageEntry
+        final LogStorageEntry storageEntry,
+        final Integer allowedRetryAttempts
     ){
         this.notifier = notifier;      
         this.storageEntry = storageEntry;
+        this.allowedRetryAttempts = allowedRetryAttempts;
     }
 
     public void afterInsert(final List<Log__e> logs){   
@@ -55,12 +57,11 @@ public with sharing class LogEventTriggerHandlerImp implements LogEventTriggerHa
 
     private void handleException(final Exception ex){
         ApexUtils.logException(LoggingLevel.DEBUG, ex);
-
-        if(EventBus.TriggerContext.currentContext().retries < MAX_RETRY_ATTEMPTS){
+        
+        if(EventBus.TriggerContext.currentContext().retries < allowedRetryAttempts){
             throw new EventBus.RetryableException(ex.getMessage()+' '+ex.getCause()+' '+ex.getStackTraceString());
         }else{
             notifier.notifyAdministrators(ex);
         }
-    }  
-   
+    }     
 }

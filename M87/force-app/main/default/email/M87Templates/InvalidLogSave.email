@@ -1,0 +1,20 @@
+<div>
+    Hello,
+</div>
+<div>
+    Unfortunately, an exception has been thrown during logs save attempt.
+</div>
+<div>
+    Affected log events
+</div>
+<div>
+    [AFFECTED_LOGS]
+</div>
+<div>
+    Errors
+</div>
+<div>
+    [Errors]
+</div>
+</div>
+</div>

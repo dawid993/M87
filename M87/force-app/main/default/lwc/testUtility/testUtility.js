@@ -32,6 +32,8 @@ const STEP_5 = {
     order: 5,
 };
 
+const SHOW_TOAST_EVENT_NAME = 'lightning__showtoast';
+
 const STEPS = [STEP_1, STEP_2, STEP_3, STEP_4, STEP_5];
 
 const TEST_STEPS_DATA = {
@@ -76,6 +78,10 @@ const jestUtils = {
 
     mockCheckValidityForElements: (elements = [], fn) => {
         elements.forEach(element => element.checkValidity = fn);
+    },
+
+    mockCheckValidityForElement: (element = {}, fn) => {
+        element.checkValidity = fn;
     },
 
     mockReportValidity : (elements = [], fn) => {
@@ -124,6 +130,7 @@ const eventTestUtils = {
 
 export {
     TEST_STEPS_DATA,
+    SHOW_TOAST_EVENT_NAME,
     flushPromises,
     clearDocument,
     createElementAndAddToDocument,
